@@ -19,7 +19,6 @@ const GameView = createView('GameView', function (props) {
             player2class        = "",
             illegalMoveClass    = "";
 
-        console.log(state);
 
     if (player === 1) {
             player1class = " active";
@@ -31,6 +30,7 @@ const GameView = createView('GameView', function (props) {
 
         return (
             <svg className="GoGame" viewBox="0 0 1200 705" preserveAspectRatio="xMidYMid meet">
+               
                 <defs>
                     <symbol id="GoGame-cell-player1" viewBox="0 0 37 37">
                       <rect

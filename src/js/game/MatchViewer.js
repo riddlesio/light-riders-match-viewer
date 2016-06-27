@@ -71,8 +71,6 @@ const MatchViewer = createGame({
             state: states[currentState],
         };
 
-        console.log(props);
-
         ReactDOM.render(<GameView { ...props }/>, this.getDOMNode());
     }
 }, [StateMixin, GameLoopMixin]);

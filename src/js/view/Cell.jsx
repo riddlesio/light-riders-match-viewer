@@ -15,7 +15,7 @@
         if (value == 17) { xlinkHref = "GoGame-cell-player1"; }
         if (value == 18) { xlinkHref = "GoGame-cell-player2"; }
 
-        if (value > 0) console.log(value);
+        //if (value > 0) console.log(value);
         //var xlinkHref = "GoGame-cell-player1";
         if (value == 5) xlinkHref = "GoGame-cell-wall";
         //if (value == 0) xlinkHref = "GoGame-cell-empty";
