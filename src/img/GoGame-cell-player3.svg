@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 37 37"
+   id="svg3017"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   width="100%"
+   height="100%"
+   sodipodi:docname="GoGame-cell-player2.svg">
+  <metadata
+     id="metadata3055">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Go</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1326"
+     inkscape:window-height="814"
+     id="namedview3053"
+     showgrid="false"
+     inkscape:zoom="6.3783784"
+     inkscape:cx="-20.542156"
+     inkscape:cy="18.5"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3017" />
+  <defs
+     id="defs3019">
+    <style
+       id="style3021">.cls-1{isolation:isolate;}.cls-2{opacity:0.8;mix-blend-mode:screen;}.cls-3{fill:#cc4242;}.cls-4{fill:#ff5552;}.cls-5{mask:url(#mask);}.cls-6{opacity:0.7;mix-blend-mode:overlay;}.cls-7{fill:#fff;}.cls-8{filter:url(#luminosity-noclip);}</style>
+    <filter
+       id="luminosity-noclip"
+       x="2.55"
+       y="0.44"
+       width="30"
+       height="30"
+       filterUnits="userSpaceOnUse"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         flood-color="#fff"
+         result="bg"
+         id="feFlood3024" />
+      <feBlend
+         in="SourceGraphic"
+         in2="bg"
+         id="feBlend3026" />
+    </filter>
+    <mask
+       id="mask"
+       x="2.55"
+       y="0.44"
+       width="30"
+       height="30"
+       maskUnits="userSpaceOnUse">
+      <g
+         class="cls-8"
+         id="g3029">
+        <image
+           width="30"
+           height="30"
+           transform="translate(2.55 0.44)"
+           xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAIAAACQzIFuAAAACXBIWXMAAAsSAAALEgHS3X78AAAEAklEQVRIS7WW2SttcRTHz99hnsqD4cX45NFYhoRXiTLfY8yDQiIPlKGMuYZImRIiPJgJZUiZh3AJmYlrPPdzz9F2bPucLbKeztnD97fWd32/a22F4sdCpVLJPfKN+BS6kZGRra2tg4ODs7Ozk5MTP2xsbAwNDeXek0M3NTV1cXEJDAwMCwuLjY39pY6YmJjQ0NCAgABXV1czMzM9r+tENzY2JtPg4OD4+Pjs7Ozi4uKqqqrf6qisrCwqKuIit3iAaihOEkQa3dLS0sfHJzo6OicnB9D29vaBgYGRkZGJiYnx8fHh4eH+/v62tjZu8UBUVBQPW1lZfcSRQOc5Pz+/5OTkkpKS1tbWoaGh+fn5tbW1nZ2dP+rY3t5eXV2dm5sbHBxsaWmhrJSUFF9fXwsLCxl0c3NzoFNTUysqKrq7u2dmZjY2No6Oji4vL29vb/+qgx8XFxdc5Nb09HRXV1d5eXlSUpK3t7eJiYlOdAMDA3d394SEhLKysp6eHlLe29sD9+Hh4eXlRaUV/L2/v+eM3d3d2dlZDqACuo0EdKLb29sjhvz8/I6ODt6BhOvr6+fnZ5WOeHp6urq64gAqgMPc3NyQkBBkJo3u5uYGg3V1dWNjY5DLm3qghQPOz8/X19fpAU2Oi4vTTv8NHQlycl5eXmdn5+Li4snJyePjo35oTdCJw8NDakVFWVlZ+AAoMTq0RERElJaWksXm5iacyMG+BvXRAFTU19eHD/CdnZ2dGB1T4MOamhpEDeNkJAf7Fjc3NzCJDzAalnZ0dBSjY2tU1dDQQIuoFJ3IYb7F3d0d6sJoOFmpVGJyCXQc1NjYiMa/gw4BEuj0OjExsb6+fmpq6uDgADnLYb4FzGxtbcEMHkT1DFExOmShJ1TFPIFEXpDDfA1EeXZ2try83NvbW1hYiGOYz2J0Gk27uc1DS0tLp6envCaH/D+ghVrhs7m5OSMjg4EjjEyVgM4lJgy3m5qaJicncaB+o2qC9uCMlZUVhijzg3kpkP4OXaEWZWRkJBOD+bWwsEBG8KPnAKAxKuZAxOSUmZnJntHeJ+/QmXBeXl4oB9kywXHs/v4+U4wOi6YYpEEIWQONClgABQUF4eHhgtIl0AlmNFZOT0+vrq7GewxxxHB8fCxMYEApiDZSGYSQNdCUy55ivgozQBqdsLa2psC0tDSmNsNydHQUloTtga45D4XQRriGELIG2tPTU357aIL15O/vj3WZxrW1tZwh2nzoCoXQRriGELL+CK3Qs7VZrR4eHoiXM1iebEGswBTSbG2Ei7pYvFQJ1yJChNCJrlCvKgYnQz8oKIgE8ZpSHZovDnSNvb/4xaEdaIljyBE45Kz5WtKVr3Z8Cv3L8fPoqp+Mf8flLxX1AUEMAAAAAElFTkSuQmCC"
+           id="image3031" />
+      </g>
+    </mask>
+  </defs>
+  <title
+     id="title3033">Go</title>
+  <rect
+     style="fill:#ff3c00;fill-opacity:1;stroke:none"
+     id="rect3057"
+     width="37"
+     height="37"
+     x="0"
+     y="6.2172489e-15" />
+</svg>
