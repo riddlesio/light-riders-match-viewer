@@ -1,38 +1,46 @@
 import React from 'react';
 import createView from 'omniscient';
+import GameField from './GameField.jsx';
 
 const GameView = createView('GameView', function ({ state, settings }) {
 
-    const { winner, illegalMove, player } = state;
-    const { players } = settings;
-    const illegalMoveClass = player === 1 ? 'u-color-player1': 'u-color-player2';
-    const player1class = `PlayerName PlayerName--player1 ${player === 1 ? 'is-active' : ''}`;
-    const player2class = `PlayerName PlayerName--player2 ${player === 2 ? 'is-active' : ''}`;
+    const { field, winner } = state;
+    const { players, cell } = settings;
+    const cellWidth = cell.width;
+    const cellHeight = cell.height;
+    const cellViewBox = `0 0 ${cellWidth} ${cellHeight}`;
 
     return (
         <svg className="GoGame" viewBox="0 0 1200 705" preserveAspectRatio="xMidYMid meet">
             <defs>
                 <symbol id="LightRiders-vehicle-player1" viewBox="0 0 37 37">
-                    <rect className="LightRiders-vehicle LightRiders-vehicle--player1" />
+                    <rect
+                        className="LightRiders-vehicle LightRiders-vehicle--player1"
+                        width={ cellWidth }
+                        height={ cellHeight }
+                    />
                 </symbol>
                 <symbol id="LightRiders-vehicle-player2" viewBox="0 0 37 37">
-                    <rect className="LightRiders-vehicle LightRiders-vehicle--player2" />
+                    <rect
+                        className="LightRiders-vehicle LightRiders-vehicle--player2"
+                        width={ cellWidth }
+                        height={ cellHeight }
+                    />
                 </symbol>
                 <symbol id="Avatar-1" viewBox="0 0 37 37"></symbol>
                 <symbol id="Avatar-2" viewBox="0 0 37 37"></symbol>
-                <symbol id="" viewBox="0 0 37 37"></symbol>
+                <symbol id="cell" viewBox={ cellViewBox }>
+                    <rect width={ cellWidth } height={ cellHeight } />
+                </symbol>
             </defs>
-            { FieldView(state) }
+            { GameField(state) }
             <use x="70" y="60" xlinkHref="#Avatar-1" />
             <use x="1010" y="60" xlinkHref="#Avatar-2" />
-            <text x={ '130' } y={ '215' } className={ player1class }>
+            <text x={ '130' } y={ '215' } className="PlayerName PlayerName--player1" >
                 { players.names[0] }
             </text>
-            <text x={ '1070' } y={ '215' } className={ player2class }>
+            <text x={ '1070' } y={ '215' } className="PlayerName PlayerName--player2" >
                 { players.names[1] }
-            </text>
-            <text x="50%" y="60" className={'GoGame-illegalMove' + illegalMoveClass }>
-                { illegalMove }
             </text>
             <Overlay winner={ winner } />
         </svg>
