@@ -1,7 +1,6 @@
-# Match Viewer Boilerplate
+# Light Riders Match Viewer
 
-This repository contains a starting point to create Match Viewers for the
-Riddles.io platform and TheAIGames.com.
+This repository contains the Light Riders match viewer for Riddles.io and TheAIGames
 
 ## Setting up
 
@@ -15,9 +14,8 @@ accessible:
 Execute the following commands:
 
 ```
-git clone git@bitbucket.org:riddlesio/match-viewer-boilerplate.git my-match-viewer
-cd my-match-viewer
-rm -Rf .git
+git clone git@bitbucket.org:riddlesio/light-riders-match-viewer.git
+cd light-riders-match-viewer
 npm install
 ```
 
@@ -52,7 +50,7 @@ Run the following command:
 npm run dev-server
 ```
 
-### Developing a Match Viewer
+### Developing the Match Viewer
 
 ## Application flow
 
