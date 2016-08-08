@@ -20,7 +20,7 @@ if (window.frameElement.getAttribute('data-indexgame')) {
 /* @endif */
 
 const game = new MatchViewer({
-    name: 'hello-world',
+    name: 'light-rider',
     dataProvider: dataProvider(data),
     player: {
         // Determines whether they player's chrome should be displayed

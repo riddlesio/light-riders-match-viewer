@@ -1,11 +1,11 @@
-import React                            from 'react';
-import ReactDOM                         from 'react-dom';
-import { createGame, event }            from '@riddles/match-viewer';
-import StateMixin                       from '../mixin/StateMixin';
-import GameLoopMixin                    from '../mixin/SimpleGameLoopMixin';
-import { parseSettings, parseStates }   from '../io/Parser';
-import GameView                         from '../view/GameView';
-import defaults                         from '../data/gameDefaults.json';
+import React                    from 'react';
+import ReactDOM                 from 'react-dom';
+import { createGame, event }    from '@riddles/match-viewer';
+import StateMixin               from '../mixin/StateMixin';
+import GameLoopMixin            from '../mixin/SimpleGameLoopMixin';
+import GameView                 from '../view/GameView.jsx';
+import defaults                 from '../data/gameDefaults.json';
+import { parseSettings, parseStates, parsePlayerNames } from '../io/Parser';
 
 const { PlaybackEvent } = event;
 
@@ -45,12 +45,15 @@ const MatchViewer = createGame({
      */
     handleData: function (data) {
 
-        const currentState  = 0;
-        const settings      = parseSettings(data, defaults);
-        const states        = parseStates(data, settings);
+        const { matchData, playerData } = data;
+        const currentState = 0;
+        const settings = parseSettings(matchData, defaults);
+        const states = parseStates(matchData, settings);
+        const playerNames = parsePlayerNames(playerData, settings);
 
         this.settings = settings;
         this.states = states;
+        this.playerNames = playerNames;
 
         this.triggerStateChange(currentState);
         this.play();

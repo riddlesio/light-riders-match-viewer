@@ -5,19 +5,8 @@
             "1": "rgb(40, 128, 186)"
         }
     },
-    "player": {
-        "canvas": {
-            "width": 1200,
-            "height": 705
-        }
-    },
-    "field": {
-        "width": 10,
-        "height": 20,
-        "cell": {
-            "width": 24,
-            "height": 24
-        }
-    },
-    "boxHeight": 630
+    "canvas": {
+        "width": 1920,
+        "height": 1080
+    }
 }
