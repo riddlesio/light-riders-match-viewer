@@ -52,11 +52,11 @@ function parsePlayerNames(playerData, settings) {
  * @param   {Object} settings The parsed settings
  * @returns {Array}           List of states
  */
-function parseStates(data, settings) {
+function parseStates(matchData, settings) {
 
-    let states = data.matchData.states;
-    const rowLength = settings.field.width;
-    const rowCount = states[0].field.split(',').length / rowLength;
+    let states = matchData.states;
+    const rowCount = parseInt(settings.field.height);
+    const rowLength = parseInt(settings.field.width);
     const firstState = states[0];
     const arrayField = Array.from({ length: rowCount });
 
@@ -68,14 +68,10 @@ function parseStates(data, settings) {
     };
 
     states.unshift(initialState);
-    states = states.map((state, index) => (
-        parseState({ arrayField, rowLength, settings, state, index })
-    ));
 
-    return {
-        settings,
-        states,
-    };
+    return states.map((state, index) => (
+        parseState({ arrayField, index, rowLength, settings, state })
+    ));
 }
 /**
  *
@@ -86,22 +82,27 @@ function parseStates(data, settings) {
  * @param index: index of state, same as move
  * @returns parsed states
  */
-function parseState({ arrayField, rowLength, settings, state, index }) {
+function parseState({ arrayField, index, rowLength, settings, state }) {
 
-    const splitField = state.field.split(',');
     const winner = 'TODO';
-
-    const field = arrayField.map((cell, index) => {
-        const sliceStart = index * rowLength;
-        const sliceEnd = sliceStart + rowLength;
-
-        return splitField.slice(sliceStart, sliceEnd);
-    });
+    const splitField = state.field.split(',');
+    const field = parseField({ arrayField, rowLength, splitField });
 
     return {
         field,
         winner,
     };
+}
+
+function parseField({ arrayField, rowLength, splitField }) {
+
+    return arrayField.map((cell, index) => {
+        const sliceStart = index * rowLength;
+        const sliceEnd = sliceStart + rowLength;
+
+        return splitField.slice(sliceStart, sliceEnd);
+    });
+}
 
     // END OF MY STUFF
 
@@ -199,11 +200,10 @@ function parseState({ arrayField, rowLength, settings, state, index }) {
     //     player,
     //     winner: winnerName,
     // };
-}
 
 export {
     parseSettings,
     parseStates,
     parseState,
     parsePlayerNames,
-}
+};

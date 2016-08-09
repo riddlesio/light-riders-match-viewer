@@ -25,15 +25,15 @@ describe('parsePlayerNames', function () {
         const settings = parseSettings(matchData, defaults);
         const parsedSettings = parsePlayerNames(playerData, settings);
 
-        console.log(parsedSettings);
-
         expect(parsedSettings.players).to.contain.all.keys(['names', 'emailHash']);
     });
 });
 
-// describe('parseStates', function () {
-//
-//     it('should return', function () {
-//
-//     });
-// });
+describe('parseStates', function () {
+
+    it('should return', function () {
+        const settings = parseSettings(matchData, defaults);
+        const parsedSettings = parsePlayerNames(playerData, settings);
+        const parsedStates = parseStates(data, parsedSettings);
+    });
+});

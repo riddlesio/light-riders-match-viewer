@@ -48,8 +48,8 @@ const MatchViewer = createGame({
         const { matchData, playerData } = data;
         const currentState = 0;
         const settings = parseSettings(matchData, defaults);
-        const states = parseStates(matchData, settings);
         const playerNames = parsePlayerNames(playerData, settings);
+        const states = parseStates(matchData, playerNames);
 
         this.settings = settings;
         this.states = states;
@@ -77,8 +77,6 @@ const MatchViewer = createGame({
         ReactDOM.render(<GameView { ...props }/>, this.getDOMNode());
     }
 }, [StateMixin, GameLoopMixin]);
-
-// Private functions
 
 /**
  * Register the event listeners
