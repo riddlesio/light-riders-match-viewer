@@ -8,8 +8,6 @@ const GameView = createView('GameView', function ({ state, settings }) {
     const { canvas } = settings;
     const { width, height } = canvas;
 
-    console.log(field);
-
     return (
         <div className="LightRiders-wrapper">
             <svg

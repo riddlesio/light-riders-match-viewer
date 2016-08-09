@@ -14,5 +14,38 @@ html {
 
 .Cell {
     stroke: darkgrey;
-    fill: transparent;
 }
+
+.Position-p1 {
+    fill: #4ce670;
+}
+.Position-p2 {
+    fill: yellow;
+}
+.Position-p3 {
+    fill: cyan;
+}
+.Position-p4 {
+    fill: magenta;
+}
+
+.Wall-p1 {
+    fill: #37a852;
+}
+.Wall-p2 {
+    fill: #bfbf00;
+}
+.Wall-p3 {
+    fill: #00bfbf;
+}
+.Wall-p4 {
+    fill: #c100c1;
+}
+
+/*.IllegalMoveMade {*/
+    /*fill: #a8352d !important;*/
+/*}*/
+
+/*.Crashed {*/
+    /*fill: white !important;*/
+/*}*/
