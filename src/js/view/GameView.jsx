@@ -11,7 +11,7 @@ const GameView = createView('GameView', function ({ state, settings }) {
     console.log(field);
 
     return (
-        <div style={{ height: '100%' }}>
+        <div className="LightRiders-wrapper">
             <svg
                 className="LightRiders"
                 viewBox={ `0 0 ${width} ${height}` }
