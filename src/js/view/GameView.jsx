@@ -5,11 +5,10 @@ import Row from './Row.jsx';
 const GameView = createView('GameView', function ({ state, settings }) {
 
     const { field, winner } = state;
-    const { players, cells, canvas } = settings;
+    const { canvas } = settings;
     const { width, height } = canvas;
-    const cellWidth = cells.width;
-    const cellHeight = cells.height;
-    const cellViewBox = `0 0 ${cellWidth} ${cellHeight}`;
+
+    console.log(field);
 
     return (
         <div style={{ height: '100%' }}>
@@ -18,28 +17,9 @@ const GameView = createView('GameView', function ({ state, settings }) {
                 viewBox={ `0 0 ${width} ${height}` }
                 preserveAspectRatio="xMidYMid meet"
             >
-                <defs>
-                    <symbol id="LightRiders-vehicle-player1" viewBox="0 0 37 37">
-                        <rect
-                            className="LightRiders-vehicle LightRiders-vehicle--player1"
-                            width={ cellWidth }
-                            height={ cellHeight }
-                        />
-                    </symbol>
-                    <symbol id="LightRiders-vehicle-player2" viewBox="0 0 37 37">
-                        <rect
-                            className="LightRiders-vehicle LightRiders-vehicle--player2"
-                            width={ cellWidth }
-                            height={ cellHeight }
-                        />
-                    </symbol>
-                    <symbol id="Avatar-1" viewBox="0 0 37 37"></symbol>
-                    <symbol id="Avatar-2" viewBox="0 0 37 37"></symbol>
-                    <symbol id="cell" viewBox={ cellViewBox }>
-                        <rect />
-                    </symbol>
-                </defs>
-                { field.map(getRowRenderer(settings)) }
+                <g>
+                    { field.map(getRowRenderer(settings)) }
+                </g>
             </svg>
         </div>
     );
@@ -50,14 +30,35 @@ function getRowRenderer(settings) {
     return function renderRow(row, index) {
 
         return <Row
+            key={ `LightRiders-Row-${index}` }
             cells={ row }
             index={ index }
-            key={ `Row-${index}` }
             settings={ settings }
         />
     };
 }
 
+export default GameView;
+
+// DEFS
+/*
+ <symbol id="LightRiders-vehicle-player1" viewBox="0 0 37 37">
+ <rect
+ className="LightRiders-vehicle LightRiders-vehicle--player1"
+ width={ cellWidth }
+ height={ cellHeight }
+ />
+ </symbol>
+ <symbol id="LightRiders-vehicle-player2" viewBox="0 0 37 37">
+ <rect
+ className="LightRiders-vehicle LightRiders-vehicle--player2"
+ width={ cellWidth }
+ height={ cellHeight }
+ />
+ </symbol>
+ <symbol id="Avatar-1" viewBox="0 0 37 37"></symbol>
+ <symbol id="Avatar-2" viewBox="0 0 37 37"></symbol>
+ */
 /*
  <use x="70" y="60" xlinkHref="#Avatar-1" />
  <use x="1010" y="60" xlinkHref="#Avatar-2" />
@@ -69,5 +70,3 @@ function getRowRenderer(settings) {
  </text>
  <Overlay winner={ winner } />
  */
-
-export default GameView;

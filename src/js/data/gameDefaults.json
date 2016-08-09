@@ -6,7 +6,11 @@
         }
     },
     "canvas": {
-        "width": 1920,
-        "height": 1080
+        "width": 1200,
+        "height": 705,
+        "marginLeft": 60,
+        "marginRight": 60,
+        "marginTop": 40,
+        "marginBottom": 80
     }
 }

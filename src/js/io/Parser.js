@@ -14,14 +14,21 @@ function parseSettings(matchData, defaults = {}) {
     const fieldWidth = field.width;
     const fieldHeight = field.height;
 
-    const cellHeight = canvasHeight / fieldHeight;
-    const cellWidth = canvasWidth / fieldWidth;
-    const cells = { height: cellHeight, width: cellWidth };
+    const gridWidth = canvasWidth - canvas.marginLeft - canvas.marginRight;
+    const gridHeight = canvasHeight - canvas.marginTop - canvas.marginBottom;
+
+    const cellHeight = gridHeight / fieldHeight;
+    const cellWidth = gridWidth / fieldWidth;
+    const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+    const cells = { height: cellDimensions, width: cellDimensions };
+
+    const grid = { width: cellDimensions * fieldWidth, height: cellDimensions * fieldHeight };
 
     return {
         ...defaults,
         ...settings,
         cells,
+        grid,
     };
 }
 
