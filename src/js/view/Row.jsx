@@ -17,7 +17,7 @@ const Row = createView('Row', function ({ cells, index, settings }) {
     const cellWidth = cellSettings.width;
 
     const transformX = (canvasWidth - gridWidth) / 2;
-    const marginTop = (canvasHeight - gridHeight) / 2;
+    const marginTop = (canvasHeight - gridHeight) / 1.5;
     const transformY = index * cellHeight + marginTop;
 
     const transform = `translate(${transformX},${transformY})`;
