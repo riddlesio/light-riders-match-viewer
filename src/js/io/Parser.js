@@ -8,22 +8,26 @@ function parseSettings(data, defaults = {}) {
 
     const { matchData, playerData } = data;
     const { settings } = matchData;
-    const { field } = settings;
-    const canvas = defaults.canvas;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-    const fieldWidth = field.width;
-    const fieldHeight = field.height;
 
-    const gridWidth = canvasWidth - canvas.marginLeft - canvas.marginRight;
-    const gridHeight = canvasHeight - canvas.marginTop - canvas.marginBottom;
+    const canvasWidth = defaults.canvas.width;
+    const canvasHeight = defaults.canvas.height;
+    const fieldWidth = settings.field.width;
+    const fieldHeight = settings.field.height;
 
-    const cellHeight = gridHeight / fieldHeight;
-    const cellWidth = gridWidth / fieldWidth;
+    const cellHeight = canvasHeight / fieldHeight;
+    const cellWidth = canvasWidth / fieldWidth;
     const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
-    const cells = { height: cellDimensions, width: cellDimensions };
 
-    const grid = { width: cellDimensions * fieldWidth, height: cellDimensions * fieldHeight };
+    const cells = {
+        height: cellDimensions,
+        width: cellDimensions,
+    };
+
+    const grid = {
+        width: cellDimensions * fieldWidth,
+        height: cellDimensions * fieldHeight,
+    };
+
     const minimalistic = cellDimensions < 15;
 
     let parsedSettings = {
@@ -50,71 +54,10 @@ function parseSettings(data, defaults = {}) {
         },
     ];
 
-    // TODO: Map on playerData
-    parsedSettings.players = players.map(getPlayerPositionsCalculator(parsedSettings));
+    // TODO: Return playerData as players
+    parsedSettings.players = players;
 
     return parsedSettings;
-}
-
-function getPlayerPositionsCalculator(settings) {
-
-    return function calculatePlayerPosition(player, index) {
-
-        const controlsHeight = 40;
-        const avatarDimension = 60;
-
-        const gridWidth = settings.grid.width;
-        const halfGridWidth = gridWidth / 2;
-        const halfCanvasWidth = settings.canvas.width / 2;
-        const horizontalMargin = halfCanvasWidth - halfGridWidth;
-
-        const gridHeight = settings.grid.height;
-        const halfGridHeight = gridHeight / 2;
-        const halfCanvasHeight = (settings.canvas.height - controlsHeight) / 2;
-        const verticalMargin = halfCanvasHeight - halfGridHeight;
-
-        let avatarX;
-        let avatarY;
-        let textX;
-        let textY;
-
-        if (index === 0) {
-            avatarX = horizontalMargin - avatarDimension - 10;
-            avatarY = verticalMargin - 30;
-            textX = avatarX + avatarDimension + 10;
-            textY = avatarY + 20;
-        }
-        if (index === 1) {
-            avatarX = gridWidth + horizontalMargin + 10;
-            avatarY = verticalMargin - 30;
-            textX = avatarX - 10;
-            textY = avatarY + 20;
-        }
-        if (index === 2) {
-            avatarX = horizontalMargin - avatarDimension - 10;
-            avatarY = gridHeight + verticalMargin - (avatarDimension / 2);
-            textX = avatarX + avatarDimension + 10;
-            textY = avatarY + avatarDimension - 5;
-        }
-        if (index === 3) {
-            avatarX = gridWidth + horizontalMargin + 10;
-            avatarY = gridHeight + verticalMargin - (avatarDimension / 2);
-            textX = avatarX - 10;
-            textY = avatarY + avatarDimension - 5;
-        }
-
-        return {
-            ...player,
-            avatar: {
-                x: avatarX,
-                y: avatarY,
-            },
-            text: {
-                x: textX,
-                y: textY,
-            },
-        };
-    }
 }
 
 function parsePlayerNames(playerData) {

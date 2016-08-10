@@ -30,7 +30,7 @@ const game = new MatchViewer({
         viewstack: false,
 
         // A number between 0 and 1
-        aspectRatio: 1200 / 705,
+        aspectRatio: 960 / 540,
 
         // Time between each step when playing
         playbackTimeout: {

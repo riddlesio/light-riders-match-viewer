@@ -2,42 +2,84 @@ html {
     font-size: 62.5%;
     font-family: 'Titillium Web', sans-serif;
 }
-
 .LightRiders-wrapper {
     background: #3e3e3e;
     height: 100%;
     padding: 40px 80px 80px;
     background: url('../img/background.png') no-repeat center;
     background-size: cover;
+    position: relative;
 }
 
-.LightRiders {}
-
+.LightRiders {
+    position: absolute;
+    border: 1px solid red;
+}
+.Players-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.Players {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: 1px solid white;
+}
+.Player {
+    position: absolute;
+}
+.Player-name {
+    font-size: 2rem;
+    font-family: 'Titillium Web', sans-serif;
+    display: inline-block;
+    margin: 0 10px;
+}
+.Player:nth-of-type(1) .Player-name,
+.Player:nth-of-type(2) .Player-name{
+    vertical-align: top;
+}
+.Player:nth-of-type(3) .Player-name,
+.Player:nth-of-type(4) .Player-name {
+    vertical-align: bottom;
+}
+.Player1 .Player-name {
+    color: #6AA0FC;
+}
+.Player2 .Player-name {
+    color: #E419F9;
+}
+.Player3 .Player-name {
+    color: #00FF0C;
+}
+.Player4 .Player-name {
+    color: #F7FF55;
+}
+.AvatarWrapper {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #5e6565;
+    border-radius: 2px;
+    display: inline-block;
+}
 .Cell {
-    stroke: #363A3F;
+    stroke: #424a4a;
 }
-
-.Position--p1,
-.Player1 .PlayerName,
-.Player1 .AvatarStroke {
+.Position--p1 {
     fill: #6AA0FC;
 }
-.Position--p2,
-.Player2 .PlayerName,
-.Player2 .AvatarStroke {
+.Position--p2 {
     fill: #E419F9;
 }
-.Position--p3,
-.Player3 .PlayerName,
-.Player3 .AvatarStroke {
+.Position--p3 {
     fill: #00FF0C;
 }
-.Position--p4,
-.Player4 .PlayerName,
-.Player4 .AvatarStroke {
+.Position--p4 {
     fill: #F7FF55;
 }
-
 .Wall--p1 {
     fill: #00bfbf;
 }
@@ -49,10 +91,4 @@ html {
 }
 .Wall--p4 {
     fill: #bfbf00;
-}
-
-.Players {}
-.PlayerName {
-    font-size: 2rem;
-    font-family: 'Titillium Web', sans-serif;
 }

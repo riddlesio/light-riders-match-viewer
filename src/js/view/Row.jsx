@@ -4,21 +4,17 @@ import Cell from './Cell.jsx';
 
 const Row = createView('Row', function ({ cells, index, settings }) {
 
+    // FIXME: Something is fucked up here
     const { canvas, grid, field } = settings;
-    const cellSettings = settings.cells;
 
     const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-
     const gridWidth = grid.width;
-    const gridHeight = grid.height;
 
-    const cellHeight = cellSettings.height;
-    const cellWidth = cellSettings.width;
+    const cellHeight = settings.cells.height;
+    const cellWidth = settings.cells.width;
 
     const transformX = (canvasWidth - gridWidth) / 2;
-    const marginTop = settings.canvas.marginTop;
-    const transformY = index * cellHeight + marginTop;
+    const transformY = index * cellHeight;
 
     const transform = `translate(${transformX},${transformY})`;
     const fieldWidth = field.width;

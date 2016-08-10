@@ -6,8 +6,8 @@
         }
     },
     "canvas": {
-        "width": 1200,
-        "height": 705,
+        "width": 960,
+        "height": 540,
         "marginLeft": 80,
         "marginRight": 80,
         "marginTop": 40,
