@@ -2,9 +2,9 @@ import React from 'react';
 import createView from 'omniscient';
 import classNames from 'classnames';
 
-const MinimalisticCell = createView('MinimalisticCell', function ({ cell, settings, index }) {
+const MinimalisticCell = createView('MinimalisticCell', function ({ cell, cellSize, index }) {
 
-    const { height, width } = settings.cells;
+    const { height, width } = cellSize;
     const transformX = index * width;
 
     /**
@@ -50,15 +50,15 @@ const MinimalisticCell = createView('MinimalisticCell', function ({ cell, settin
     );
 });
 
-const DetailedCell = createView('DetailedCell', function ({ cell, settings, index }) {});
+const DetailedCell = createView('DetailedCell', function ({ cell, cellSize, index }) {});
 
-const Cell = createView('Cell', function ({ cell, settings, index }) {
+const Cell = createView('Cell', function ({ cell, cellSize, index }) {
 
-    if (settings.minimalistic) {
-        return <MinimalisticCell cell={ cell } settings={ settings } index={ index } />;
-    }
+    // if (settings.minimalistic) {
+    //     return <MinimalisticCell cell={ cell } settings={ settings } index={ index } />;
+    // }
 
-    return <MinimalisticCell cell={ cell } settings={ settings } index={ index } />;
+    return <MinimalisticCell cell={ cell } cellSize={ cellSize } index={ index } />;
 });
 
 export default Cell;

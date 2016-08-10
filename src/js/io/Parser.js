@@ -8,34 +8,39 @@ function parseSettings(data, defaults = {}) {
 
     const { matchData, playerData } = data;
     const { settings } = matchData;
+    // const { canvas } = defaults;
 
-    const canvasWidth = defaults.canvas.width;
-    const canvasHeight = defaults.canvas.height;
-    const fieldWidth = settings.field.width;
-    const fieldHeight = settings.field.height;
+    // const canvasWidth = canvas.width;
+    // const canvasHeight = canvas.height;
+    // const fieldWidth = settings.field.width;
+    // const fieldHeight = settings.field.height;
 
-    const cellHeight = canvasHeight / fieldHeight;
-    const cellWidth = canvasWidth / fieldWidth;
-    const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+    // const cellHeight = canvasHeight / fieldHeight;
+    // const cellWidth = canvasWidth / fieldWidth;
+    // const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+    //
+    // const cells = {
+    //     height: cellDimensions,
+    //     width: cellDimensions,
+    // };
 
-    const cells = {
-        height: cellDimensions,
-        width: cellDimensions,
-    };
+    // const gridWidth = cellDimensions * fieldWidth;
+    // const gridHeight = cellDimensions * fieldHeight;
+    // const grid = {
+    //     width: gridWidth,
+    //     widthPercentage: gridWidth / canvasWidth * 100,
+    //     height: gridHeight,
+    //     heightPercentage: gridHeight / canvasHeight * 100,
+    // };
 
-    const grid = {
-        width: cellDimensions * fieldWidth,
-        height: cellDimensions * fieldHeight,
-    };
-
-    const minimalistic = cellDimensions < 15;
+    // const minimalistic = cellDimensions < 15;
 
     let parsedSettings = {
         ...defaults,
         ...settings,
-        cells,
-        grid,
-        minimalistic,
+        // cells,
+        // grid,
+        // minimalistic,
     };
 
     // TODO: Remove player array

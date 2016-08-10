@@ -5,15 +5,15 @@ html {
 .LightRiders-wrapper {
     background: #3e3e3e;
     height: 100%;
-    padding: 40px 80px 80px;
     background: url('../img/background.png') no-repeat center;
     background-size: cover;
     position: relative;
 }
 
 .LightRiders {
-    position: absolute;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
+    height: 100%;
+    width: 100%;
 }
 .Players-wrapper {
     position: absolute;
@@ -23,11 +23,10 @@ html {
     bottom: 0;
 }
 .Players {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    position: relative;
     border: 1px solid white;
+    margin-left: auto;
+    margin-right: auto;
 }
 .Player {
     position: absolute;

@@ -2,20 +2,104 @@ import React from 'react';
 import createView from 'omniscient';
 import Row from './Row.jsx';
 
-const GameView = createView('GameView', function ({ state, settings }) {
+const lifeCycle = {
+
+    getInitialState() {
+        return {
+            sizes: {
+                cells: {
+                    width: 0,
+                    height: 0,
+                },
+                grid: {
+                    width: 0,
+                    height: 0,
+                },
+                svg: {
+                    width: 0,
+                    height: 0,
+                    heightPercentage: 100,
+                    widthPercentage: 100,
+                },
+            }
+        }
+    },
+
+    componentDidMount() {
+
+        this.recalculateSizes();
+
+        const resize = this.recalculateSizes;
+        let resizeTimer;
+
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                resize();
+            }, 50);
+        });
+    },
+
+    recalculateSizes() {
+
+        // Get available grid size from dom
+        const GridSpace = this.refs.GridSpace;
+        const svgWidth = GridSpace.clientWidth;
+        const svgHeight = GridSpace.clientHeight;
+
+        // Get square cell size
+        const { field } = this.props.settings;
+        const cellHeight = svgHeight / field.height;
+        const cellWidth = svgWidth / field.width;
+        const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+
+        // Get grid size
+        const gridWidth = field.width * cellDimensions;
+        const gridHeight = field.height * cellDimensions;
+
+        this.setState({
+            sizes: {
+                cells: {
+                    height: cellDimensions,
+                    width: cellDimensions,
+                },
+                grid: {
+                    width: gridWidth,
+                    height: gridHeight,
+                    heightPercentage: gridHeight / svgHeight * 100,
+                    widthPercentage: gridWidth / svgWidth * 100,
+                },
+                svg: {
+                    width: svgWidth,
+                    height: svgHeight,
+                },
+            }
+        });
+    },
+};
+
+const GameView = createView('GameView', lifeCycle, function ({ state, settings }) {
 
     console.log(settings);
     console.log(state);
-    const { field, winner } = state;
+
+    const { sizes } = this.state;
+    const { grid, svg } = sizes;
+    const { field } = state;
     const { canvas, players } = settings;
-    const { width, height } = canvas;
+    const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
+
+    const wrapperStyle = {
+        padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
+    };
 
     return (
-        <div className="LightRiders-wrapper">
+        <div className="LightRiders-wrapper" style={ wrapperStyle }>
             <svg
                 className="LightRiders"
-                viewBox={ `0 0 ${width} ${height}` }
+                viewBox={ `0 0 ${grid.width} ${grid.height}` }
                 preserveAspectRatio="xMidYMid meet"
+                ref="GridSpace"
             >
                 <defs>
                     <pattern
@@ -32,15 +116,15 @@ const GameView = createView('GameView', function ({ state, settings }) {
                     </pattern>
                 </defs>
                 <g>
-                    { field.map(getRowRenderer(settings)) }
+                    { field.map(getRowRenderer(settings, sizes)) }
                 </g>
             </svg>
-            <div className="Players-wrapper">
+            <div className="Players-wrapper" style={ wrapperStyle }>
                 <div
                     className="Players"
                     style={{
-                        width: `83%`,
-                        height: `83%`
+                        width: `${grid.widthPercentage}%`,
+                        height: `${grid.heightPercentage}%`
                     }}
                 >
                     { players.map(renderPlayerInfo) }
@@ -50,11 +134,6 @@ const GameView = createView('GameView', function ({ state, settings }) {
     );
 });
 
-// style={{
-//     width: `${settings.grid.widthPercentage}%`,
-//     height: `${settings.grid.heightPercentage}%`
-// }}
-
 function isOdd(num) {
     return num % 2;
 }
@@ -63,25 +142,25 @@ function getPlayerCords(index) {
     if (index === 0) {
         return {
             top: "-30px",
-            left: "-10px",
+            left: "-70px",
         }
     }
     if (index === 1) {
         return {
             top: "-30px",
-            right: "-10px",
+            right: "-70px",
         }
     }
     if (index === 2) {
         return {
-            bottom: "0px",
-            left: "-10px",
+            bottom: "-30px",
+            left: "-70px",
         }
     }
     if (index === 3) {
         return {
-            bottom: "0px",
-            right: "-10px",
+            bottom: "-30px",
+            right: "-70px",
         }
     }
 }
@@ -108,7 +187,7 @@ function renderPlayerInfo(player, index) {
     );
 }
 
-function getRowRenderer(settings) {
+function getRowRenderer(settings, sizes) {
 
     return function renderRow(row, index) {
 
@@ -117,6 +196,7 @@ function getRowRenderer(settings) {
                 key={ `LightRiders-Row-${index}` }
                 cells={ row }
                 index={ index }
+                sizes={ sizes }
                 settings={ settings }
             />
         );

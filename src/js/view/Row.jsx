@@ -2,23 +2,15 @@ import React from 'react';
 import createView from 'omniscient';
 import Cell from './Cell.jsx';
 
-const Row = createView('Row', function ({ cells, index, settings }) {
+const Row = createView('Row', function ({ cells, index, settings, sizes }) {
 
-    // FIXME: Something is fucked up here
-    const { canvas, grid, field } = settings;
+    const { field } = settings;
+    const cellHeight = sizes.cells.height;
+    const cellWidth = sizes.cells.width;
 
-    const canvasWidth = canvas.width;
-    const gridWidth = grid.width;
-
-    const cellHeight = settings.cells.height;
-    const cellWidth = settings.cells.width;
-
-    const transformX = (canvasWidth - gridWidth) / 2;
+    const width = field.width * cellWidth;
     const transformY = index * cellHeight;
-
-    const transform = `translate(${transformX},${transformY})`;
-    const fieldWidth = field.width;
-    const width = fieldWidth * cellWidth;
+    const transform = `translate(0,${transformY})`;
 
     return (
         <g
@@ -27,12 +19,12 @@ const Row = createView('Row', function ({ cells, index, settings }) {
             width={ width }
             height={ cellHeight }
         >
-            { cells.map(getCellRenderer(settings)) }
+            { cells.map(getCellRenderer(sizes.cells)) }
         </g>
     );
 });
 
-function getCellRenderer(settings) {
+function getCellRenderer(cellSize) {
 
     return function renderCell(cell, index) {
 
@@ -40,7 +32,7 @@ function getCellRenderer(settings) {
             key={ `LightRidersCell-${index}` }
             cell={ cell }
             index={ index }
-            settings={ settings }
+            cellSize={ cellSize }
         />;
     };
 }
