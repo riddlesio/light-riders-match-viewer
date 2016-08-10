@@ -1,51 +1,58 @@
 html {
     font-size: 62.5%;
+    font-family: 'Titillium Web', sans-serif;
 }
 
 .LightRiders-wrapper {
     background: #3e3e3e;
     height: 100%;
-}
-
-.LightRiders {
+    padding: 40px 80px 80px;
     background: url('../img/background.png') no-repeat center;
     background-size: cover;
 }
 
+.LightRiders {}
+
 .Cell {
-    stroke: darkgrey;
+    stroke: #363A3F;
 }
 
-.Position-p1 {
-    fill: #4ce670;
+.Position--p1,
+.Player1 .PlayerName,
+.Player1 .AvatarStroke {
+    fill: #6AA0FC;
 }
-.Position-p2 {
-    fill: yellow;
+.Position--p2,
+.Player2 .PlayerName,
+.Player2 .AvatarStroke {
+    fill: #E419F9;
 }
-.Position-p3 {
-    fill: cyan;
+.Position--p3,
+.Player3 .PlayerName,
+.Player3 .AvatarStroke {
+    fill: #00FF0C;
 }
-.Position-p4 {
-    fill: magenta;
+.Position--p4,
+.Player4 .PlayerName,
+.Player4 .AvatarStroke {
+    fill: #F7FF55;
 }
 
-.Wall-p1 {
-    fill: #37a852;
-}
-.Wall-p2 {
-    fill: #bfbf00;
-}
-.Wall-p3 {
+.Wall--p1 {
     fill: #00bfbf;
 }
-.Wall-p4 {
+.Wall--p2 {
     fill: #c100c1;
 }
+.Wall--p3 {
+    fill: #37a852;
+}
+.Wall--p4 {
+    fill: #bfbf00;
+}
 
-/*.IllegalMoveMade {*/
-    /*fill: #a8352d !important;*/
-/*}*/
-
-/*.Crashed {*/
-    /*fill: white !important;*/
-/*}*/
+.Players {}
+.PlayerName {
+    font-size: 2rem;
+    font-family: 'Titillium Web', sans-serif;
+}

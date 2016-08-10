@@ -4,8 +4,9 @@
  * @param   {Object} [defaults] The default settings as passed from the gameViewer
  * @returns {Object}            The settings object
  */
-function parseSettings(matchData, defaults = {}) {
+function parseSettings(data, defaults = {}) {
 
+    const { matchData, playerData } = data;
     const { settings } = matchData;
     const { field } = settings;
     const canvas = defaults.canvas;
@@ -23,16 +24,100 @@ function parseSettings(matchData, defaults = {}) {
     const cells = { height: cellDimensions, width: cellDimensions };
 
     const grid = { width: cellDimensions * fieldWidth, height: cellDimensions * fieldHeight };
+    const minimalistic = cellDimensions < 15;
 
-    return {
+    let parsedSettings = {
         ...defaults,
         ...settings,
         cells,
         grid,
+        minimalistic,
     };
+
+    // TODO: Remove player array
+    const players = [
+        {
+            name: 'Ron',
+        },
+        {
+            name: 'JackieChan',
+        },
+        {
+            name: 'PeterPetrelli',
+        },
+        {
+            name: 'JohnLegend',
+        },
+    ];
+
+    // TODO: Map on playerData
+    parsedSettings.players = players.map(getPlayerPositionsCalculator(parsedSettings));
+
+    return parsedSettings;
 }
 
-function parsePlayerNames(playerData, settings) {
+function getPlayerPositionsCalculator(settings) {
+
+    return function calculatePlayerPosition(player, index) {
+
+        const controlsHeight = 40;
+        const avatarDimension = 60;
+
+        const gridWidth = settings.grid.width;
+        const halfGridWidth = gridWidth / 2;
+        const halfCanvasWidth = settings.canvas.width / 2;
+        const horizontalMargin = halfCanvasWidth - halfGridWidth;
+
+        const gridHeight = settings.grid.height;
+        const halfGridHeight = gridHeight / 2;
+        const halfCanvasHeight = (settings.canvas.height - controlsHeight) / 2;
+        const verticalMargin = halfCanvasHeight - halfGridHeight;
+
+        let avatarX;
+        let avatarY;
+        let textX;
+        let textY;
+
+        if (index === 0) {
+            avatarX = horizontalMargin - avatarDimension - 10;
+            avatarY = verticalMargin - 30;
+            textX = avatarX + avatarDimension + 10;
+            textY = avatarY + 20;
+        }
+        if (index === 1) {
+            avatarX = gridWidth + horizontalMargin + 10;
+            avatarY = verticalMargin - 30;
+            textX = avatarX - 10;
+            textY = avatarY + 20;
+        }
+        if (index === 2) {
+            avatarX = horizontalMargin - avatarDimension - 10;
+            avatarY = gridHeight + verticalMargin - (avatarDimension / 2);
+            textX = avatarX + avatarDimension + 10;
+            textY = avatarY + avatarDimension - 5;
+        }
+        if (index === 3) {
+            avatarX = gridWidth + horizontalMargin + 10;
+            avatarY = gridHeight + verticalMargin - (avatarDimension / 2);
+            textX = avatarX - 10;
+            textY = avatarY + avatarDimension - 5;
+        }
+
+        return {
+            ...player,
+            avatar: {
+                x: avatarX,
+                y: avatarY,
+            },
+            text: {
+                x: textX,
+                y: textY,
+            },
+        };
+    }
+}
+
+function parsePlayerNames(playerData) {
 
     let players = {
         names: [],
@@ -48,7 +133,6 @@ function parsePlayerNames(playerData, settings) {
     });
 
     return {
-        ...settings,
         players,
     };
 }
@@ -69,8 +153,7 @@ function parseStates(matchData, settings) {
 
     const initialState = {
         ...firstState,
-        field: firstState.field.replace(/4|8/g, '0'),
-        player: -1,
+        // field: firstState.field.replace(/4|8/g, '0'),
         move: -1,
     };
 
