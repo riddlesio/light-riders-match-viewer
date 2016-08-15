@@ -20,7 +20,7 @@ function parseSettings(data, defaults = {}) {
             name: 'Ron',
         },
         {
-            name: 'JackieChan',
+            name: 'Jackie',
         },
         {
             name: 'PeterPetrelli',
@@ -67,19 +67,10 @@ function parseStates(matchData, settings) {
     let states = matchData.states;
     const rowCount = parseInt(settings.field.height);
     const rowLength = parseInt(settings.field.width);
-    const firstState = states[0];
     const arrayField = Array.from({ length: rowCount });
 
-    const initialState = {
-        ...firstState,
-        // field: firstState.field.replace(/4|8/g, '0'),
-        move: -1,
-    };
-
-    states.unshift(initialState);
-
-    return states.map((state, index) => (
-        parseState({ arrayField, index, rowLength, settings, state })
+    return states.map((state) => (
+        parseState({ settings, state })
     ));
 }
 /**
@@ -91,124 +82,80 @@ function parseStates(matchData, settings) {
  * @param index: index of state, same as move
  * @returns parsed states
  */
-function parseState({ arrayField, index, rowLength, settings, state }) {
+function parseState({ settings, state }) {
 
-    const winner = 'TODO';
-    const splitField = state.field.split(',');
-    const field = parseField({ arrayField, rowLength, splitField });
+    const playerNames = settings.players.map(p => p.name);
 
-    return {
-        field,
-        winner,
-    };
-}
+    const splitStates = state.split(';');
+    const playerStates = playerNames.map((name) => {
 
-function parseField({ arrayField, rowLength, splitField }) {
+        const playerState = splitStates
+            .find(player => player.includes(name))
+            .replace(name, '')
+            .split(':')
+            .map(line => line.split(','));
 
-    return arrayField.map((cell, index) => {
-        const sliceStart = index * rowLength;
-        const sliceEnd = sliceStart + rowLength;
+        const playerLines = playerState.map((line) => {
+            const x1 = line[0];
+            const y1 = line[1];
+            const x2 = line[2];
+            const y2 = line[3];
 
-        return splitField.slice(sliceStart, sliceEnd);
+            const horizontal = x2 !== x1;
+            const vertical = y2 !== y1;
+            let direction;
+            let scale;
+
+            if (horizontal) {
+                if (x1 < x2) {
+                    direction = 'right';
+                    scale = x2 - x1;
+                }
+                if (x1 > x2) {
+                    direction = 'left';
+                    scale = x1 - x2;
+                }
+            }
+
+            if (vertical) {
+                if (y1 < y2) {
+                    direction = 'down';
+                    scale = y2 - y1;
+                }
+                if (y1 > y2) {
+                    direction = 'up';
+                    scale = y1 - y2;
+                }
+            }
+
+            return {
+                direction,
+                scale,
+                x: x1,
+                y: y1,
+            };
+        });
+
+        return {
+            name,
+            lines: playerState,
+        }
     });
+
+    return playerStates;
+
+    // state = "Ron:1,1,2,1;Jackie;24,16,23,16;";
 }
 
-    // END OF MY STUFF
-
-    // const fieldWidth = settings.field.width;
-    // const cell = settings.cells;
-    // const cellWidth = cell.width;
-    // const cellHeight = cell.height;
-    //
-    // const marginLeft = 20;
-    // let winnerName;
-    // let prevX = 0;
-    // let prevY = 0;
-    //
-    // if (winner && winner !== 'none') {
-    //     winnerName = settings.players.names[parseInt(winner.replace('player', '')) - 1];
-    // }
-    //
-    // const lines = field.map((value, index) => {
-    //
-    //     let row = Math.floor(index / fieldWidth);
-    //     let column = index % fieldWidth;
-    //     let x1 = column * cellWidth + marginLeft;
-    //     let x2 = column * cellWidth + marginLeft + cellWidth;
-    //     let y1 = row * cellHeight + marginTop;
-    //     let y2 = row * cellHeight + marginTop;
-    //
-    //     /* 1. Copy previous state lines */
-    //     /* 2. Find position of light cycle relative to previous position (prevX, prevY) */
-    //     /* 3. Draw a line */
-    //     /* 4. Make this not suck */
-    //     if (value == 17) {
-    //         const row = Math.floor(index / fieldWidth);
-    //         const column = index % fieldWidth;
-    //
-    //         x1 = column * cellWidth + marginLeft;
-    //         x2 = column * cellWidth + marginLeft;
-    //
-    //         y1 = row * cellHeight + marginTop;
-    //         y2 = row * cellHeight + marginTop;
-    //
-    //         if (column > prevX) {
-    //             x2 = column * cellWidth + marginLeft - cellWidth;
-    //         }
-    //         if (column < prevX) {
-    //             x2 = column * cellWidth + marginLeft + cellWidth;
-    //         }
-    //         if (row > prevY) {
-    //             y2 = row * cellHeight + marginTop-height;
-    //         }
-    //         if (row < prevY) {
-    //             y2 = row * cellHeight + marginTop+height;
-    //         }
-    //     }
-    //
-    //     if (value == 33) {
-    //         prevX = column;
-    //         prevY = row;
-    //     }
-    //
-    //     return {
-    //         column,
-    //         row,
-    //         value,
-    //         x1,
-    //         x2,
-    //         y1,
-    //         y2,
-    //     };
-    // });
-    //
-    // const cells = field.map((value, index) => {
-    //
-    //     const row     = Math.floor(index / fieldWidth);
-    //     const column  = index % fieldWidth;
-    //     const x       = column * cellWidth + marginLeft;
-    //     const y       = row * cellHeight + marginTop;
-    //
-    //     return {
-    //         column,
-    //         row,
-    //         value,
-    //         x,
-    //         y,
-    //         height: cellHeight,
-    //         width: cellWidth,
-    //     };
-    // });
-    //
-    // return {
-    //     cells,
-    //     column,
-    //     illegalMove,
-    //     lines,
-    //     move,
-    //     player,
-    //     winner: winnerName,
-    // };
+// function parseField({ arrayField, rowLength, splitField }) {
+//
+//     return arrayField.map((cell, index) => {
+//         const sliceStart = index * rowLength;
+//         const sliceEnd = sliceStart + rowLength;
+//
+//         return splitField.slice(sliceStart, sliceEnd);
+//     });
+// }
 
 export {
     parseSettings,

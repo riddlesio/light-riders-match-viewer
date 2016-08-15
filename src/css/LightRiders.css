@@ -125,11 +125,13 @@ html {
 
 .line {
     fill: transparent;
-    stroke: red;
-    stroke-width: 2;
-    animation: dash 5s linear forwards;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+    stroke: #60a0fc;
+    stroke-width: 4;
+    /* TODO: Set speed appropriate to range. Set stroke-dash appropriate to cell size */
+    transition: all .3s linear;
+    animation: dash .3s linear forwards;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
 }
 
 @keyframes dash {

@@ -6,6 +6,7 @@ const Cell = createView('Cell', function ({ cell, cellSize, index }) {
 
     const { height, width } = cellSize;
     const transformX = index * width;
+    const halfDimension = height / 2;
 
     /**
      *  Description of cell values
@@ -50,19 +51,35 @@ const Cell = createView('Cell', function ({ cell, cellSize, index }) {
                 <use
                     className={ className }
                     xlinkHref="#SpaceShip"
-                    width={ width }
-                    height={ height }
+                    width={ width / 2 }
+                    height={ height / 2 }
                     x={ transformX }
                 />
             </g>
         );
     }
 
+    if (className.includes('Wall')) {
+        return (
+            <g
+                className={ className }
+                width={ width }
+                height={ height }
+            >
+                <path
+                    className="Cell line"
+                    transform={ `translate(${transformX},0) rotate(270) translate(-${height})` }
+                    d={ `M${halfDimension} 0 L${halfDimension} ${height}` }
+                />
+            </g>
+        )
+    }
+
     return (
         <rect
             className={ className }
-            width={ width / 2 }
-            height={ height / 2 }
+            width={ width }
+            height={ height }
             x={ transformX }
         />
     );

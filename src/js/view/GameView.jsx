@@ -167,16 +167,13 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                         <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${cellDimension}` } />
                     </symbol>
                     <symbol id="CornerLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
-                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension}` } />
+                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension} L${cellDimension} ${halfCellDimension}` } />
                     </symbol>
                 </defs>
                 <g>
                     { field.map(getRowRenderer({ isGrid: true, settings, sizes })) }
                 </g>
-                <g>
-                    { field.map(getRowRenderer({ isGrid: false, settings, sizes })) }
-                </g>
-                <path className="line" d="M15 0 L15 30" />
+
             </svg>
             <div className="Players-wrapper" style={ wrapperStyle }>
                 <div
@@ -192,6 +189,10 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
         </div>
     );
 });
+
+// <g>
+//     { field.map(getRowRenderer({ isGrid: false, settings, sizes })) }
+// </g>
 
 function isOdd(num) {
     return num % 2;
