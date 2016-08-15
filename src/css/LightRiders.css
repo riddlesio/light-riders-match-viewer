@@ -2,8 +2,11 @@ html {
     font-size: 62.5%;
     font-family: 'Titillium Web', sans-serif;
 }
+/*.BackgroundSvg {*/
+    /*background: url('../img/background.png') no-repeat center;*/
+    /*background-size: cover;*/
+/*}*/
 .LightRiders-wrapper {
-    background: #3e3e3e;
     height: 100%;
     background: url('../img/background.png') no-repeat center;
     background-size: cover;
@@ -11,7 +14,6 @@ html {
 }
 
 .LightRiders {
-    /*border: 1px solid red;*/
     height: 100%;
     width: 100%;
 }
@@ -24,7 +26,7 @@ html {
 }
 .Players {
     position: relative;
-    border: 1px solid white;
+    border: 1px solid #363A3F;
     margin-left: auto;
     margin-right: auto;
 }
@@ -64,19 +66,39 @@ html {
     border-radius: 2px;
     display: inline-block;
 }
-.Cell {
-    stroke: #424a4a;
+.AvatarBackground {
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
 }
-.Position--p1 {
+.Player1 .AvatarBackground {
+    background-color: #6AA0FC;
+}
+.Player2 .AvatarBackground {
+    background-color: #E419F9;
+}
+.Player3 .AvatarBackground {
+    background-color: #00FF0C;
+}
+.Player4 .AvatarBackground {
+    background-color: #F7FF55;
+}
+.Cell {
+    stroke: #121414;
+    stroke-width: 1;
+    fill: transparent;
+    /*fill: rgba(255,255,255,0.2);*/
+}
+.Position--p1:first-child {
     fill: #6AA0FC;
 }
-.Position--p2 {
+.Position--p2:first-child {
     fill: #E419F9;
 }
-.Position--p3 {
+.Position--p3:first-child {
     fill: #00FF0C;
 }
-.Position--p4 {
+.Position--p4:first-child {
     fill: #F7FF55;
 }
 .Wall--p1 {
@@ -90,4 +112,11 @@ html {
 }
 .Wall--p4 {
     fill: #bfbf00;
+}
+
+.SpaceShip-7 {
+    filter:'url(#luminosity-noclip)';
+}
+.Player1 .SpaceShipColor {
+    fill: #E419F9;
 }

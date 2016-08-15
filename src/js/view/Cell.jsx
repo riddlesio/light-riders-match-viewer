@@ -40,6 +40,24 @@ const MinimalisticCell = createView('MinimalisticCell', function ({ cell, cellSi
         'Wall--p4': cell === '24',
     });
 
+    if (className.includes('Position')) {
+        return (
+            <g
+                className="Cell"
+                width={ width }
+                height={ height }
+            >
+                <use
+                    className={ className }
+                    xlinkHref="#SpaceShip"
+                    width={ width }
+                    height={ height }
+                    x={ transformX }
+                />
+            </g>
+        );
+    }
+
     return (
         <rect
             className={ className }
@@ -49,8 +67,6 @@ const MinimalisticCell = createView('MinimalisticCell', function ({ cell, cellSi
         />
     );
 });
-
-const DetailedCell = createView('DetailedCell', function ({ cell, cellSize, index }) {});
 
 const Cell = createView('Cell', function ({ cell, cellSize, index }) {
 
