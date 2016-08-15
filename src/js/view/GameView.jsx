@@ -1,6 +1,6 @@
 import React from 'react';
 import createView from 'omniscient';
-import Row from './Row.jsx';
+import GridRow from './Row.jsx';
 
 const lifeCycle = {
 
@@ -52,7 +52,7 @@ const lifeCycle = {
         const cellHeight = svgHeight / field.height;
         const cellWidth = svgWidth / field.width;
         const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
-        // if breakpoint toggle css class
+        // TODO: if breakpoint toggle css class
 
         // Get grid size
         const gridWidth = field.width * cellDimensions;
@@ -90,7 +90,9 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     const { field } = state;
     const { canvas, players } = settings;
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
-
+    const cellDimension = cells.width;
+    const halfCellDimension = cellDimension / 2;
+    console.log(cellDimension);
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
@@ -161,10 +163,20 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                             </g>
                         </g>
                     </symbol>
+                    <symbol id="StraightLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
+                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${cellDimension}` } />
+                    </symbol>
+                    <symbol id="CornerLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
+                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension}` } />
+                    </symbol>
                 </defs>
                 <g>
-                    { field.map(getRowRenderer(settings, sizes)) }
+                    { field.map(getRowRenderer({ isGrid: true, settings, sizes })) }
                 </g>
+                <g>
+                    { field.map(getRowRenderer({ isGrid: false, settings, sizes })) }
+                </g>
+                <path className="line" d="M15 0 L15 30" />
             </svg>
             <div className="Players-wrapper" style={ wrapperStyle }>
                 <div
@@ -236,15 +248,16 @@ function renderPlayerInfo(player, index) {
     );
 }
 
-function getRowRenderer(settings, sizes) {
+function getRowRenderer({ isGrid, settings, sizes }) {
 
     return function renderRow(row, index) {
 
         return (
-            <Row
+            <GridRow
                 key={ `LightRiders-Row-${index}` }
                 cells={ row }
                 index={ index }
+                isGrid={ isGrid }
                 sizes={ sizes }
                 settings={ settings }
             />

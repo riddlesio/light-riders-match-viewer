@@ -84,10 +84,12 @@ html {
     background-color: #F7FF55;
 }
 .Cell {
-    stroke: #121414;
-    stroke-width: 1;
     fill: transparent;
     /*fill: rgba(255,255,255,0.2);*/
+}
+.Cell.Cell--grid {
+    stroke: #121414;
+    stroke-width: 1;
 }
 .Position--p1:first-child {
     fill: #6AA0FC;

@@ -1,8 +1,9 @@
 import React from 'react';
 import createView from 'omniscient';
 import Cell from './Cell.jsx';
+import GridCell from './GridCell.jsx';
 
-const Row = createView('Row', function ({ cells, index, settings, sizes }) {
+const Row = createView('Row', function ({ cells, isGrid, index, settings, sizes }) {
 
     const { field } = settings;
     const cellHeight = sizes.cells.height;
@@ -19,16 +20,18 @@ const Row = createView('Row', function ({ cells, index, settings, sizes }) {
             width={ width }
             height={ cellHeight }
         >
-            { cells.map(getCellRenderer(sizes.cells)) }
+            { cells.map(getCellRenderer({ cellSize: sizes.cells, isGrid })) }
         </g>
     );
 });
 
-function getCellRenderer(cellSize) {
+function getCellRenderer({ cellSize, isGrid }) {
+
+    const Component = isGrid ? GridCell : Cell;
 
     return function renderCell(cell, index) {
 
-        return <Cell
+        return <Component
             key={ `LightRidersCell-${index}` }
             cell={ cell }
             index={ index }
