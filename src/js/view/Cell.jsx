@@ -61,8 +61,8 @@ const Cell = createView('Cell', function ({ cell, cellSize, index }) {
     return (
         <rect
             className={ className }
-            width={ width }
-            height={ height }
+            width={ width / 2 }
+            height={ height / 2 }
             x={ transformX }
         />
     );

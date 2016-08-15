@@ -103,18 +103,18 @@ html {
 .Position--p4:first-child {
     fill: #F7FF55;
 }
-.Wall--p1 {
-    fill: #00bfbf;
-}
-.Wall--p2 {
-    fill: #c100c1;
-}
-.Wall--p3 {
-    fill: #37a852;
-}
-.Wall--p4 {
-    fill: #bfbf00;
-}
+/*.Wall--p1 {*/
+    /*fill: #00bfbf;*/
+/*}*/
+/*.Wall--p2 {*/
+    /*fill: #c100c1;*/
+/*}*/
+/*.Wall--p3 {*/
+    /*fill: #37a852;*/
+/*}*/
+/*.Wall--p4 {*/
+    /*fill: #bfbf00;*/
+/*}*/
 
 .SpaceShip-7 {
     filter:'url(#luminosity-noclip)';
