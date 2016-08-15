@@ -120,3 +120,18 @@ html {
 .Player1 .SpaceShipColor {
     fill: #E419F9;
 }
+
+.line {
+    fill: transparent;
+    stroke: red;
+    stroke-width: 2;
+    animation: dash 5s linear forwards;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}

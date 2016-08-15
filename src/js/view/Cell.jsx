@@ -2,7 +2,7 @@ import React from 'react';
 import createView from 'omniscient';
 import classNames from 'classnames';
 
-const MinimalisticCell = createView('MinimalisticCell', function ({ cell, cellSize, index }) {
+const Cell = createView('Cell', function ({ cell, cellSize, index }) {
 
     const { height, width } = cellSize;
     const transformX = index * width;
@@ -66,15 +66,6 @@ const MinimalisticCell = createView('MinimalisticCell', function ({ cell, cellSi
             x={ transformX }
         />
     );
-});
-
-const Cell = createView('Cell', function ({ cell, cellSize, index }) {
-
-    // if (settings.minimalistic) {
-    //     return <MinimalisticCell cell={ cell } settings={ settings } index={ index } />;
-    // }
-
-    return <MinimalisticCell cell={ cell } cellSize={ cellSize } index={ index } />;
 });
 
 export default Cell;
