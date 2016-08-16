@@ -75,10 +75,10 @@ function parseState({ settings, state }) {
             .map(line => line.split(','));
 
         const playerLines = playerState.map((line) => {
-            const x1 = line[0];
-            const y1 = line[1];
-            const x2 = line[2];
-            const y2 = line[3];
+            const x1 = parseInt(line[0]);
+            const y1 = parseInt(line[1]);
+            const x2 = parseInt(line[2]);
+            const y2 = parseInt(line[3]);
 
             const horizontal = x2 !== x1;
             const vertical = y2 !== y1;

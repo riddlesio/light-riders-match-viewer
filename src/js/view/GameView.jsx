@@ -195,16 +195,17 @@ function getPlayerStateRenderer({ sizes }) {
 
         return (
             <g key={ name } className={ `Player Player--${playerNo}` }>
-                { lines.map(getPlayerLineRenderer({ sizes })) }
+                { lines.map(getPlayerLineRenderer({ name, sizes })) }
             </g>
         );
     }
 }
 
-function getPlayerLineRenderer({ sizes }) {
+function getPlayerLineRenderer({ name, sizes }) {
 
-    return function renderPlayerLine({ direction, scale, x, y }) {
+    return function renderPlayerLine(props, index) {
 
+        const { direction, scale, x, y } = props;
         const { cells } = sizes;
         const cellDimension = cells.width;
         const halfCellDimension = cellDimension / 2;
@@ -212,14 +213,15 @@ function getPlayerLineRenderer({ sizes }) {
         const y1 = ((y - 1) * cellDimension) + halfCellDimension;
         const x2 = getLineX2({ cellDimension, direction });
         const y2 = getLineY2({ cellDimension, direction });
-        const transform = getLineScaleTransform({ direction, scale });
-        const rotation = getRotation({ direction });
+        const scaleTransformation = getLineScale({ direction, scale });
+        const rotation = getLineRotation({ direction });
 
         return (
-            <g transform={ `translate(${x1},${y1}) rotate(${rotation})`}>
+            <g key={ `${name}-g-${index}` } transform={ `translate(${x1},${y1}) rotate(${rotation})`}>
                 <line
+                    key={ `${name}-line-${index}` }
                     className="line"
-                    transform={ transform }
+                    style={{ transform: scaleTransformation }}
                     x1="0"
                     y1="0"
                     x2={ x2 }
@@ -230,12 +232,12 @@ function getPlayerLineRenderer({ sizes }) {
     }
 }
 
-function getRotation({ direction }) {
+function getLineRotation({ direction }) {
     return direction === 'up' || direction === 'left' ? 180 : 0;
 }
 
 
-function getLineScaleTransform({ direction, scale }) {
+function getLineScale({ direction, scale }) {
     if (direction === 'up' || direction === 'down') {
         return `scale(1,${scale})`;
     }
