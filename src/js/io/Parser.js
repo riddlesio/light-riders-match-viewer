@@ -9,31 +9,11 @@ function parseSettings(data, defaults = {}) {
     const { matchData, playerData } = data;
     const { settings } = matchData;
 
-    let parsedSettings = {
+    return {
         ...defaults,
         ...settings,
+        players: playerData,
     };
-
-    // TODO: Remove player array
-    const players = [
-        {
-            name: 'Ron',
-        },
-        {
-            name: 'Jackie',
-        },
-        {
-            name: 'PeterPetrelli',
-        },
-        {
-            name: 'JohnLegend',
-        },
-    ];
-
-    // TODO: Return playerData as players
-    parsedSettings.players = players;
-
-    return parsedSettings;
 }
 
 function parsePlayerNames(playerData) {
@@ -63,15 +43,15 @@ function parsePlayerNames(playerData) {
  * @returns {Array}           List of states
  */
 function parseStates(matchData, settings) {
-
+    console.log(matchData);
     let states = matchData.states;
-    const rowCount = parseInt(settings.field.height);
-    const rowLength = parseInt(settings.field.width);
-    const arrayField = Array.from({ length: rowCount });
+    // const rowCount = parseInt(settings.field.height);
+    // const rowLength = parseInt(settings.field.width);
+    // const arrayField = Array.from({ length: rowCount });
 
-    return states.map((state) => (
-        parseState({ settings, state })
-    ));
+    const parsedStates = states.map(state => parseState({ settings, state }));
+    console.log(parsedStates);
+    return parsedStates;
 }
 /**
  *
@@ -85,13 +65,12 @@ function parseStates(matchData, settings) {
 function parseState({ settings, state }) {
 
     const playerNames = settings.players.map(p => p.name);
-
     const splitStates = state.split(';');
     const playerStates = playerNames.map((name) => {
 
         const playerState = splitStates
             .find(player => player.includes(name))
-            .replace(name, '')
+            .replace(`${name}`, '')
             .split(':')
             .map(line => line.split(','));
 
@@ -138,13 +117,11 @@ function parseState({ settings, state }) {
 
         return {
             name,
-            lines: playerState,
+            lines: playerLines,
         }
     });
 
     return playerStates;
-
-    // state = "Ron:1,1,2,1;Jackie;24,16,23,16;";
 }
 
 // function parseField({ arrayField, rowLength, splitField }) {

@@ -87,12 +87,11 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
 
     const { sizes } = this.state;
     const { cells, grid, svg } = sizes;
-    const { field } = state;
     const { canvas, players } = settings;
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
     const cellDimension = cells.width;
     const halfCellDimension = cellDimension / 2;
-    console.log(cellDimension);
+
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
@@ -170,10 +169,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                         <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension} L${cellDimension} ${halfCellDimension}` } />
                     </symbol>
                 </defs>
-                <g>
-                    { field.map(getRowRenderer({ isGrid: true, settings, sizes })) }
-                </g>
-
+                { state.map(getPlayerStateRenderer({ sizes })) }
             </svg>
             <div className="Players-wrapper" style={ wrapperStyle }>
                 <div
@@ -190,6 +186,79 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     );
 });
 
+function getPlayerStateRenderer({ sizes }) {
+
+    return function renderPlayerState(props, index) {
+
+        const { lines, name } = props;
+        const playerNo = index + 1;
+
+        return (
+            <g key={ name } className={ `Player Player--${playerNo}` }>
+                { lines.map(getPlayerLineRenderer({ sizes })) }
+            </g>
+        );
+    }
+}
+
+function getPlayerLineRenderer({ sizes }) {
+
+    return function renderPlayerLine({ direction, scale, x, y }) {
+
+        const { cells } = sizes;
+        const cellDimension = cells.width;
+        const halfCellDimension = cellDimension / 2;
+        const x1 = ((x - 1) * cellDimension) + halfCellDimension;
+        const y1 = ((y - 1) * cellDimension) + halfCellDimension;
+        const x2 = getLineX2({ cellDimension, direction });
+        const y2 = getLineY2({ cellDimension, direction });
+        const transform = getLineScaleTransform({ direction, scale });
+        const rotation = getRotation({ direction });
+
+        return (
+            <g transform={ `translate(${x1},${y1}) rotate(${rotation})`}>
+                <line
+                    className="line"
+                    transform={ transform }
+                    x1="0"
+                    y1="0"
+                    x2={ x2 }
+                    y2={ y2 }
+                />
+            </g>
+        );
+    }
+}
+
+function getRotation({ direction }) {
+    return direction === 'up' || direction === 'left' ? 180 : 0;
+}
+
+
+function getLineScaleTransform({ direction, scale }) {
+    if (direction === 'up' || direction === 'down') {
+        return `scale(1,${scale})`;
+    }
+    return `scale(${scale},1)`;
+}
+
+function getLineX2({ cellDimension, direction }) {
+    if (direction === 'right' || direction === 'left') {
+        return cellDimension;
+    }
+    return 0;
+}
+
+function getLineY2({ cellDimension, direction }) {
+    if ( direction === 'up' || direction === 'down') {
+        return cellDimension;
+    }
+    return 0;
+}
+
+// <g>
+//     { field.map(getRowRenderer({ isGrid: true, settings, sizes })) }
+// </g>
 // <g>
 //     { field.map(getRowRenderer({ isGrid: false, settings, sizes })) }
 // </g>
@@ -198,7 +267,31 @@ function isOdd(num) {
     return num % 2;
 }
 
-function getPlayerCords(index) {
+function renderPlayerInfo(player, index) {
+
+    const className = `Player Player${index + 1}`;
+    const odd = isOdd(index);
+    const playerCords = getPlayerInfoCords(index);
+    const { top, bottom, left, right } = playerCords;
+
+    const info = [
+        <div className="AvatarWrapper">
+            <div className="AvatarBackground"></div>
+        </div>,
+        <p className="Player-name">
+            { player.name }
+        </p>
+    ];
+
+    return (
+        <div key={ `Player--${index}` } className={ className } style={{ top, bottom, left, right }}>
+            { info[odd ? 1 : 0] }
+            { info[odd ? 0 : 1] }
+        </div>
+    );
+}
+
+function getPlayerInfoCords(index) {
     if (index === 0) {
         return {
             top: "-30px",
@@ -223,30 +316,6 @@ function getPlayerCords(index) {
             right: "-70px",
         }
     }
-}
-
-function renderPlayerInfo(player, index) {
-
-    const className = `Player Player${index + 1}`;
-    const odd = isOdd(index);
-    const playerCords = getPlayerCords(index);
-    const { top, bottom, left, right } = playerCords;
-
-    const info = [
-        <div className="AvatarWrapper">
-            <div className="AvatarBackground"></div>
-        </div>,
-        <p className="Player-name">
-            { player.name }
-        </p>
-    ];
-
-    return (
-        <div key={ `Player--${index}` } className={ className } style={{ top, bottom, left, right }}>
-            { info[odd ? 1 : 0] }
-            { info[odd ? 0 : 1] }
-        </div>
-    );
 }
 
 function getRowRenderer({ isGrid, settings, sizes }) {

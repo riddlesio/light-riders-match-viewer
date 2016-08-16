@@ -130,8 +130,9 @@ html {
     /* TODO: Set speed appropriate to range. Set stroke-dash appropriate to cell size */
     transition: all .3s linear;
     animation: dash .3s linear forwards;
-    stroke-dasharray: 30;
-    stroke-dashoffset: 30;
+    /* TODO: Set stroke-dash appropriate to line scale * cell size */
+    /*stroke-dasharray: 30;*/
+    /*stroke-dashoffset: 30;*/
 }
 
 @keyframes dash {
