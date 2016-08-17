@@ -85,8 +85,8 @@ function parseState({ settings, state }) {
             .map(line => line.split(','))
             .map((line) => ({
                 x1: parseInt(line[0]),
-                x2: parseInt(line[1]),
-                y1: parseInt(line[2]),
+                y1: parseInt(line[1]),
+                x2: parseInt(line[2]),
                 y2: parseInt(line[3]),
             }));
 

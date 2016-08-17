@@ -127,4 +127,5 @@ html {
     fill: transparent;
     stroke: #60a0fc;
     stroke-width: 4;
+    stroke-linecap: round;
 }
