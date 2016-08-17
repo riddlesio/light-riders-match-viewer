@@ -62,6 +62,7 @@
     "lodash": "^3.0.1",
     "omniscient": "^3.3.0",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "velocity-react": "^1.1.5"
   }
 }
