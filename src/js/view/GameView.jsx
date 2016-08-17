@@ -1,6 +1,7 @@
 import React from 'react';
 import createView from 'omniscient';
 import GridRow from './Row.jsx';
+import { spring, Motion } from 'react-motion';
 
 const lifeCycle = {
 
@@ -82,8 +83,8 @@ const lifeCycle = {
 
 const GameView = createView('GameView', lifeCycle, function ({ state, settings }) {
 
-    console.log(settings);
-    console.log(state);
+    // console.log(settings);
+    // console.log(state);
 
     const { sizes } = this.state;
     const { cells, grid, svg } = sizes;
@@ -221,14 +222,29 @@ function getPlayerLineRenderer({ name, sizes }) {
         console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
 
         return (
-            <line
+            <Motion
                 key={ `${name}-line-${index}` }
-                className="line"
-                x1={ x1 }
-                y1={ y1 }
-                x2={ x2 }
-                y2={ y2 }
-            />
+                defaultStyle={{ x1, x2, y1, y2 }}
+                style={{
+                    x1: spring(x1, {stiffness: 300, damping: 110 }),
+                    x2: spring(x2, {stiffness: 300, damping: 110 }),
+                    y1: spring(y1, {stiffness: 300, damping: 110 }),
+                    y2: spring(y2, {stiffness: 300, damping: 110 })
+                }}
+            >
+                {
+                    interpolatingStyle => {
+                        console.log(interpolatingStyle);
+                        return <line
+                            className="line"
+                            x1={ interpolatingStyle.x1 }
+                            y1={ interpolatingStyle.y1 }
+                            x2={ interpolatingStyle.x2 }
+                            y2={ interpolatingStyle.y2 }
+                        />;
+                    }
+                }
+            </Motion>
         );
     }
 }
