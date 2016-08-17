@@ -43,85 +43,30 @@ function parsePlayerNames(playerData) {
  * @returns {Array}           List of states
  */
 function parseStates(matchData, settings) {
-    console.log(matchData);
+
+    // console.log(matchData);
     let states = matchData.states;
+
     // const rowCount = parseInt(settings.field.height);
     // const rowLength = parseInt(settings.field.width);
     // const arrayField = Array.from({ length: rowCount });
 
-    const parsedStates = states.map(state => parseState({ settings, state }));
-    console.log(parsedStates);
-    return parsedStates;
+    // const parsedStates = states
+    //     .map(state => parseState({ settings, state }))
+    //     .reduce((a, b) => a.concat(b));
+    //
+    // console.log(parsedStates);
+
+    const subbedStates = states.map(state => createSubStates({ settings, state }));
+
+    console.log(subbedStates);
+
+    return subbedStates;
 }
-/**
- *
- * @param arrayField: Array with length of amount of rows
- * @param rowLength: Length of a single row (int)
- * @param settings: The settings object with players data & field, cell and canvas sizes
- * @param state: expects an object with field (comma seperated string) and move (int)
- * @param index: index of state, same as move
- * @returns parsed states
- */
-function parseState({ settings, state }) {
 
-    const playerNames = settings.players.map(p => p.name);
-    const splitStates = state.split(';');
-    const playerStates = playerNames.map((name) => {
+function createSubStates({ settings, state }) {
 
-        const playerState = splitStates
-            .find(player => player.includes(name))
-            .replace(`${name}`, '')
-            .split(':')
-            .map(line => line.split(','));
-
-        const playerLines = playerState.map((line) => {
-            const x1 = parseInt(line[0]);
-            const y1 = parseInt(line[1]);
-            const x2 = parseInt(line[2]);
-            const y2 = parseInt(line[3]);
-
-            const horizontal = x2 !== x1;
-            const vertical = y2 !== y1;
-            let direction;
-            let scale;
-
-            if (horizontal) {
-                if (x1 < x2) {
-                    direction = 'right';
-                    scale = x2 - x1;
-                }
-                if (x1 > x2) {
-                    direction = 'left';
-                    scale = x1 - x2;
-                }
-            }
-
-            if (vertical) {
-                if (y1 < y2) {
-                    direction = 'down';
-                    scale = y2 - y1;
-                }
-                if (y1 > y2) {
-                    direction = 'up';
-                    scale = y1 - y2;
-                }
-            }
-
-            return {
-                direction,
-                scale,
-                x: x1,
-                y: y1,
-            };
-        });
-
-        return {
-            name,
-            lines: playerLines,
-        }
-    });
-
-    return playerStates;
+    const lines = state.state.split(':');
 }
 
 // function parseField({ arrayField, rowLength, splitField }) {
@@ -137,6 +82,5 @@ function parseState({ settings, state }) {
 export {
     parseSettings,
     parseStates,
-    parseState,
     parsePlayerNames,
 };

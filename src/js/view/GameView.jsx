@@ -205,57 +205,28 @@ function getPlayerLineRenderer({ name, sizes }) {
 
     return function renderPlayerLine(props, index) {
 
-        const { direction, scale, x, y } = props;
+        let { x1, x2, y1, y2 } = props;
+
         const { cells } = sizes;
         const cellDimension = cells.width;
         const halfCellDimension = cellDimension / 2;
-        const x1 = ((x - 1) * cellDimension) + halfCellDimension;
-        const y1 = ((y - 1) * cellDimension) + halfCellDimension;
-        const x2 = getLineX2({ cellDimension, direction });
-        const y2 = getLineY2({ cellDimension, direction });
-        const scaleTransformation = getLineScale({ direction, scale });
-        const rotation = getLineRotation({ direction });
+
+        x1 = ((x1 - 1) * cellDimension) + halfCellDimension;
+        y1 = ((y1 - 1) * cellDimension) + halfCellDimension;
+        x2 = ((x2 - 1) * cellDimension) + halfCellDimension;
+        y2 = ((y2 - 1) * cellDimension) + halfCellDimension;
 
         return (
-            <g key={ `${name}-g-${index}` } transform={ `translate(${x1},${y1}) rotate(${rotation})`}>
-                <line
-                    key={ `${name}-line-${index}` }
-                    className="line"
-                    style={{ transform: scaleTransformation }}
-                    x1="0"
-                    y1="0"
-                    x2={ x2 }
-                    y2={ y2 }
-                />
-            </g>
+            <line
+                key={ `${name}-line-${index}` }
+                className="line"
+                x1={ x1 }
+                y1={ y1 }
+                x2={ x2 }
+                y2={ y2 }
+            />
         );
     }
-}
-
-function getLineRotation({ direction }) {
-    return direction === 'up' || direction === 'left' ? 180 : 0;
-}
-
-
-function getLineScale({ direction, scale }) {
-    if (direction === 'up' || direction === 'down') {
-        return `scale(1,${scale})`;
-    }
-    return `scale(${scale},1)`;
-}
-
-function getLineX2({ cellDimension, direction }) {
-    if (direction === 'right' || direction === 'left') {
-        return cellDimension;
-    }
-    return 0;
-}
-
-function getLineY2({ cellDimension, direction }) {
-    if ( direction === 'up' || direction === 'down') {
-        return cellDimension;
-    }
-    return 0;
 }
 
 // <g>

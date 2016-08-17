@@ -127,16 +127,4 @@ html {
     fill: transparent;
     stroke: #60a0fc;
     stroke-width: 4;
-    /* TODO: Set speed appropriate to range. Set stroke-dash appropriate to cell size */
-    /*transition: all .3s linear;*/
-    /*animation: dash .3s linear forwards;*/
-    /* TODO: Set stroke-dash appropriate to cell size */
-    /*stroke-dasharray: 30;*/
-    /*stroke-dashoffset: 30;*/
 }
-
-/*@keyframes dash {*/
-    /*to {*/
-        /*stroke-dashoffset: 0;*/
-    /*}*/
-/*}*/
