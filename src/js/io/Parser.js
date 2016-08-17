@@ -56,17 +56,45 @@ function parseStates(matchData, settings) {
     //     .reduce((a, b) => a.concat(b));
     //
     // console.log(parsedStates);
+    const parsedStates = states.map(state => parseState({ settings, state }));
 
-    const subbedStates = states.map(state => createSubStates({ settings, state }));
+    console.log(parsedStates);
 
-    console.log(subbedStates);
-
-    return subbedStates;
+    return parsedStates;
 }
+/**
+ *
+ * @param arrayField: Array with length of amount of rows
+ * @param rowLength: Length of a single row (int)
+ * @param settings: The settings object with players data & field, cell and canvas sizes
+ * @param state: expects an object with field (comma seperated string) and move (int)
+ * @param index: index of state, same as move
+ * @returns parsed states
+ */
+function parseState({ settings, state }) {
 
-function createSubStates({ settings, state }) {
+    const playerNames = settings.players.map(p => p.name);
+    const splitStates = state.split(';');
 
-    const lines = state.state.split(':');
+    return playerNames.map((name) => {
+
+        const playerState = splitStates
+            .find(player => player.includes(name))
+            .replace(`${name}`, '')
+            .split(':')
+            .map(line => line.split(','))
+            .map((line) => ({
+                x1: parseInt(line[0]),
+                x2: parseInt(line[1]),
+                y1: parseInt(line[2]),
+                y2: parseInt(line[3]),
+            }));
+
+        return {
+            name,
+            lines: playerState,
+        };
+    });
 }
 
 // function parseField({ arrayField, rowLength, splitField }) {
@@ -82,5 +110,6 @@ function createSubStates({ settings, state }) {
 export {
     parseSettings,
     parseStates,
+    parseState,
     parsePlayerNames,
 };
