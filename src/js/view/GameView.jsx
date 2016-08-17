@@ -1,5 +1,6 @@
 import React from 'react';
 import createView from 'omniscient';
+import MtSvgLines from 'react-mt-svg-lines';
 import GridRow from './Row.jsx';
 
 const lifeCycle = {
@@ -98,79 +99,81 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
 
     return (
         <div key="GAME" className="LightRiders-wrapper" style={ wrapperStyle }>
-            <svg
-                className="LightRiders"
-                viewBox={ `0 0 ${grid.width} ${grid.height}` }
-                preserveAspectRatio="xMidYMid meet"
-                ref="GridSpace"
-            >
-                <defs>
-                    <pattern
-                        id="New_Pattern_Swatch_5"
-                        width="1"
-                        height="2"
-                        patternTransform="translate(6.79 0.55) scale(0.56 0.83)"
-                        patternUnits="userSpaceOnUse"
-                        viewBox="0 0 1 2"
-                    >
-                        <rect className="Avatar-1" width="1" height="2"/>
-                        <rect className="Avatar-2" width="1" height="1"/>
-                        <rect y="1" width="1" height="1"/>
-                    </pattern>
-                    <filter id="luminosity-noclip" x="2" y="2.41" width="21" height="21" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                        <feFlood floodColor="#fff" result="bg"/>
-                        <feBlend in="SourceGraphic" in2="bg"/>
-                    </filter>
-                    <mask
-                        id="mask"
-                        x="2"
-                        y="2.41"
-                        width="21"
-                        height="21"
-                        maskUnits="userSpaceOnUse">
-                        <g className="SpaceShip-7">
-                            <image
-                                width="21"
-                                height="21"
-                                transform="translate(2 2.41)"
-                                xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAIAAAAmdTLBAAAACXBIWXMAAAsSAAALEgHS3X78AAABXklEQVQ4T82SP6uCUBiH/RLuQn4JbQyyIYjATbBFIeyPNDWEIgQO7UFU9gX6AHcRQWpusGwQmxojrGhrsJfCS9bxHu5w4T7D4fC+v0dfzjkE8a+haRoXyaZYLLbb7XK5jAtmoOv6fD43DAMXRCFJ0nK53O/3i8VClmVc/IPxeHw8HuM4PhwOsMfF0yiKsl6v44TtdquqKk56wbKs8/n87V+v19lshpMSGo2G7/txms1mA0Ph1AfT6fT150+iKIKhcCpB1Ot1z/NiFDBUq9XC+MPh8Hnsn8AIo9HoJ1kQBNd1L5fL7XYLw/DrQRAEp9MJfChCVxTFTL/X6zmOAzdn23a3230Wm83mZDJZrVa73Q5elKZpaLlQKPT7fXgqpmnWarW3LpzLYDCAD8HKcRzCL5VKcEPVahXRS+B5vtPpVCqV9wZFUSzLMgyDslJALJ/P53K5VJUkyYw8mt/m/4w7Gnf2Z9sghWIAAAAASUVORK5CYII="
-                            />
-                        </g>
-                    </mask>
-                    <symbol id="SpaceShip" viewBox="0 0 25 25">
-                        <g isolation="isolate">
-                            <image
-                                style={{ opacity: 0.7 }}
-                                mixBlendMode="screen"
-                                width="29"
-                                height="29"
-                                transform="translate(-2 -1.59)"
-                                xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAACXBIWXMAAAsSAAALEgHS3X78AAAEgUlEQVRIS71WW2gdRRg+pqlt4i2pJ9ndOTFNa6zUtCAtlNYb4oOiFV+EghcqoiiKgtRW34oVRCx4AaFCvdQHQQ0oUvAKJVTfanxQUYRjepKzs5ucFqOY5OzOnofx+2ZOks3lnD0q9OFndma+///2m/nnn8lprXMX2jIBKyynL1phWT7/mXSRpA22ZiSn29nW+/+KPBOQImTw9uJgcZ3fpztCoTvZsq/tD7S1SpwJmCcc3anXkmSsW18BwvyUo3vZss9xzrdKnEn6Ql1hKEIq2xCKqD8Q8bUTrhpiy74dDzuJM/j/RWpVrikN6PUT/bp70o0GQpHskE50W+jV7jAt+hznPHHa7nNTtVmkVLn2fF5fJgvVvnExt0O68d6yGz2M9ol6u9eMY5444nWG2kyV3K9Jd6Yn9NTWUMS3h17ymC/UkcCtHWXLvh1XW4kjXmeozVT5xwZ9ORKmH0r2+J560HfVESnUe4GbfMSWfY5znjjis9S2oFL3MGm4jLBnAy8+Hnjqy8BLTts2Ps5xzhNHfJbaTJVnvWhjIKo3SDd5KHDVKyD6DPY91P3C1vQxbuaBIz5LbWsqnfhu340PYTlPQOF3UsRF6Skf/aLtqxNmHrhW1LasEklzVLrqJAh+ggUgO8+WfSTVSTvfmtomKmegcmbIHpH4IBLnXe4jiKEyqUDptPTicyD9HePfYhzJFR9c3NvGmdxQJSuNLNT2SDfaj317GSSfgOyM78VjvohDEFbwPYm5syAdRfupwbnJfvrRv5HaZiqvwz7dieDPoOocA+kXsDOwn2G/wn6jBfb7ByTWV/ipt4inH/0bqV2hklUF+3KV7ya7yqJ6H87hYSYKgn0uRXIKSXQKwb8B2df8tkfHHh/g3kcmH7Z+yS7GWa1KLagcNjW2tJ7F2++Lr5EFU1cfhYqXEPQd7NmHCPwBlvRtKHkTxG+A9BiJMMdC8TH3lXjjB3/GYTzGHU6pTS9tO+/ISu+s4zuz2xH4LtbXAKUOBK9B6av2Oz6A/uM+AiO5nkTWPk8ijL1uTKgX6Ud/xmE8xtX2zl1KOoolONejLy3n54QszF5Pp0Akj0ivdgBZeQjJ8xTq6wPMTt+Nbg1F7SbeMrje7mHyAPs0fuA5U7XgZ34acRiPcUftEi8hNfvJSeyBxz80y+Ope0Oh7sey7ZtkUiEry87MtoqjN5dwnVV69dVTjtqOvbvRrozaRzz9jD/iMB7jpvd1xfKaatITD054czvLXnQz7s1bpFPdXXbUNt6bfDGUunQXj8NE/1/dXL5xJ9pkf7S6m3j60Z9xGK/h8up6Ik3j+TGen/MQfJMsxFuYDKGnN0KVM22fKp16SF+s8TwpDup17JcG/uziPHE2CeMt9Gcc+jCubpBI5lni9/kdRaiwTxCdl4W/rxzbvEg2svgIMzZSf6z96ExdQhzx9KO/jeN36GUPt+XFIfXi8zt4sM0ThMrSjvMHff677kcc8fQzP9/gpbha7W2rn6m0NX/bLiVf8BtO+6bwzQIsWK4R2TLLreK7nHB10gtg/wAZdCPGuYbJrAAAAABJRU5ErkJggg=="
-                            />
-                            <polygon
-                                className="SpaceShipColor"
-                                points="12.5 4.5 20.5 20.5 12.42 15.5 4.5 20.5 12.5 4.5"
-                            />
-                            <g style={{ mask: 'url(#mask)' }}>
-                                <g style={{ opacity: 0.75 }} mixBlendMode="screen">
-                                    <polygon
-                                        className="SpaceShip-6"
-                                        fill="#fff"
-                                        points="12.5 4.5 20.5 20.5 12.42 15.5 4.5 20.5 12.5 4.5"
-                                    />
+            <MtSvgLines animate={ true } duration={ 500 }>
+                <svg
+                    className="LightRiders"
+                    viewBox={ `0 0 ${grid.width} ${grid.height}` }
+                    preserveAspectRatio="xMidYMid meet"
+                    ref="GridSpace"
+                >
+                    <defs>
+                        <pattern
+                            id="New_Pattern_Swatch_5"
+                            width="1"
+                            height="2"
+                            patternTransform="translate(6.79 0.55) scale(0.56 0.83)"
+                            patternUnits="userSpaceOnUse"
+                            viewBox="0 0 1 2"
+                        >
+                            <rect className="Avatar-1" width="1" height="2"/>
+                            <rect className="Avatar-2" width="1" height="1"/>
+                            <rect y="1" width="1" height="1"/>
+                        </pattern>
+                        <filter id="luminosity-noclip" x="2" y="2.41" width="21" height="21" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                            <feFlood floodColor="#fff" result="bg"/>
+                            <feBlend in="SourceGraphic" in2="bg"/>
+                        </filter>
+                        <mask
+                            id="mask"
+                            x="2"
+                            y="2.41"
+                            width="21"
+                            height="21"
+                            maskUnits="userSpaceOnUse">
+                            <g className="SpaceShip-7">
+                                <image
+                                    width="21"
+                                    height="21"
+                                    transform="translate(2 2.41)"
+                                    xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAIAAAAmdTLBAAAACXBIWXMAAAsSAAALEgHS3X78AAABXklEQVQ4T82SP6uCUBiH/RLuQn4JbQyyIYjATbBFIeyPNDWEIgQO7UFU9gX6AHcRQWpusGwQmxojrGhrsJfCS9bxHu5w4T7D4fC+v0dfzjkE8a+haRoXyaZYLLbb7XK5jAtmoOv6fD43DAMXRCFJ0nK53O/3i8VClmVc/IPxeHw8HuM4PhwOsMfF0yiKsl6v44TtdquqKk56wbKs8/n87V+v19lshpMSGo2G7/txms1mA0Ph1AfT6fT150+iKIKhcCpB1Ot1z/NiFDBUq9XC+MPh8Hnsn8AIo9HoJ1kQBNd1L5fL7XYLw/DrQRAEp9MJfChCVxTFTL/X6zmOAzdn23a3230Wm83mZDJZrVa73Q5elKZpaLlQKPT7fXgqpmnWarW3LpzLYDCAD8HKcRzCL5VKcEPVahXRS+B5vtPpVCqV9wZFUSzLMgyDslJALJ/P53K5VJUkyYw8mt/m/4w7Gnf2Z9sghWIAAAAASUVORK5CYII="
+                                />
+                            </g>
+                        </mask>
+                        <symbol id="SpaceShip" viewBox="0 0 25 25">
+                            <g isolation="isolate">
+                                <image
+                                    style={{ opacity: 0.7 }}
+                                    mixBlendMode="screen"
+                                    width="29"
+                                    height="29"
+                                    transform="translate(-2 -1.59)"
+                                    xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAACXBIWXMAAAsSAAALEgHS3X78AAAEgUlEQVRIS71WW2gdRRg+pqlt4i2pJ9ndOTFNa6zUtCAtlNYb4oOiFV+EghcqoiiKgtRW34oVRCx4AaFCvdQHQQ0oUvAKJVTfanxQUYRjepKzs5ucFqOY5OzOnofx+2ZOks3lnD0q9OFndma+///2m/nnn8lprXMX2jIBKyynL1phWT7/mXSRpA22ZiSn29nW+/+KPBOQImTw9uJgcZ3fpztCoTvZsq/tD7S1SpwJmCcc3anXkmSsW18BwvyUo3vZss9xzrdKnEn6Ql1hKEIq2xCKqD8Q8bUTrhpiy74dDzuJM/j/RWpVrikN6PUT/bp70o0GQpHskE50W+jV7jAt+hznPHHa7nNTtVmkVLn2fF5fJgvVvnExt0O68d6yGz2M9ol6u9eMY5444nWG2kyV3K9Jd6Yn9NTWUMS3h17ymC/UkcCtHWXLvh1XW4kjXmeozVT5xwZ9ORKmH0r2+J560HfVESnUe4GbfMSWfY5znjjis9S2oFL3MGm4jLBnAy8+Hnjqy8BLTts2Ps5xzhNHfJbaTJVnvWhjIKo3SDd5KHDVKyD6DPY91P3C1vQxbuaBIz5LbWsqnfhu340PYTlPQOF3UsRF6Skf/aLtqxNmHrhW1LasEklzVLrqJAh+ggUgO8+WfSTVSTvfmtomKmegcmbIHpH4IBLnXe4jiKEyqUDptPTicyD9HePfYhzJFR9c3NvGmdxQJSuNLNT2SDfaj317GSSfgOyM78VjvohDEFbwPYm5syAdRfupwbnJfvrRv5HaZiqvwz7dieDPoOocA+kXsDOwn2G/wn6jBfb7ByTWV/ipt4inH/0bqV2hklUF+3KV7ya7yqJ6H87hYSYKgn0uRXIKSXQKwb8B2df8tkfHHh/g3kcmH7Z+yS7GWa1KLagcNjW2tJ7F2++Lr5EFU1cfhYqXEPQd7NmHCPwBlvRtKHkTxG+A9BiJMMdC8TH3lXjjB3/GYTzGHU6pTS9tO+/ISu+s4zuz2xH4LtbXAKUOBK9B6av2Oz6A/uM+AiO5nkTWPk8ijL1uTKgX6Ud/xmE8xtX2zl1KOoolONejLy3n54QszF5Pp0Akj0ivdgBZeQjJ8xTq6wPMTt+Nbg1F7SbeMrje7mHyAPs0fuA5U7XgZ34acRiPcUftEi8hNfvJSeyBxz80y+Ope0Oh7sey7ZtkUiEry87MtoqjN5dwnVV69dVTjtqOvbvRrozaRzz9jD/iMB7jpvd1xfKaatITD054czvLXnQz7s1bpFPdXXbUNt6bfDGUunQXj8NE/1/dXL5xJ9pkf7S6m3j60Z9xGK/h8up6Ik3j+TGen/MQfJMsxFuYDKGnN0KVM22fKp16SF+s8TwpDup17JcG/uziPHE2CeMt9Gcc+jCubpBI5lni9/kdRaiwTxCdl4W/rxzbvEg2svgIMzZSf6z96ExdQhzx9KO/jeN36GUPt+XFIfXi8zt4sM0ThMrSjvMHff677kcc8fQzP9/gpbha7W2rn6m0NX/bLiVf8BtO+6bwzQIsWK4R2TLLreK7nHB10gtg/wAZdCPGuYbJrAAAAABJRU5ErkJggg=="
+                                />
+                                <polygon
+                                    className="SpaceShipColor"
+                                    points="12.5 4.5 20.5 20.5 12.42 15.5 4.5 20.5 12.5 4.5"
+                                />
+                                <g style={{ mask: 'url(#mask)' }}>
+                                    <g style={{ opacity: 0.75 }} mixBlendMode="screen">
+                                        <polygon
+                                            className="SpaceShip-6"
+                                            fill="#fff"
+                                            points="12.5 4.5 20.5 20.5 12.42 15.5 4.5 20.5 12.5 4.5"
+                                        />
+                                    </g>
                                 </g>
                             </g>
-                        </g>
-                    </symbol>
-                    <symbol id="StraightLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
-                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${cellDimension}` } />
-                    </symbol>
-                    <symbol id="CornerLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
-                        <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension} L${cellDimension} ${halfCellDimension}` } />
-                    </symbol>
-                </defs>
-                { state.map(getPlayerStateRenderer({ sizes })) }
-            </svg>
+                        </symbol>
+                        <symbol id="StraightLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
+                            <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${cellDimension}` } />
+                        </symbol>
+                        <symbol id="CornerLine" viewBox={ `0 0 ${cellDimension} ${cellDimension}` }>
+                            <path className="line" d={ `M${halfCellDimension} 0 L${halfCellDimension} ${halfCellDimension} L${cellDimension} ${halfCellDimension}` } />
+                        </symbol>
+                    </defs>
+                    { state.map(getPlayerStateRenderer({ sizes })) }
+                </svg>
+            </MtSvgLines>
             <div className="Players-wrapper" style={ wrapperStyle }>
                 <div
                     className="Players"
@@ -211,14 +214,12 @@ function getPlayerLineRenderer({ name, sizes }) {
         const cellDimension = cells.width;
         const halfCellDimension = cellDimension / 2;
 
-        console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
+        // console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
 
         x1 = ((x1 - 1) * cellDimension) + halfCellDimension;
         y1 = ((y1 - 1) * cellDimension) + halfCellDimension;
         x2 = ((x2 - 1) * cellDimension) + halfCellDimension;
         y2 = ((y2 - 1) * cellDimension) + halfCellDimension;
-
-        console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
 
         return (
             <line
