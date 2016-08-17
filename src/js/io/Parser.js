@@ -56,11 +56,65 @@ function parseStates(matchData, settings) {
     //     .reduce((a, b) => a.concat(b));
     //
     // console.log(parsedStates);
+
     const parsedStates = states.map(state => parseState({ settings, state }));
 
     console.log(parsedStates);
 
-    return parsedStates;
+    // All States map
+    const tweenStates = parsedStates.map((state) => {
+
+        // Return 10 states. Increment in each state
+        const stateCount = 10;
+        const array = Array.from({ length: stateCount });
+
+        return array.map((item, index) => {
+            // For each player, get latest line
+            // Reduce the increased value back to previous state value
+            return state.map((player) => {
+                const { name, lines } = player;
+                const latestLine = lines[lines.length - 1];
+                let { x1, x2, y1, y2 } = latestLine;
+                let increment;
+
+                if (x1 < x2) {
+                    increment = 1 / stateCount;
+                    x2 = x2 - 1 + (index * increment);
+                }
+                if (x2 < x1) {
+                    increment = 1 / stateCount;
+                    x2 = x2 + 1 - (index * increment);
+                }
+                if (y1 < y2) {
+                    increment = 1 / stateCount;
+                    y2 = y2 - 1 + (index * increment);
+                }
+                if (y1 > y2) {
+                    increment = 1 / stateCount;
+                    y2 = y2 + 1 - (index * increment);
+                }
+
+                const newLine = [{ x1, x2, y1, y2 }];
+                const otherLines = lines.slice(0,-1);
+                const newLines = otherLines.concat(newLine);
+
+                return {
+                    name,
+                    lines: newLines,
+                }
+            });
+        });
+    });
+
+    console.log(tweenStates);
+
+    // reduce tweenStates to single array
+
+    const combinedStates = tweenStates.reduce((a, b) => a.concat(b), []);
+
+    console.log(combinedStates);
+
+    return combinedStates;
 }
 /**
  *
