@@ -59,13 +59,13 @@ function parseStates(matchData, settings) {
 
     const parsedStates = states.map(state => parseState({ settings, state }));
 
-    console.log(parsedStates);
+    // console.log(parsedStates);
 
     // All States map
     const tweenStates = parsedStates.map((state) => {
 
         // Return 10 states. Increment in each state
-        const stateCount = 10;
+        const stateCount = 8;
         const array = Array.from({ length: stateCount });
 
         return array.map((item, index) => {
@@ -106,13 +106,13 @@ function parseStates(matchData, settings) {
         });
     });
 
-    console.log(tweenStates);
+    // console.log(tweenStates);
 
     // reduce tweenStates to single array
 
     const combinedStates = tweenStates.reduce((a, b) => a.concat(b), []);
 
-    console.log(combinedStates);
+    // console.log(combinedStates);
 
     return combinedStates;
 }

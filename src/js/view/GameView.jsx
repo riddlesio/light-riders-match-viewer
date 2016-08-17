@@ -211,14 +211,14 @@ function getPlayerLineRenderer({ name, sizes }) {
         const cellDimension = cells.width;
         const halfCellDimension = cellDimension / 2;
 
-        console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
+        // console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
 
         x1 = ((x1 - 1) * cellDimension) + halfCellDimension;
         y1 = ((y1 - 1) * cellDimension) + halfCellDimension;
         x2 = ((x2 - 1) * cellDimension) + halfCellDimension;
         y2 = ((y2 - 1) * cellDimension) + halfCellDimension;
 
-        console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
+        // console.log('x1:', x1, 'x2:', x2, 'y1:', y1, 'y2:', y2);
 
         return (
             <line

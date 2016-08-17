@@ -34,8 +34,8 @@ const game = new MatchViewer({
 
         // Time between each step when playing
         playbackTimeout: {
-            min: 16,
-            max: 750,
+            min: 1,
+            max: 50,
         },
     },
 });
