@@ -6,6 +6,7 @@ const lifeCycle = {
 
     getInitialState() {
         return {
+            width: 100,
             sizes: {
                 cells: {
                     width: 0,
@@ -80,7 +81,7 @@ const lifeCycle = {
     },
 };
 
-const GameView = createView('GameView', lifeCycle, function ({ state, settings }) {
+const GameView = createView('GameView', [lifeCycle, React.Animate], function ({ state, settings }) {
 
     console.log(settings);
     console.log(state);
