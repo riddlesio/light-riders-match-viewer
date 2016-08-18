@@ -85,6 +85,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     console.log(settings);
     console.log(state);
 
+    const { playerStates } = state;
     const { sizes } = this.state;
     const { cells, grid, svg } = sizes;
     const { canvas, players } = settings;
@@ -205,7 +206,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                         width="626.0625"
                         height="626.0625"
                     /> */ }
-                    { state.map(getPlayerStateRenderer({ settings, sizes })) }
+                    { playerStates.map(getPlayerStateRenderer({ settings, sizes })) }
                 </svg>
             </div>
             <div className="Players-wrapper" style={ wrapperStyle }>

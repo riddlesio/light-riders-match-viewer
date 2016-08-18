@@ -44,11 +44,12 @@ function parsePlayerNames(playerData) {
  */
 function parseStates(matchData, settings) {
 
-    const states = matchData.states;
+    const { errors, states } = matchData;
     const parsedStates = states.map(state => parseState({ settings, state }));
     const { width, height } = settings.field;
     const fieldSize = width > height ? width : height;
     let stateCount;
+    let visibleErrors = [];
 
     if (fieldSize <= 25) {
         stateCount = 25 / fieldSize * 8;
@@ -103,7 +104,9 @@ function parseStates(matchData, settings) {
         });
     });
 
-    return tweenStates.reduce((a, b) => a.concat(b), []);
+    return tweenStates
+        .reduce((a, b) => a.concat(b), [])
+        .map(state => ({ errors: visibleErrors, playerStates: state}));
 }
 /**
  *
