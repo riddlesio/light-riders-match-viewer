@@ -1,9 +1,3 @@
-/**
- * Parses the passed data object into settings which are usable by the viewer
- * @param   {Object} data       The JSON data received from the server
- * @param   {Object} [defaults] The default settings as passed from the gameViewer
- * @returns {Object}            The settings object
- */
 function parseSettings(data, defaults = {}) {
 
     const { matchData, playerData } = data;
@@ -36,20 +30,45 @@ function parsePlayerNames(playerData) {
     };
 }
 
-/**
- * Parses the passed data and settings into states which can be rendered by the viewer
- * @param   {Object} data     The JSON data received from the server
- * @param   {Object} settings The parsed settings
- * @returns {Array}           List of states
- */
+function parseErrors({ errors, parsedStates }) {
+
+    // map parsedStates
+    // if one of line x2 and y2 === error. set index on error
+
+    return errors
+        .map((error) => {
+            const coordinates = error.split(',');
+            return {
+                x: parseInt(coordinates[0]),
+                y: parseInt(coordinates[1]),
+            };
+        })
+        .map((error) => {
+            const index = parsedStates.find((state, index) => {
+                const foundError = state.find((playerState) => {
+                    const { lines } = playerState;
+                    const finalLine = lines[lines.length - 1];
+                    return error.x === finalLine.x2 && error.y === finalLine.y2;
+                });
+                if (!!foundError) return index;
+            });
+
+            return {
+                error,
+                index: parsedStates.indexOf(index),
+            }
+        });
+}
+
 function parseStates(matchData, settings) {
 
     const { errors, states } = matchData;
     const parsedStates = states.map(state => parseState({ settings, state }));
+    const parsedErrors = parseErrors({ errors, parsedStates });
+    console.log(parsedErrors);
     const { width, height } = settings.field;
     const fieldSize = width > height ? width : height;
     let stateCount;
-    let visibleErrors = [];
 
     if (fieldSize <= 25) {
         stateCount = 25 / fieldSize * 8;
@@ -63,13 +82,13 @@ function parseStates(matchData, settings) {
         stateCount = 1;
     }
 
-    const tweenStates = parsedStates.map((state) => {
+    const tweenStates = parsedStates.map((playerState) => {
 
         const array = Array.from({ length: stateCount });
 
         return array.map((item, index) => {
 
-            return state.map((player) => {
+            return playerState.map((player) => {
                 const { name, lines } = player;
                 const latestLine = lines[lines.length - 1];
                 let { x1, x2, y1, y2 } = latestLine;
@@ -104,19 +123,9 @@ function parseStates(matchData, settings) {
         });
     });
 
-    return tweenStates
-        .reduce((a, b) => a.concat(b), [])
-        .map(state => ({ errors: visibleErrors, playerStates: state}));
+    return tweenStates.reduce((a, b) => a.concat(b), []);
 }
-/**
- *
- * @param arrayField: Array with length of amount of rows
- * @param rowLength: Length of a single row (int)
- * @param settings: The settings object with players data & field, cell and canvas sizes
- * @param state: expects an object with field (comma seperated string) and move (int)
- * @param index: index of state, same as move
- * @returns parsed states
- */
+
 function parseState({ settings, state }) {
 
     const playerNames = settings.players.map(p => p.name);

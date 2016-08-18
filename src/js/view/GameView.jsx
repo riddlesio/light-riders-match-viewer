@@ -85,7 +85,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     console.log(settings);
     console.log(state);
 
-    const { playerStates } = state;
+    const playerStates = state;
     const { sizes } = this.state;
     const { cells, grid, svg } = sizes;
     const { canvas, players } = settings;
