@@ -44,33 +44,35 @@ function parsePlayerNames(playerData) {
  */
 function parseStates(matchData, settings) {
 
-    // console.log(matchData);
-    let states = matchData.states;
+    const states = matchData.states;
 
     // const rowCount = parseInt(settings.field.height);
     // const rowLength = parseInt(settings.field.width);
     // const arrayField = Array.from({ length: rowCount });
 
-    // const parsedStates = states
-    //     .map(state => parseState({ settings, state }))
-    //     .reduce((a, b) => a.concat(b));
-    //
-    // console.log(parsedStates);
-
     const parsedStates = states.map(state => parseState({ settings, state }));
+    const { width, height } = settings.field;
+    const fieldSize = width > height ? width : height;
+    let stateCount;
 
-    // console.log(parsedStates);
+    if (fieldSize <= 25) {
+        stateCount = 25 / fieldSize * 8;
+    } else if (fieldSize > 25 && fieldSize <= 50) {
+        stateCount = 50 / fieldSize * 4;
+    } else if (fieldSize > 100 && fieldSize <= 100) {
+        stateCount = 100 / fieldSize * 2;
+    } else if (fieldSize > 200 && fieldSize <= 200) {
+        stateCount = 200 / fieldSize;
+    } else {
+        stateCount = 1;
+    }
 
-    // All States map
     const tweenStates = parsedStates.map((state) => {
 
-        // Return 10 states. Increment in each state
-        const stateCount = 8;
         const array = Array.from({ length: stateCount });
 
         return array.map((item, index) => {
-            // For each player, get latest line
-            // Reduce the increased value back to previous state value
+
             return state.map((player) => {
                 const { name, lines } = player;
                 const latestLine = lines[lines.length - 1];
@@ -106,15 +108,7 @@ function parseStates(matchData, settings) {
         });
     });
 
-    // console.log(tweenStates);
-
-    // reduce tweenStates to single array
-
-    const combinedStates = tweenStates.reduce((a, b) => a.concat(b), []);
-
-    // console.log(combinedStates);
-
-    return combinedStates;
+    return tweenStates.reduce((a, b) => a.concat(b), []);
 }
 /**
  *
