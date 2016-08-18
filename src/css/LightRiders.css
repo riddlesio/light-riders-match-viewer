@@ -130,10 +130,10 @@ html {
     filter:'url(#luminosity-noclip)';
 }
 .Player--1 .SpaceShip {
-    fill: #6aa0fc;
+    /*fill: #6aa0fc;*/
 }
 .Player--2 .SpaceShip {
-    fill: #E419F9;
+    /*fill: #E419F9;*/
 }
 
 .line {
