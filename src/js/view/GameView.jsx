@@ -272,13 +272,76 @@ function getPlayerStateRenderer({ settings, sizes }) {
 
         const { lines, name } = props;
         const playerNo = index + 1;
+        const currentLine = lines[lines.length - 1];
+        const { x1, x2, y1, y2 } = currentLine;
+        let direction;
+
+        if (x1 > x2) {
+            direction = 'left';
+        } else if (x2 > x1) {
+            direction = 'right';
+        } else if (y2 > y1) {
+            direction = 'down';
+        } else {
+            direction = 'up';
+        }
+
+        const currentPosition = {
+            direction,
+            x: currentLine.x2,
+            y: currentLine.y2
+        };
 
         return (
             <g key={ name } className={ `Player Player--${playerNo}` }>
                 { lines.map(getPlayerLineRenderer({ name, settings, sizes })) }
+                { renderSpaceShip({ currentPosition, sizes }) }
             </g>
         );
     }
+}
+
+function renderSpaceShip({ currentPosition, sizes }) {
+
+    const { direction, x, y } = currentPosition;
+    const cellDimension = sizes.cells.width;
+    let rotation = 0;
+    let transformXCorrection = 0;
+    let transformYCorrection = 0;
+
+    console.log(direction);
+    console.log(x, y);
+
+    switch(direction) {
+        case 'left':
+            rotation = 270;
+            transformXCorrection -= cellDimension;
+            transformYCorrection += cellDimension;
+            break;
+        case 'right':
+            rotation = 90;
+            break;
+        case 'up':
+            rotation = 0;
+            transformXCorrection -= cellDimension;
+            break;
+        case 'down':
+            rotation = 180;
+            transformYCorrection += cellDimension;
+            break;
+    }
+    const transformX = (x * cellDimension) + transformXCorrection;
+    const transformY = ((y - 1) * cellDimension) + transformYCorrection;
+
+    return (
+        <use
+            className="SpaceShip"
+            xlinkHref="#SpaceShip"
+            transform={ `translate(${transformX}, ${transformY}) rotate(${rotation})`}
+            width={ cellDimension }
+            height={ cellDimension }
+        />
+    );
 }
 
 function getPlayerLineRenderer({ name, settings, sizes }) {
