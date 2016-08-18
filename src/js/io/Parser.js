@@ -45,11 +45,6 @@ function parsePlayerNames(playerData) {
 function parseStates(matchData, settings) {
 
     const states = matchData.states;
-
-    // const rowCount = parseInt(settings.field.height);
-    // const rowLength = parseInt(settings.field.width);
-    // const arrayField = Array.from({ length: rowCount });
-
     const parsedStates = states.map(state => parseState({ settings, state }));
     const { width, height } = settings.field;
     const fieldSize = width > height ? width : height;
@@ -144,16 +139,6 @@ function parseState({ settings, state }) {
         };
     });
 }
-
-// function parseField({ arrayField, rowLength, splitField }) {
-//
-//     return arrayField.map((cell, index) => {
-//         const sliceStart = index * rowLength;
-//         const sliceEnd = sliceStart + rowLength;
-//
-//         return splitField.slice(sliceStart, sliceEnd);
-//     });
-// }
 
 export {
     parseSettings,

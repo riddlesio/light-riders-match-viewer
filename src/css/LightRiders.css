@@ -6,11 +6,31 @@ html {
     /*background: url('../img/background.png') no-repeat center;*/
     /*background-size: cover;*/
 /*}*/
+
+.Grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
 .LightRiders-wrapper {
     height: 100%;
     background: url('../img/background.png') no-repeat center;
     background-size: cover;
     position: relative;
+}
+.LightRiders-stateWrapper {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .LightRiders {
@@ -71,6 +91,7 @@ html {
     height: 100%;
     opacity: 0.1;
 }
+
 .Player1 .AvatarBackground {
     background-color: #6AA0FC;
 }
@@ -83,14 +104,15 @@ html {
 .Player4 .AvatarBackground {
     background-color: #F7FF55;
 }
+
 .Cell {
     fill: transparent;
-    /*fill: rgba(255,255,255,0.2);*/
 }
 .Cell.Cell--grid {
     stroke: #121414;
     stroke-width: 1;
 }
+
 .Position--p1:first-child {
     fill: #6AA0FC;
 }
@@ -103,18 +125,6 @@ html {
 .Position--p4:first-child {
     fill: #F7FF55;
 }
-/*.Wall--p1 {*/
-    /*fill: #00bfbf;*/
-/*}*/
-/*.Wall--p2 {*/
-    /*fill: #c100c1;*/
-/*}*/
-/*.Wall--p3 {*/
-    /*fill: #37a852;*/
-/*}*/
-/*.Wall--p4 {*/
-    /*fill: #bfbf00;*/
-/*}*/
 
 .SpaceShip-7 {
     filter:'url(#luminosity-noclip)';
@@ -125,7 +135,23 @@ html {
 
 .line {
     fill: transparent;
-    stroke: #60a0fc;
-    stroke-width: 4;
     stroke-linecap: round;
+}
+.line--small {
+    stroke-width: 1;
+}
+.line--normal {
+    stroke-width: 4;
+}
+.Player--1 .line {
+    stroke: #6AA0FC;
+}
+.Player--2 .line {
+    stroke: #E419F9;
+}
+.Player--3 .line {
+    stroke: #00FF0C;
+}
+.Player--4 .line {
+    stroke: #F7FF55;
 }

@@ -1,16 +1,12 @@
 import React from 'react';
 import createView from 'omniscient';
-import Cell from './Cell.jsx';
-import GridCell from './GridCell.jsx';
+import Cell from './GridCell.jsx';
 
-const Row = createView('Row', function ({ cells, isGrid, index, settings, sizes }) {
+const Row = createView('Row', function ({ cells, index, grid, settings, sizes }) {
 
-    const { field } = settings;
-    const cellHeight = sizes.cells.height;
-    const cellWidth = sizes.cells.width;
-
-    const width = field.width * cellWidth;
-    const transformY = index * cellHeight;
+    const cellDimension = sizes.cells.width;
+    const width = grid.width * cellDimension;
+    const transformY = index * cellDimension;
     const transform = `translate(0,${transformY})`;
 
     return (
@@ -18,24 +14,22 @@ const Row = createView('Row', function ({ cells, isGrid, index, settings, sizes 
             className="Row"
             transform={ transform }
             width={ width }
-            height={ cellHeight }
+            height={ sizes.cells.height }
         >
-            { cells.map(getCellRenderer({ cellSize: sizes.cells, isGrid })) }
+            { cells.map(getCellRenderer({ cellSize: sizes.cells, settings })) }
         </g>
     );
 });
 
-function getCellRenderer({ cellSize, isGrid }) {
-
-    const Component = isGrid ? GridCell : Cell;
+function getCellRenderer({ cellSize, settings }) {
 
     return function renderCell(cell, index) {
 
-        return <Component
+        return <Cell
             key={ `LightRidersCell-${index}` }
-            cell={ cell }
             index={ index }
             cellSize={ cellSize }
+            settings={ settings }
         />;
     };
 }

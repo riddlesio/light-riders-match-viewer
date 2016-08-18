@@ -12,5 +12,6 @@
         "marginRight": 80,
         "marginTop": 40,
         "marginBottom": 80
-    }
+    },
+    "breakpoint": 20
 }
