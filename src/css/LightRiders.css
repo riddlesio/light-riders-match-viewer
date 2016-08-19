@@ -168,7 +168,8 @@ html {
 }
 
 .VictoryScreen-wrapper,
-.VictoryScreen-background{
+.VictoryScreen-background,
+.VictoryScreen-component {
     position: absolute;
     top: 0;
     left: 0;
