@@ -96,9 +96,39 @@ function parseStates(matchData, settings) {
         });
     });
 
+    const combinedStates = tweenStates.reduce((a, b) => a.concat(b), []);
+    const finalState = combinedStates[combinedStates.length - 1];
+    const withAdditionalStates = combinedStates.concat(Array(stateCount).fill(finalState));
+
+    // const statesWithCrashInfo = withAdditionalStates.map((item, index) => {
+    //     if (index === 0) return item;
+    //
+    //     const previousItem = withAdditionalStates[index - 1];
+    //
+    //     const morphed = item.map((playerItem, index) => {
+    //         const previousLines = previousItem[index].lines;
+    //         const lastPreviousLine = previousLines[previousLines.length - 1];
+    //         const lastCurrentLine = playerItem.lines[playerItem.lines.length - 1];
+    //
+    //         const isCrashed = lastCurrentLine.x2 === lastPreviousLine.x2 && lastCurrentLine.y2 === lastPreviousLine.y2;
+    //
+    //         return {
+    //             ...playerItem,
+    //             crashed: isCrashed,
+    //         };
+    //     });
+    //
+    //     console.log('morphed', morphed);
+    //
+    //     return morphed;
+    // });
+
+    // const finalStateClone = statesWithCrashInfo[statesWithCrashInfo.length - 1];
+    // const withAdditionalStates = statesWithCrashInfo.concat(Array(stateCount).fill(finalStateClone));
+
     return {
         errors: parsedErrors,
-        states: tweenStates.reduce((a, b) => a.concat(b), []),
+        states: withAdditionalStates,
         winner: players.winner,
     };
 }
@@ -109,18 +139,17 @@ function parseState({ settings, state }) {
     const splitStates = state.split(';');
 
     return playerNames.map((name) => {
-        let crashed = false;
+        let isCrashed = false;
 
         const playerState = splitStates
-            .find(player => player.includes(name))
+            .find((player) => {
+                isCrashed = player.includes('X');
+                return player.includes(name);
+            })
             .replace(`${name}`, '')
             .split(':')
             .map(line => line.split(','))
             .map((line) => {
-                // FIXME: set crashed when in the last tween state only
-                if (line[4] === 'X') {
-                    crashed = true;
-                }
                 return {
                     x1: parseInt(line[0]),
                     y1: parseInt(line[1]),
@@ -131,7 +160,7 @@ function parseState({ settings, state }) {
 
         return {
             name,
-            crashed,
+            crashed: isCrashed,
             lines: playerState,
         };
     });

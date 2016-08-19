@@ -285,10 +285,38 @@ function renderErrors({ currentState, errors, sizes }) {
 
         return isVisible ? (
             <circle
+                className="ErrorCircle"
+                key={ `error-${cx}-${cy}` }
                 cx={ cx }
                 cy={ cy }
                 r="10"
-                className="ErrorCircle"
+            />
+        ) : null;
+    });
+}
+
+function renderCrashes({ playerStates, sizes }) {
+
+    const cellDimension = sizes.cells.width;
+    const halfCellDimension = cellDimension / 2;
+    const toPixels = (n) => n * cellDimension;
+
+    return playerStates.map((state) => {
+        const { crashed, name, lines } = state;
+        const currentLine = lines[lines.length - 1];
+        const x = currentLine.x2;
+        const y = currentLine.y2 - 1;
+
+        const cx = toPixels(x) - halfCellDimension;
+        const cy = toPixels(y) + halfCellDimension;
+
+        return crashed ? (
+            <circle
+                className="CrashCircle"
+                key={ `crash-${name}` }
+                cx={ cx }
+                cy={ cy }
+                r="10"
             />
         ) : null;
     });
@@ -364,36 +392,10 @@ function getPlayerStateRenderer({ settings, sizes }) {
     }
 }
 
-function renderCrashes({ playerStates, sizes }) {
-
-    return playerStates.map((state) => {
-
-        const { crashed, lines } = state;
-        const currentLine = lines[lines.length - 1];
-        const x = currentLine.x2;
-        const y = currentLine.y2;
-
-        const cellDimension = sizes.cells.width;
-        const halfCellDimension = cellDimension / 2;
-        const transformX = (x * cellDimension);
-        const transformY = ((y - 1) * cellDimension);
-
-        return crashed ? (
-            <circle
-                key={ 'lodsada' }
-                cx={ transformX - halfCellDimension }
-                cy={ transformY + halfCellDimension }
-                r="10"
-                className="CrashCircle"
-            />
-        ) : null;
-    });
-}
-
 function renderSpaceShip({ crashed, currentPosition, sizes }) {
 
     const { direction, x, y } = currentPosition;
-    const cellDimension = sizes.cells.width
+    const cellDimension = sizes.cells.width;
     let rotation = 0;
     let transformXCorrection = 0;
     let transformYCorrection = 0;
