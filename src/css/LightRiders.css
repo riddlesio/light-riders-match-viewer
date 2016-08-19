@@ -89,8 +89,12 @@ html {
     width: 100%;
     height: 100%;
     opacity: 0.1;
+    position: absolute;
 }
-
+.Avatar {
+    width: 100%;
+    height: 100%;
+}
 .Player1 .AvatarBackground {
     background-color: #6AA0FC;
 }
@@ -181,40 +185,66 @@ html {
     opacity: 0.8;
 }
 .VictoryScreen-component {
-    border: 1px solid;
-    width: 300px;
-    height: 80px;
+    border: 2px solid;
+    width: 400px;
+    height: 120px;
 
     margin-left: auto;
     margin-right: auto;
-    margin-top: 200px;
 
     background-color: black;
 }
-.Player--1 .VictoryScreen-component {
+.Player--1 .VictoryScreen-component,
+.Player--1 .VictoryScreen-avatarWrapper {
     border-color: #6AA0FC;
 }
-.Player--2 .VictoryScreen-component {
+.Player--2 .VictoryScreen-component,
+.Player--2 .VictoryScreen-avatarWrapper {
     border-color: #E419F9;
 }
-.Player--3 .VictoryScreen-component {
+.Player--3 .VictoryScreen-component,
+.Player--3 .VictoryScreen-avatarWrapper {
     border-color: #00FF0C;
 }
-.Player--4 .VictoryScreen-component {
+.Player--4 .VictoryScreen-component,
+.Player--4 .VictoryScreen-avatarWrapper {
     border-color: #F7FF55;
 }
 .VictoryScreen-avatarWrapper {
-
+    width: 120px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    border-right: 2px solid;
 }
 .VictoryScreen-avatar {
-
+    width:100%;
+    height: 100%;
+}
+.Player--1 .VictoryScreen-textWrapper {
+    color: #6AA0FC;
+}
+.Player--2 .VictoryScreen-textWrapper {
+    color: #E419F9;
+}
+.Player--3 .VictoryScreen-textWrapper {
+    color: #00FF0C;
+}
+.Player--4 .VictoryScreen-textWrapper {
+    color: #F7FF55;
 }
 .VictoryScreen-textWrapper {
-
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    padding: 15px 30px;
 }
 .VictoryScreen-textHeading {
-
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 1rem;
 }
 .VictoryScreen-textMessage {
-
+    font-size: 2rem;
+    line-height: 1rem;
 }

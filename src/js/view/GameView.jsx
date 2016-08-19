@@ -237,9 +237,13 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
                 <div className="VictoryScreen-background"></div>
                 <div className={ `VictoryScreen Player--${winnerData.number}` }>
-                    <div className="VictoryScreen-component">
+                    <div className="VictoryScreen-component" style={{ marginTop: svg.height / 2 }}>
                         <div className="VictoryScreen-avatarWrapper">
-                            <image className="VictoryScreen-avatar" src={ winnerData.emailHash } alt="avatar"/>
+                            <image
+                                className="VictoryScreen-avatar"
+                                src={ `https://www.gravatar.com/avatar/${winnerData.emailHash}?s=120` }
+                                alt="avatar"
+                            />
                         </div>
                         <div className="VictoryScreen-textWrapper">
                             <h2 className="VictoryScreen-textHeading">Game End</h2>
@@ -458,6 +462,11 @@ function renderPlayerInfo(player, index) {
     const info = [
         <div className="AvatarWrapper">
             <div className="AvatarBackground"></div>
+            <image
+                className="Avatar"
+                src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60` }
+                alt="avatar"
+            />
         </div>,
         <p className="Player-name">
             { player.name }
