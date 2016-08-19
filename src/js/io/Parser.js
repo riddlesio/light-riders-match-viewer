@@ -97,9 +97,9 @@ function parseStates(matchData, settings) {
     });
 
     return {
-        winner: players.winner,
         errors: parsedErrors,
         states: tweenStates.reduce((a, b) => a.concat(b), []),
+        winner: players.winner,
     };
 }
 

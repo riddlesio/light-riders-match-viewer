@@ -51,6 +51,7 @@ html {
 }
 .Player {
     position: absolute;
+    transition: all .5s ease-out;
 }
 .Player-name {
     font-size: 2rem;

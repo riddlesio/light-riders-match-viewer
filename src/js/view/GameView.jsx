@@ -1,11 +1,16 @@
 import React from 'react';
 import createView from 'omniscient';
 import Row from './Row.jsx';
+import { event } from '@riddles/match-viewer';
+
+const { PlaybackEvent } = event;
 
 const lifeCycle = {
 
     getInitialState() {
         return {
+            showPlayerInfo: true,
+            paused: false,
             sizes: {
                 cells: {
                     width: 0,
@@ -25,6 +30,12 @@ const lifeCycle = {
         }
     },
 
+    componentWillMount() {
+
+        PlaybackEvent.on(PlaybackEvent.PLAY, this.hidePlayerInfo);
+        PlaybackEvent.on(PlaybackEvent.PAUSE, this.showPlayerInfo);
+    },
+
     componentDidMount() {
 
         this.recalculateSizes();
@@ -38,6 +49,24 @@ const lifeCycle = {
                 resize();
             }, 50);
         });
+
+        setTimeout(this.maybeHidePlayerInfo, 3000);
+    },
+
+    setPlayerInfo(bool) {
+        this.setState({ showPlayerInfo: bool, paused: bool });
+    },
+
+    showPlayerInfo() {
+        this.setPlayerInfo(true);
+    },
+
+    hidePlayerInfo() {
+        this.setPlayerInfo(false);
+    },
+
+    maybeHidePlayerInfo() {
+        if (!this.state.paused) this.setPlayerInfo(false);
     },
 
     recalculateSizes() {
@@ -103,15 +132,11 @@ const GameView = createView('GameView', lifeCycle, function (props) {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
 
-    console.log(winner);
-
     const winnerData = {
         emailHash: players[winner - 1].emailHash,
         name: players[winner - 1].name,
         number: winner,
     };
-
-    console.log(winnerData);
 
     const finished = currentState + 1 >= statesLength;
 
@@ -211,14 +236,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                             </g>
                         </symbol>
                     </defs>
-                    { /* <use
-                        className="SpaceShip"
-                        xlinkHref="#Spaceship2"
-                        transform="translate(516.76, -50) rotate(90)"
-                        width="626.0625"
-                        height="626.0625"
-                    /> */ }
-                    { playerStates.map(getPlayerStateRenderer({ settings, sizes })) }
+                    { playerStates.map(getPlayerStateRenderer({ settings, sizes, isVisible: this.state.showPlayerInfo })) }
                     { renderCrashes({ playerStates, settings, sizes }) }
                     { renderErrors({ currentState, errors, sizes }) }
                 </svg>
@@ -231,7 +249,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                         height: `${grid.heightPercentage}%`
                     }}
                 >
-                    { players.map(renderPlayerInfo) }
+                    { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
                 </div>
             </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
@@ -452,33 +470,39 @@ function isOdd(num) {
     return num % 2;
 }
 
-function renderPlayerInfo(player, index) {
+function renderPlayerInfo({ players, isVisible }) {
 
-    const className = `Player Player${index + 1}`;
-    const odd = isOdd(index);
-    const playerCords = getPlayerInfoCords(index);
-    const { top, bottom, left, right } = playerCords;
+    return players.map((player, index) => {
+        const className = `Player Player${index + 1}`;
+        const odd = isOdd(index);
+        const playerCords = getPlayerInfoCords(index);
+        const { top, bottom, left, right } = playerCords;
 
-    const info = [
-        <div className="AvatarWrapper">
-            <div className="AvatarBackground"></div>
-            <image
-                className="Avatar"
-                src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60` }
-                alt="avatar"
-            />
-        </div>,
-        <p className="Player-name">
-            { player.name }
-        </p>
-    ];
+        const info = [
+            <div className="AvatarWrapper">
+                <div className="AvatarBackground"></div>
+                <image
+                    className="Avatar"
+                    src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60` }
+                    alt="avatar"
+                />
+            </div>,
+            <p className="Player-name">
+                { player.name }
+            </p>
+        ];
 
-    return (
-        <div key={ `Player--${index}` } className={ className } style={{ top, bottom, left, right }}>
-            { info[odd ? 1 : 0] }
-            { info[odd ? 0 : 1] }
-        </div>
-    );
+        return (
+            <div
+                key={ `Player--${index}` }
+                className={ className }
+                style={{ opacity: isVisible ? 1 : 0, top, bottom, left, right }}
+            >
+                { info[odd ? 1 : 0] }
+                { info[odd ? 0 : 1] }
+            </div>
+        );
+    });
 }
 
 function getPlayerInfoCords(index) {
