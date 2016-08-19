@@ -62,7 +62,7 @@ function parseStates(matchData, settings) {
         return array.map((item, index) => {
 
             return playerState.map((player) => {
-                const { name, lines } = player;
+                const { lines } = player;
                 const latestLine = lines[lines.length - 1];
                 let { x1, x2, y1, y2 } = latestLine;
                 let increment;
@@ -89,7 +89,7 @@ function parseStates(matchData, settings) {
                 const newLines = otherLines.concat(newLine);
 
                 return {
-                    name,
+                    ...player,
                     lines: newLines,
                 }
             });
@@ -108,21 +108,29 @@ function parseState({ settings, state }) {
     const splitStates = state.split(';');
 
     return playerNames.map((name) => {
+        let crashed = false;
 
         const playerState = splitStates
             .find(player => player.includes(name))
             .replace(`${name}`, '')
             .split(':')
             .map(line => line.split(','))
-            .map((line) => ({
-                x1: parseInt(line[0]),
-                y1: parseInt(line[1]),
-                x2: parseInt(line[2]),
-                y2: parseInt(line[3]),
-            }));
+            .map((line) => {
+                // FIXME: set crashed when in the last tween state only
+                if (line[4] === 'X') {
+                    crashed = true;
+                }
+                return {
+                    x1: parseInt(line[0]),
+                    y1: parseInt(line[1]),
+                    x2: parseInt(line[2]),
+                    y2: parseInt(line[3]),
+                }
+            });
 
         return {
             name,
+            crashed,
             lines: playerState,
         };
     });

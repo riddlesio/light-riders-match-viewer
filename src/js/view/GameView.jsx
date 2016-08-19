@@ -84,7 +84,7 @@ const GameView = createView('GameView', lifeCycle, function ({ currentState, err
 
     console.log(settings);
     console.log(state);
-    console.log(errors);
+    // console.log(errors);
 
     const playerStates = state;
     const { sizes } = this.state;
@@ -207,6 +207,7 @@ const GameView = createView('GameView', lifeCycle, function ({ currentState, err
                         height="626.0625"
                     /> */ }
                     { playerStates.map(getPlayerStateRenderer({ settings, sizes })) }
+                    { renderCrashes({ playerStates, settings, sizes }) }
                     { renderErrors({ currentState, errors, sizes }) }
                 </svg>
             </div>
@@ -288,7 +289,8 @@ function getPlayerStateRenderer({ settings, sizes }) {
 
     return function renderPlayerState(props, index) {
 
-        const { lines, name } = props;
+        // console.log(props);
+        const { crashed, lines, name } = props;
         const playerNo = index + 1;
         const currentLine = lines[lines.length - 1];
         const { x1, x2, y1, y2 } = currentLine;
@@ -313,16 +315,43 @@ function getPlayerStateRenderer({ settings, sizes }) {
         return (
             <g key={ name } className={ `Player Player--${playerNo}` }>
                 { lines.map(getPlayerLineRenderer({ name, settings, sizes })) }
-                { renderSpaceShip({ currentPosition, sizes }) }
+                { renderSpaceShip({ crashed, currentPosition, sizes }) }
             </g>
         );
     }
 }
 
-function renderSpaceShip({ currentPosition, sizes }) {
+function renderCrashes({ playerStates, sizes }) {
+
+    return playerStates.map((state) => {
+
+        const { crashed, lines } = state;
+        const currentLine = lines[lines.length - 1];
+        const x = currentLine.x2;
+        const y = currentLine.y2;
+        console.log('state', state);
+
+        const cellDimension = sizes.cells.width;
+        const halfCellDimension = cellDimension / 2;
+        const transformX = (x * cellDimension);
+        const transformY = ((y - 1) * cellDimension);
+
+        return crashed ? (
+            <circle
+                key={ 'lodsada' }
+                cx={ transformX - halfCellDimension }
+                cy={ transformY + halfCellDimension }
+                r="10"
+                className="CrashCircle"
+            />
+        ) : null;
+    });
+}
+
+function renderSpaceShip({ crashed, currentPosition, sizes }) {
 
     const { direction, x, y } = currentPosition;
-    const cellDimension = sizes.cells.width;
+    const cellDimension = sizes.cells.width
     let rotation = 0;
     let transformXCorrection = 0;
     let transformYCorrection = 0;
@@ -353,6 +382,7 @@ function renderSpaceShip({ currentPosition, sizes }) {
             className="SpaceShip"
             xlinkHref="#Spaceship2"
             transform={ `translate(${transformX}, ${transformY}) rotate(${rotation})`}
+            style={{ opacity: crashed ? 0 : 1 }}
             width={ cellDimension }
             height={ cellDimension }
         />

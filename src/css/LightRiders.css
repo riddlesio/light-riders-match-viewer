@@ -137,7 +137,7 @@ html {
 
 .line {
     fill: transparent;
-    stroke-linecap: round;
+    stroke-linecap: square;
 }
 .line--small {
     stroke-width: 1;
@@ -160,5 +160,9 @@ html {
 
 .ErrorCircle {
     fill: #FF5552;
+    opacity: 0.5;
+}
+.CrashCircle {
+    fill: #C9C9C9;
     opacity: 0.5;
 }
