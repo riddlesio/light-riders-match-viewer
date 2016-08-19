@@ -236,13 +236,15 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
                 <div className="VictoryScreen-background"></div>
-                <div className={ `VictoryScreen-component Player--${winnerData.number}` }>
-                    <div>
-                        <image src={ winnerData.emailHash } alt="avatar"/>
-                    </div>
-                    <div>
-                        <h2>Game End</h2>
-                        <p>{ winnerData.name } won the game!</p>
+                <div className={ `VictoryScreen Player--${winnerData.number}` }>
+                    <div className="VictoryScreen-component">
+                        <div className="VictoryScreen-avatarWrapper">
+                            <image className="VictoryScreen-avatar" src={ winnerData.emailHash } alt="avatar"/>
+                        </div>
+                        <div className="VictoryScreen-textWrapper">
+                            <h2 className="VictoryScreen-textHeading">Game End</h2>
+                            <p className="VictoryScreen-textMessage">{ winnerData.name } won the game!</p>
+                        </div>
                     </div>
                 </div>
             </div>
