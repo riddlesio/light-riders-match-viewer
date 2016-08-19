@@ -2,12 +2,11 @@ html {
     font-size: 62.5%;
     font-family: 'Titillium Web', sans-serif;
 }
-/*.BackgroundSvg {*/
-    /*background: url('../img/background.png') no-repeat center;*/
-    /*background-size: cover;*/
-/*}*/
+.RadialBackgroundGradient-wrapper {
+    position: absolute;
+}
 
-.Grid {
+.GridBackground-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -23,7 +22,7 @@ html {
     background-size: cover;
     position: relative;
 }
-.LightRiders-stateWrapper {
+.GameState-wrapper{
     height: 100%;
     width: 100%;
     position: absolute;
@@ -33,11 +32,11 @@ html {
     bottom: 0;
 }
 
-.LightRiders {
+.GameState {
     height: 100%;
     width: 100%;
 }
-.Players-wrapper {
+.PlayerInformation-wrapper {
     position: absolute;
     top: 0;
     left: 0;
@@ -157,4 +156,9 @@ html {
 }
 .Player--4 .line {
     stroke: #F7FF55;
+}
+
+.ErrorCircle {
+    fill: #FF5552;
+    opacity: 0.5;
 }

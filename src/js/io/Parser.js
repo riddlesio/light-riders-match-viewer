@@ -30,42 +30,11 @@ function parsePlayerNames(playerData) {
     };
 }
 
-function parseErrors({ errors, parsedStates }) {
-
-    // map parsedStates
-    // if one of line x2 and y2 === error. set index on error
-
-    return errors
-        .map((error) => {
-            const coordinates = error.split(',');
-            return {
-                x: parseInt(coordinates[0]),
-                y: parseInt(coordinates[1]),
-            };
-        })
-        .map((error) => {
-            const index = parsedStates.find((state, index) => {
-                const foundError = state.find((playerState) => {
-                    const { lines } = playerState;
-                    const finalLine = lines[lines.length - 1];
-                    return error.x === finalLine.x2 && error.y === finalLine.y2;
-                });
-                if (!!foundError) return index;
-            });
-
-            return {
-                error,
-                index: parsedStates.indexOf(index),
-            }
-        });
-}
-
 function parseStates(matchData, settings) {
 
     const { errors, states } = matchData;
     const parsedStates = states.map(state => parseState({ settings, state }));
-    const parsedErrors = parseErrors({ errors, parsedStates });
-    console.log(parsedErrors);
+
     const { width, height } = settings.field;
     const fieldSize = width > height ? width : height;
     let stateCount;
@@ -81,6 +50,10 @@ function parseStates(matchData, settings) {
     } else {
         stateCount = 1;
     }
+
+    stateCount = Math.ceil(stateCount);
+
+    const parsedErrors = parseErrors({ errors, parsedStates, stateCount });
 
     const tweenStates = parsedStates.map((playerState) => {
 
@@ -123,7 +96,10 @@ function parseStates(matchData, settings) {
         });
     });
 
-    return tweenStates.reduce((a, b) => a.concat(b), []);
+    return {
+        errors: parsedErrors,
+        states: tweenStates.reduce((a, b) => a.concat(b), []),
+    };
 }
 
 function parseState({ settings, state }) {
@@ -150,6 +126,37 @@ function parseState({ settings, state }) {
             lines: playerState,
         };
     });
+}
+
+function parseErrors({ errors, parsedStates, stateCount }) {
+
+    return errors
+        .map((error) => {
+            const coordinates = error.split(',');
+            return {
+                x: parseInt(coordinates[0]),
+                y: parseInt(coordinates[1]),
+            };
+        })
+        .map((error) => {
+            const index = parsedStates.find((state, index) => {
+                const foundError = state.find((playerState) => {
+                    const { lines } = playerState;
+                    const finalLine = lines[lines.length - 1];
+                    return error.x === finalLine.x2 && error.y === finalLine.y2;
+                });
+                if (!!foundError) return index;
+            });
+
+            return {
+                error,
+                index: parsedStates.indexOf(index),
+            }
+        })
+        .map((error) => ({
+            ...error,
+            index: (error.index + 1) * stateCount,
+        }));
 }
 
 export {

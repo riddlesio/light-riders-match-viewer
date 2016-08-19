@@ -80,10 +80,11 @@ const lifeCycle = {
     },
 };
 
-const GameView = createView('GameView', lifeCycle, function ({ state, settings }) {
+const GameView = createView('GameView', lifeCycle, function ({ currentState, errors, state, settings }) {
 
     console.log(settings);
     console.log(state);
+    console.log(errors);
 
     const playerStates = state;
     const { sizes } = this.state;
@@ -91,7 +92,6 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     const { canvas, players } = settings;
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
     const cellDimension = cells.width;
-    const halfCellDimension = cellDimension / 2;
 
     // TODO: Get the grid to position correctly
     const gridTransformX = (Math.ceil(marginLeft / cellDimension) * cellDimension) - marginLeft;
@@ -106,7 +106,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
     return (
         <div key="GAME" className="LightRiders-wrapper">
             <svg
-                className="Grid"
+                className="GridBackground-wrapper"
                 viewBox={ `0 0 ${canvas.width} ${canvas.height}` }
                 preserveAspectRatio="xMidYMid meet"
             >
@@ -114,7 +114,7 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                     { renderGrid({ settings, sizes }) }
                 </g>
             </svg>
-            <svg className="BackgroundSvg" viewBox={ `0 0 ${canvas.width} ${canvas.height}` }>
+            <svg className="RadialBackgroundGradient-wrapper" viewBox={ `0 0 ${canvas.width} ${canvas.height}` }>
                 <defs>
                     <radialGradient
                         id="radial-gradient"
@@ -138,9 +138,9 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                     height="540"
                 />
             </svg>
-            <div className="LightRiders-stateWrapper" style={ wrapperStyle }>
+            <div className="GameState-wrapper" style={ wrapperStyle }>
                 <svg
-                    className="LightRiders"
+                    className="GameState"
                     viewBox={ `0 0 ${grid.width} ${grid.height}` }
                     preserveAspectRatio="xMidYMid meet"
                     ref="GridSpace"
@@ -207,9 +207,10 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
                         height="626.0625"
                     /> */ }
                     { playerStates.map(getPlayerStateRenderer({ settings, sizes })) }
+                    { renderErrors({ currentState, errors, sizes }) }
                 </svg>
             </div>
-            <div className="Players-wrapper" style={ wrapperStyle }>
+            <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
                 <div
                     className="Players"
                     style={{
@@ -223,6 +224,30 @@ const GameView = createView('GameView', lifeCycle, function ({ state, settings }
         </div>
     );
 });
+
+function renderErrors({ currentState, errors, sizes }) {
+
+    const cellDimension = sizes.cells.width;
+    const halfCellDimension = cellDimension / 2;
+    const toPixels = (n) => parseInt(n) * cellDimension;
+
+    return errors.map((error) => {
+        const errorIndex = error.index;
+        const isVisible = errorIndex <= currentState;
+        const { x, y } = error.error;
+        const cx = toPixels(x) - halfCellDimension;
+        const cy = toPixels(y) - halfCellDimension;
+
+        return isVisible ? (
+            <circle
+                cx={ cx }
+                cy={ cy }
+                r="10"
+                className="ErrorCircle"
+            />
+        ) : null;
+    });
+}
 
 function renderGrid({ settings, sizes }) {
     const { canvas } = settings;
