@@ -80,11 +80,11 @@ const lifeCycle = {
     },
 };
 
-const GameView = createView('GameView', lifeCycle, function ({ currentState, errors, state, settings }) {
+const GameView = createView('GameView', lifeCycle, function (props) {
 
+    const { currentState, errors, state, statesLength, settings, winner } = props;
     console.log(settings);
     console.log(state);
-    // console.log(errors);
 
     const playerStates = state;
     const { sizes } = this.state;
@@ -102,6 +102,8 @@ const GameView = createView('GameView', lifeCycle, function ({ currentState, err
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
+
+    const finished = currentState + 1 >= statesLength;
 
     return (
         <div key="GAME" className="LightRiders-wrapper">
@@ -221,6 +223,9 @@ const GameView = createView('GameView', lifeCycle, function ({ currentState, err
                 >
                     { players.map(renderPlayerInfo) }
                 </div>
+            </div>
+            <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
+                <div className="VictoryScreen-background"></div>
             </div>
         </div>
     );

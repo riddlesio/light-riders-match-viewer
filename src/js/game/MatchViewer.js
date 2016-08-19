@@ -76,6 +76,7 @@ const MatchViewer = createGame({
             errors,
             settings,
             state: states[currentState],
+            statesLength: states.length,
         };
 
         ReactDOM.render(<GameView { ...props }/>, this.getDOMNode());

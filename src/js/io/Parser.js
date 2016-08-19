@@ -32,7 +32,7 @@ function parsePlayerNames(playerData) {
 
 function parseStates(matchData, settings) {
 
-    const { errors, states } = matchData;
+    const { errors, states, players } = matchData;
     const parsedStates = states.map(state => parseState({ settings, state }));
 
     const { width, height } = settings.field;
@@ -97,6 +97,7 @@ function parseStates(matchData, settings) {
     });
 
     return {
+        winner: players.winner,
         errors: parsedErrors,
         states: tweenStates.reduce((a, b) => a.concat(b), []),
     };

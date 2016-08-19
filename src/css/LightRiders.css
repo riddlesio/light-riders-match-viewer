@@ -166,3 +166,16 @@ html {
     fill: #C9C9C9;
     opacity: 0.5;
 }
+
+.VictoryScreen-wrapper,
+.VictoryScreen-background{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.VictoryScreen-background {
+    background: black;
+    opacity: 0.8;
+}
