@@ -50,11 +50,11 @@ const MatchViewer = createGame({
         const settings = parseSettings(data, defaults);
         const parsedStates = parseStates(matchData, settings);
         const playerNames = parsePlayerNames(playerData);
-        const { errors, states } = parsedStates;
+        const { states } = parsedStates;
 
         this.settings = settings;
         this.states = states;
-        this.errors = errors;
+        this.parsedStates = parsedStates;
         this.playerNames = playerNames;
 
         this.triggerStateChange(currentState);
@@ -69,12 +69,14 @@ const MatchViewer = createGame({
     render: function (state, prevState) {
 
         const { currentState } = state;
-        const { errors, settings, states } = this;
+        const { parsedStates, settings } = this;
+        const { errors, states, winner } = parsedStates;
 
         const props = {
             currentState,
             errors,
             settings,
+            winner,
             state: states[currentState],
             statesLength: states.length,
         };

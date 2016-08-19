@@ -82,7 +82,7 @@ const lifeCycle = {
 
 const GameView = createView('GameView', lifeCycle, function (props) {
 
-    const { currentState, errors, state, statesLength, settings, winner } = props;
+    const {currentState, errors, state, statesLength, settings, winner } = props;
     console.log(settings);
     console.log(state);
 
@@ -102,6 +102,16 @@ const GameView = createView('GameView', lifeCycle, function (props) {
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
+
+    console.log(winner);
+
+    const winnerData = {
+        emailHash: players[winner - 1].emailHash,
+        name: players[winner - 1].name,
+        number: winner,
+    };
+
+    console.log(winnerData);
 
     const finished = currentState + 1 >= statesLength;
 
@@ -226,6 +236,15 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
                 <div className="VictoryScreen-background"></div>
+                <div className={ `VictoryScreen-component Player--${winnerData.number}` }>
+                    <div>
+                        <image src={ winnerData.emailHash } alt="avatar"/>
+                    </div>
+                    <div>
+                        <h2>Game End</h2>
+                        <p>{ winnerData.name } won the game!</p>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -294,7 +313,6 @@ function getPlayerStateRenderer({ settings, sizes }) {
 
     return function renderPlayerState(props, index) {
 
-        // console.log(props);
         const { crashed, lines, name } = props;
         const playerNo = index + 1;
         const currentLine = lines[lines.length - 1];
@@ -334,7 +352,6 @@ function renderCrashes({ playerStates, sizes }) {
         const currentLine = lines[lines.length - 1];
         const x = currentLine.x2;
         const y = currentLine.y2;
-        console.log('state', state);
 
         const cellDimension = sizes.cells.width;
         const halfCellDimension = cellDimension / 2;
