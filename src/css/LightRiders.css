@@ -171,7 +171,9 @@ html {
     fill: #C9C9C9;
     opacity: 0.5;
 }
-
+.VictoryScreen-wrapper {
+    transition: all 0.2s ease-in;
+}
 .VictoryScreen-wrapper,
 .VictoryScreen-background,
 .VictoryScreen {
