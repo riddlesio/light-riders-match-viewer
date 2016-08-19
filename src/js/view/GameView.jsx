@@ -121,12 +121,8 @@ const GameView = createView('GameView', lifeCycle, function (props) {
     const { canvas, players } = settings;
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
     const cellDimension = cells.width;
-
-    // TODO: Get the grid to position correctly
     const gridTransformX = (Math.ceil(marginLeft / cellDimension) * cellDimension) - marginLeft;
     const gridTransformY = (Math.ceil(marginTop / cellDimension) * cellDimension) - marginTop;
-    // console.log(cellDimension);
-    // console.log(gridTransformX, gridTransformY);
 
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
@@ -144,7 +140,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
         <div key="GAME" className="LightRiders-wrapper">
             <svg
                 className="GridBackground-wrapper"
-                viewBox={ `0 0 ${canvas.width} ${canvas.height}` }
+                viewBox={ `0 0 ${grid.width + marginLeft + marginRight} ${grid.height + marginTop + marginBottom}` }
                 preserveAspectRatio="xMidYMid meet"
             >
                 <g transform={ `translate(-${gridTransformX},-${gridTransformY})` }>
@@ -208,7 +204,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                                 />
                             </g>
                         </mask>
-                        { /* TODO: Apply mask correctly like the design */ }
+                        { /* TODO: Apply mask like the design */ }
                         <symbol id="Spaceship2" viewBox="0 0 22 22">
                             <g isolation="isolate">
                                 <image
