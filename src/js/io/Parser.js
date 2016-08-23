@@ -32,174 +32,159 @@ function parsePlayerNames(playerData) {
 
 function parseStates(matchData, settings) {
 
-    const { errors, states, players } = matchData;
-    const parsedStates = states.map(state => parseState({ settings, state }));
+    const { states, players } = matchData;
+    const parsedStates = [];
 
+    states.forEach(function (state) {
+        const previousParsedState = parsedStates.length > 0
+            ? parsedStates[parsedStates.length - 1]
+            : null;
+
+        parsedStates.push(parseState({ settings, state, previousParsedState }));
+    });
+
+    const errors = parseErrors(parsedStates);
     const { width, height } = settings.field;
     const fieldSize = width > height ? width : height;
-    let stateCount;
+    let substateCount;
 
     if (fieldSize <= 25) {
-        stateCount = 25 / fieldSize * 8;
+        substateCount = 25 / fieldSize * 8;
     } else if (fieldSize > 25 && fieldSize <= 50) {
-        stateCount = 50 / fieldSize * 4;
+        substateCount = 50 / fieldSize * 4;
     } else if (fieldSize > 100 && fieldSize <= 100) {
-        stateCount = 100 / fieldSize * 2;
+        substateCount = 100 / fieldSize * 2;
     } else if (fieldSize > 200 && fieldSize <= 200) {
-        stateCount = 200 / fieldSize;
+        substateCount = 200 / fieldSize;
     } else {
-        stateCount = 1;
+        substateCount = 0;
     }
 
-    stateCount = Math.ceil(stateCount);
+    substateCount = Math.floor(substateCount);
 
-    const parsedErrors = parseErrors({ errors, parsedStates, stateCount });
+    const tweenStates = [];
+    parsedStates.forEach(function (state, index) {
+        if (state.round <= 0) {
+            tweenStates.push(state);
+            return;
+        }
 
-    const tweenStates = parsedStates.map((playerState) => {
+        for (let index = 1; index <= substateCount; index++) {
+            const subState = { ...state, isSubState: true };
 
-        const array = Array.from({ length: stateCount });
+            subState.playerStates = subState.playerStates.map(function (playerState, pIndex) {
 
-        return array.map((item, index) => {
-
-            return playerState.map((player) => {
-                const { lines } = player;
-                const latestLine = lines[lines.length - 1];
-                let { x1, x2, y1, y2 } = latestLine;
-                let increment;
+                const { lines }         = playerState;
+                const lastLine          = lines[lines.length - 1];
+                const increment         = 1 / (substateCount + 1);
+                const isSubStateCrashed = playerState.isCrashed &&
+                    parsedStates[index - 1].playerStates[pIndex].isCrashed;
+                let { x1, x2, y1, y2 }  = lastLine;
 
                 if (x1 < x2) {
-                    increment = 1 / stateCount;
                     x2 = x2 - 1 + (index * increment);
                 }
-                if (x2 < x1) {
-                    increment = 1 / stateCount;
+                else if (x2 < x1) {
                     x2 = x2 + 1 - (index * increment);
                 }
-                if (y1 < y2) {
-                    increment = 1 / stateCount;
+                else if (y1 < y2) {
                     y2 = y2 - 1 + (index * increment);
                 }
-                if (y1 > y2) {
-                    increment = 1 / stateCount;
+                else if (y1 > y2) {
                     y2 = y2 + 1 - (index * increment);
                 }
 
-                const newLine = [{ x1, x2, y1, y2 }];
-                const otherLines = lines.slice(0,-1);
-                const newLines = otherLines.concat(newLine);
+                const newLines = lines.slice(0, -1);
+                newLines.push({ x1, x2, y1, y2 });
 
-                return {
-                    ...player,
-                    lines: newLines,
-                }
+                return { ...playerState, lines: newLines, isCrashed: isSubStateCrashed };
             });
-        });
+
+            tweenStates.push(subState);
+        }
+
+        tweenStates.push(state);
     });
 
-    const combinedStates = tweenStates.reduce((a, b) => a.concat(b), []);
-    const finalState = combinedStates[combinedStates.length - 1];
-    const withAdditionalStates = combinedStates.concat(Array(stateCount).fill(finalState));
-
-    // const statesWithCrashInfo = withAdditionalStates.map((item, index) => {
-    //     if (index === 0) return item;
-    //
-    //     const previousItem = withAdditionalStates[index - 1];
-    //
-    //     const morphed = item.map((playerItem, index) => {
-    //         const previousLines = previousItem[index].lines;
-    //         const lastPreviousLine = previousLines[previousLines.length - 1];
-    //         const lastCurrentLine = playerItem.lines[playerItem.lines.length - 1];
-    //
-    //         const isCrashed = lastCurrentLine.x2 === lastPreviousLine.x2 && lastCurrentLine.y2 === lastPreviousLine.y2;
-    //
-    //         return {
-    //             ...playerItem,
-    //             crashed: isCrashed,
-    //         };
-    //     });
-    //
-    //     console.log('morphed', morphed);
-    //
-    //     return morphed;
-    // });
-
-    // const finalStateClone = statesWithCrashInfo[statesWithCrashInfo.length - 1];
-    // const withAdditionalStates = statesWithCrashInfo.concat(Array(stateCount).fill(finalStateClone));
+    const lastState = tweenStates[tweenStates.length - 1];
+    const finalState = {
+        ...lastState,
+        round: lastState.round + 1,
+        isSubState: true,
+    };
+    const withAdditionalStates = tweenStates.concat(new Array(substateCount).fill(finalState));
 
     return {
-        errors: parsedErrors,
+        errors,
         states: withAdditionalStates,
         winner: players.winner,
     };
 }
 
-function parseState({ settings, state }) {
+function parseState({ settings, state, previousParsedState }) {
 
     const playerNames = settings.players.map(p => p.name);
-    const splitStates = state.split(';');
+    const playerStates = playerNames.map(function (name, index) {
 
-    return playerNames.map((name) => {
-        let isCrashed = false;
+        const playerState = state.players[index];
+        const isCrashed = playerState.isCrashed;
+        const hasError = playerState.hasError;
+        const thisPosition = playerState.position
+            .split(',')
+            .map(coord => parseInt(coord));
 
-        const playerState = splitStates
-            .find((player) => {
-                isCrashed = player.includes('X');
-                return player.includes(name);
-            })
-            .replace(`${name}`, '')
-            .split(':')
-            .map(line => line.split(','))
-            .map((line) => {
-                return {
-                    x1: parseInt(line[0]),
-                    y1: parseInt(line[1]),
-                    x2: parseInt(line[2]),
-                    y2: parseInt(line[3]),
-                }
+        let lines;
+        if (!previousParsedState) {
+            lines = [{
+                x1: thisPosition[0],
+                y1: thisPosition[1],
+                x2: thisPosition[0],
+                y2: thisPosition[1],
+            }];
+        } else {
+            const previousLines = previousParsedState.playerStates[index].lines;
+            const lastLine = previousLines[previousLines.length - 1];
+
+            lines = previousLines.map(function(line) {
+                return { ...line };
             });
+            lines.push({
+                x1: lastLine.x2,
+                y1: lastLine.y2,
+                x2: thisPosition[0],
+                y2: thisPosition[1],
+            })
+        }
 
-        return {
-            name,
-            crashed: isCrashed,
-            lines: playerState,
-        };
+        return { name, lines, isCrashed, hasError };
     });
+
+    return { playerStates, round: state.round };
 }
 
-function parseErrors({ errors, parsedStates, stateCount }) {
+function parseErrors(parsedStates) {
 
-    return errors
-        .map((error) => {
-            const coordinates = error.split(',');
-            return {
-                x: parseInt(coordinates[0]),
-                y: parseInt(coordinates[1]),
-            };
-        })
-        .map((error) => {
-            const index = parsedStates.find((state, index) => {
-                const foundError = state.find((playerState) => {
-                    const { lines } = playerState;
-                    const finalLine = lines[lines.length - 1];
-                    return error.x === finalLine.x2 && error.y === finalLine.y2;
-                });
-                if (!!foundError) return index;
-            });
+    const errors = [];
 
-            return {
-                error,
-                index: parsedStates.indexOf(index),
+    parsedStates.forEach(function (state) {
+        state.playerStates.forEach(function (playerState) {
+            if (playerState.hasError) {
+                const lastLine = playerState.lines[playerState.lines.length - 1];
+
+                errors.push({
+                    round: state.round,
+                    x: lastLine.x2,
+                    y: lastLine.y2,
+                })
             }
-        })
-        .map((error) => ({
-            ...error,
-            index: (error.index + 1) * stateCount,
-        }));
+        });
+    });
+
+    return errors;
 }
 
 export {
     parseSettings,
     parseStates,
-    parseState,
     parsePlayerNames,
 };

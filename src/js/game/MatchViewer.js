@@ -74,9 +74,9 @@ const MatchViewer = createGame({
 
         const props = {
             currentState,
-            errors,
             settings,
             winner,
+            errors,
             state: states[currentState],
             statesLength: states.length,
         };
@@ -96,7 +96,7 @@ function registerEventListeners (context) {
     PlaybackEvent.on(PlaybackEvent.FORWARD, context.moveForward, context);
     PlaybackEvent.on(PlaybackEvent.GOTO, context.setMove, context);
     PlaybackEvent.on(PlaybackEvent.FAST_FORWARD, context.fastForward, context);
-    PlaybackEvent.on(PlaybackEvent.BACKWARD, context.moveBackward, context);
+    PlaybackEvent.on(PlaybackEvent.BACKWARD, context.roundBackward, context);
     PlaybackEvent.on(PlaybackEvent.FAST_BACKWARD, context.fastBackward, context);
 }
 
@@ -111,7 +111,7 @@ function releaseEventListeners (context) {
     PlaybackEvent.off(PlaybackEvent.FORWARD, context.moveForward, context);
     PlaybackEvent.off(PlaybackEvent.GOTO, context.setMove, context);
     PlaybackEvent.off(PlaybackEvent.FAST_FORWARD, context.fastForward, context);
-    PlaybackEvent.off(PlaybackEvent.BACKWARD, context.moveBackward, context);
+    PlaybackEvent.off(PlaybackEvent.BACKWARD, context.roundBackward, context);
     PlaybackEvent.off(PlaybackEvent.FAST_BACKWARD, context.fastBackward, context);
 }
 

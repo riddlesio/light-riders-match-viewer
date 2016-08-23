@@ -24,39 +24,341 @@
         "height": "16"
       }
     },
-    "errors": [
-      "3,1",
-      "19,9"
-    ],
-    "states": [
-      "Ron1,1,1,1;Jackie24,16,24,16",
-      "Ron1,1,2,1;Jackie24,16,23,16",
-      "Ron1,1,3,1;Jackie24,16,22,16",
-      "Ron1,1,4,1;Jackie24,16,21,16",
-      "Ron1,1,5,1;Jackie24,16,20,16",
-      "Ron1,1,6,1;Jackie24,16,19,16",
-      "Ron1,1,6,1:6,1,6,2;Jackie24,16,19,16:19,16,19,15",
-      "Ron1,1,6,1:6,1,6,3;Jackie24,16,19,16:19,16,19,14",
-      "Ron1,1,6,1:6,1,6,4;Jackie24,16,19,16:19,16,19,13",
-      "Ron1,1,6,1:6,1,6,5;Jackie24,16,19,16:19,16,19,12",
-      "Ron1,1,6,1:6,1,6,6;Jackie24,16,19,16:19,16,19,11",
-      "Ron1,1,6,1:6,1,6,7;Jackie24,16,19,16:19,16,19,10",
-      "Ron1,1,6,1:6,1,6,8;Jackie24,16,19,16:19,16,19,9",
-      "Ron1,1,6,1:6,1,6,9;Jackie24,16,19,16:19,16,19,8",
-      "Ron1,1,6,1:6,1,6,10;Jackie24,16,19,16:19,16,19,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,7,10;Jackie24,16,19,16:19,16,19,7:19,7,18,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,8,10;Jackie24,16,19,16:19,16,19,7:19,7,17,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,9,10;Jackie24,16,19,16:19,16,19,7:19,7,16,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,10,10;Jackie24,16,19,16:19,16,19,7:19,7,15,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,11,10;Jackie24,16,19,16:19,16,19,7:19,7,14,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,12,10;Jackie24,16,19,16:19,16,19,7:19,7,13,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,13,10;Jackie24,16,19,16:19,16,19,7:19,7,12,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,14,10;Jackie24,16,19,16:19,16,19,7:19,7,11,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,15,10;Jackie24,16,19,16:19,16,19,7:19,7,10,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,16,10;Jackie24,16,19,16:19,16,19,7:19,7,9,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,17,10;Jackie24,16,19,16:19,16,19,7:19,7,8,7",
-      "Ron1,1,6,1:6,1,6,10:6,10,18,10;Jackie24,16,19,16:19,16,19,7:19,7,8,7:8,7,8,6",
-      "Ron1,1,6,1:6,1,6,10:6,10,19,10,X;Jackie24,16,19,16:19,16,19,7:19,7,8,7:8,7,8,5"
-    ]
+    "states": [{
+      "round": 0,
+      "players": [{
+        "hasError": false,
+        "position": "1,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "24,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 1,
+      "players": [{
+        "hasError": false,
+        "position": "2,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "23,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 2,
+      "players": [{
+        "hasError": true,
+        "position": "3,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "22,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 3,
+      "players": [{
+        "hasError": false,
+        "position": "4,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "21,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 4,
+      "players": [{
+        "hasError": false,
+        "position": "5,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "20,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 5,
+      "players": [{
+        "hasError": false,
+        "position": "6,1",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,16",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 6,
+      "players": [{
+        "hasError": false,
+        "position": "6,2",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,15",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 7,
+      "players": [{
+        "hasError": false,
+        "position": "6,3",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,14",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 8,
+      "players": [{
+        "hasError": false,
+        "position": "6,4",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,13",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 9,
+      "players": [{
+        "hasError": false,
+        "position": "6,5",
+        "isCrashed": false
+      }, {
+        "hasError": true,
+        "position": "19,12",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 10,
+      "players": [{
+        "hasError": false,
+        "position": "6,6",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,11",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 11,
+      "players": [{
+        "hasError": false,
+        "position": "6,7",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,10",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 12,
+      "players": [{
+        "hasError": false,
+        "position": "6,8",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,9",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 13,
+      "players": [{
+        "hasError": false,
+        "position": "6,9",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,8",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 14,
+      "players": [{
+        "hasError": false,
+        "position": "6,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "19,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 15,
+      "players": [{
+        "hasError": false,
+        "position": "7,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "18,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 16,
+      "players": [{
+        "hasError": false,
+        "position": "8,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "17,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 17,
+      "players": [{
+        "hasError": false,
+        "position": "9,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "16,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 18,
+      "players": [{
+        "hasError": false,
+        "position": "10,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "15,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 19,
+      "players": [{
+        "hasError": false,
+        "position": "11,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "14,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 20,
+      "players": [{
+        "hasError": false,
+        "position": "12,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "13,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 21,
+      "players": [{
+        "hasError": false,
+        "position": "13,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "12,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 22,
+      "players": [{
+        "hasError": false,
+        "position": "14,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "11,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 23,
+      "players": [{
+        "hasError": false,
+        "position": "15,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "10,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 24,
+      "players": [{
+        "hasError": false,
+        "position": "16,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "9,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 25,
+      "players": [{
+        "hasError": false,
+        "position": "17,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "8,7",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 26,
+      "players": [{
+        "hasError": false,
+        "position": "18,10",
+        "isCrashed": false
+      }, {
+        "hasError": false,
+        "position": "8,6",
+        "isCrashed": false
+      }]
+    },
+    {
+      "round": 27,
+      "players": [{
+        "hasError": false,
+        "position": "19,10",
+        "isCrashed": true
+      }, {
+        "hasError": false,
+        "position": "8,5",
+        "isCrashed": false
+      }]
+    }]
   }
 }

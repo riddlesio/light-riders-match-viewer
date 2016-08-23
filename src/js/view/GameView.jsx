@@ -54,7 +54,8 @@ const lifeCycle = {
     },
 
     setPlayerInfo(bool) {
-        this.setState({ showPlayerInfo: bool, paused: bool });
+        // this.setState({ showPlayerInfo: true, paused: bool });  // hiding player info off for now
+        this.setState({ showPlayerInfo: true, paused: bool });
     },
 
     showPlayerInfo() {
@@ -111,18 +112,19 @@ const lifeCycle = {
 
 const GameView = createView('GameView', lifeCycle, function (props) {
 
-    const {currentState, errors, state, statesLength, settings, winner } = props;
-    console.log(settings);
-    console.log(state);
+    const { currentState, state, errors, statesLength, settings, winner } = props;
+    const { sizes }             = this.state;
+    const { cells, grid, svg }  = sizes;
+    const { canvas, players }   = settings;
 
-    const playerStates = state;
-    const { sizes } = this.state;
-    const { cells, grid, svg } = sizes;
-    const { canvas, players } = settings;
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
     const cellDimension = cells.width;
-    const gridTransformX = (Math.ceil(marginLeft / cellDimension) * cellDimension) - marginLeft;
-    const gridTransformY = (Math.ceil(marginTop / cellDimension) * cellDimension) - marginTop;
+    const gridTransformX = cellDimension !== 0
+        ? (Math.ceil(marginLeft / cellDimension) * cellDimension) - marginLeft
+        : 0;
+    const gridTransformY = cellDimension !== 0
+        ? (Math.ceil(marginTop / cellDimension) * cellDimension) - marginTop
+        : 0;
 
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
@@ -179,62 +181,37 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                     ref="GridSpace"
                 >
                     <defs>
-                        <filter
-                            id="luminosityNoClip"
-                            x="2"
-                            y="2"
-                            width="17"
-                            height="17"
-                            filterUnits="userSpaceOnUse"
-                            colorInterpolationFilters="sRGB"
-                        >
-                            <feFlood floodColor="#fff" result="bg"/>
-                            <feBlend in="SourceGraphic" in2="bg"/>
+                        <filter id="spaceship-glow" x="-2" y="-2" width="22" height="22">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
                         </filter>
-                        <mask id="myMask" x="2" y="2" width="17" height="17" maskUnits="userSpaceOnUse">
-                            <g
-                                filter="url(#luminosityNoClip)"
-                                style={{ filter: 'url(#luminosityNoClip)' }}
-                            >
-                                <image
-                                    width="17"
-                                    height="17"
-                                    transform="translate(2 2)"
-                                    xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAIAAAC0D9CtAAAACXBIWXMAAAsSAAALEgHS3X78AAAA+0lEQVQoU8WSP65EUBTG7QWJxjJGJUShVBAKjQ0IUbEEibABBStQiIQoVCKhVtKIGu9kkpFH5s2tJu9X3Jx85/vufwz7ZwiCQFmuMAxjGAbLsijjLyzLiuPYcRyU8YWqqkVRjOMIo6ZpKPuTIAjmeT6OY5omqFF2DNN1vW3b40XXdXAwRAYmXpblzKzrGobhp4Asy03THFfqulYU5c+M53nDMGzbdgb2fe/73nXd9wF4Dd/38zwvyzJNU7jrJEmqqsqyLIoinuffZERRtG3bNE3Y4SlKkgQirA/FPUBRFMdxj8fj3ngC30IQBJqmLyqO43fpCnRJkvxg+AI/RiKTPeFP/qsAAAAASUVORK5CYII="
-                                />
-                            </g>
-                        </mask>
+                        <filter id="glow" filterUnits="userSpaceOnUse">
+                            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
                         { /* TODO: Apply mask like the design */ }
-                        <symbol id="Spaceship2" viewBox="0 0 22 22">
-                            <g isolation="isolate">
-                                <image
-                                    opacity="0.7"
-                                    mixBlendMode="screen"
-                                    style={{ mixBlendMode: 'screen' }}
-                                    width="25"
-                                    height="25"
-                                    transform="translate(-2 -2)"
-                                    xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsSAAALEgHS3X78AAADWUlEQVRIS7VVS2tTQRRO29RHH0pjYmYmaelCkLYLpRHEx0rwgQXBhSAoFjdKFyLoH0hdSBH9ASLoUs3CpbsSRCgIXYmCEqRJ7iOlpUJtk3vnZjGe797bmjT3JnXRxXD4zvnOOXPOnJmJKKUie706ErZXRHW1rE4+u07yL2g3rZ58REUhfbyrZLtJgGDRwrHCfi2tDppC9UECKy9hd6dEHRMsZlQvgv4aUocpQXw5qY5CAkMPe6dEoUmyfgWmMLHzmCmsEUPYx0tMTkACe3qzDzyX/19JvCp6lkbVgdKIGqowa9QUzqSetC6YvH7ZlYShhx085Z1TYDVhSVBF72pcDeqpWrooqpM6s6fKzLpLcsaXU66e7OCBr0KqCa0C/a6wjYTJ5Zgp7Esmd+5pQs4arP4MEtjTyzHwwA+rJrSKtZg6RAc8Qjs9o3F5W2NyVhfytcGcd5DA0MMOHvhh1bSpQiVwyGgLrcc6d17qXH40uPMJ0sXQkx088MOqaVtFUdTOlpg1bTA5Z3D5gYJ/0YXzFRIYetjBa1dN6FlUmBzXmH1V5/Yjg9uvdObMU3u+UasKriTs6skOHvhhZ9NSBSbFELVhLemc1rh1yxTyCZ3DW2rTZzc4lz8hgaGHHTzw4Rc0aU1VYN711J8j7qUTmxfLNK7U+xe0+xy1aZ7kgua2TC74OAc7eODDD/47701jkuhycrl/JaGYnnJOkMM1GtOHdOmeG8J5ozOJqXq/vQhDDzt44MMP/oijvHetKUnT5SOnUzT/1zVhP6DDzdK4zlGbnupojZBZSGDoXTvxwIdf0OVsSbKWUukSr2YwmhXm3MENJ+f7dNDTZVG7WWK1G5DAnt6e8XlT8IN/2yRU6kAxXuWYFHoAz2vcvgJnQ9Sp3/VzFDRDLTkJCQw97OCBDz/4I05Qkq489RDjt/XiltjGOAKiz0X36bBGy8NVsZTYZJDA0MMOHvhbLzPi5APOZOtz6qX/ol9Lr8cQTEvXUlQ6L9D8/6b/AzZ8WpDA0MMOnsdfj8G2XUVTEj9RDmPnf1LfEysDP+Krg5AunlD7MDH+DqPAQTz458IuY6ThL0egRdrNorej1j+94c9XDdx8w3ccCbzxzc9LF366bENg2kXzowccwt0ZszXJHqy/D17rLqxP/HcAAAAASUVORK5CYII="
-                                />
-                                <polygon fill="white" points="10.5 4.5 16.5 16.5 10.44 12.75 4.5 16.5 10.5 4.5"/>
-                                <g mask="url(#myMask)" style={{ mask: 'url(#myMask)' }}>
-                                    <g
-                                        opacity="0.75"
-                                        mixBlendMode="screen"
-                                        style={{ opacity: 0.75, mixBlendMode: 'screen' }}
-                                    >
-                                        <polygon
-                                            fill="#fff"
-                                            points="10.5 4.5 16.5 16.5 10.44 12.75 4.5 16.5 10.5 4.5"
-                                        />
-                                    </g>
-                                </g>
-                            </g>
+                        <symbol id="Spaceship" viewBox="0 0 21 22">
+                            <path
+                                d="M10.5 4.5 L16.5 16.5 L10.44 12.75 L4.5 16.5 L10.5 4.5 Z"
+                            />
+                            <path
+                                style={{ filter: 'url(#spaceship-glow)' }}
+                                fill="white"
+                                d="M10.5 4.5 L16.5 16.5 L10.44 12.75 L4.5 16.5 L10.5 4.5 Z"
+                            />
                         </symbol>
                     </defs>
-                    { playerStates.map(getPlayerStateRenderer({ settings, sizes, isVisible: this.state.showPlayerInfo })) }
-                    { renderCrashes({ playerStates, settings, sizes }) }
-                    { renderErrors({ currentState, errors, sizes }) }
+                    {
+                        state.playerStates.map(
+                            getPlayerStateRenderer({
+                                settings, sizes, isVisible: this.state.showPlayerInfo
+                            })
+                        )
+                    }
+                    { renderCrashes({ state, sizes }) }
+                    { renderErrors({ state, errors, sizes }) }
                 </svg>
             </div>
             <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
@@ -253,7 +230,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                 <div className={ `VictoryScreen Player--${winnerData.number}` }>
                     <div className="VictoryScreen-component" style={{ marginTop: svg.height / 2 }}>
                         <div className="VictoryScreen-avatarWrapper">
-                            <image
+                            <img
                                 className="VictoryScreen-avatar"
                                 src={ `https://www.gravatar.com/avatar/${winnerData.emailHash}?s=120` }
                                 alt="avatar"
@@ -261,7 +238,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                         </div>
                         <div className="VictoryScreen-textWrapper">
                             <h2 className="VictoryScreen-textHeading">Game End</h2>
-                            <p className="VictoryScreen-textMessage">{ winnerData.name } won the game!</p>
+                                <p className="VictoryScreen-textMessage">{ winnerData.name } won the game!</p>
                         </div>
                     </div>
                 </div>
@@ -270,39 +247,45 @@ const GameView = createView('GameView', lifeCycle, function (props) {
     );
 });
 
-function renderErrors({ currentState, errors, sizes }) {
+function renderErrors({ state, errors, sizes }) {
 
     const cellDimension = sizes.cells.width;
     const halfCellDimension = cellDimension / 2;
     const toPixels = (n) => parseInt(n) * cellDimension;
 
-    return errors.map((error) => {
-        const errorIndex = error.index;
-        const isVisible = errorIndex <= currentState;
-        const { x, y } = error.error;
-        const cx = toPixels(x) - halfCellDimension;
-        const cy = toPixels(y) - halfCellDimension;
+    const errorCircles = [];
+    errors.every(function (error) {
+        if (error.round > state.round) return false;
+        if (error.round === state.round && state.isSubState) return false;
 
-        return isVisible ? (
+        const cx = toPixels(error.x) - halfCellDimension;
+        const cy = toPixels(error.y) - halfCellDimension;
+
+        errorCircles.push(
             <circle
                 className="ErrorCircle"
                 key={ `error-${cx}-${cy}` }
+                style={{ filter: 'url(#glow)' }}
                 cx={ cx }
                 cy={ cy }
                 r="10"
             />
-        ) : null;
+        );
+
+        return true;
     });
+
+    return errorCircles;
 }
 
-function renderCrashes({ playerStates, sizes }) {
+function renderCrashes({ state, sizes }) {
 
     const cellDimension = sizes.cells.width;
     const halfCellDimension = cellDimension / 2;
     const toPixels = (n) => n * cellDimension;
 
-    return playerStates.map((state) => {
-        const { crashed, name, lines } = state;
+    return state.playerStates.map((state) => {
+        const { isCrashed, name, lines } = state;
         const currentLine = lines[lines.length - 1];
         const x = currentLine.x2;
         const y = currentLine.y2 - 1;
@@ -310,10 +293,11 @@ function renderCrashes({ playerStates, sizes }) {
         const cx = toPixels(x) - halfCellDimension;
         const cy = toPixels(y) + halfCellDimension;
 
-        return crashed ? (
+        return isCrashed ? (
             <circle
                 className="CrashCircle"
                 key={ `crash-${name}` }
+                style={{ filter: 'url(#glow)' }}
                 cx={ cx }
                 cy={ cy }
                 r="10"
@@ -325,8 +309,8 @@ function renderCrashes({ playerStates, sizes }) {
 function renderGrid({ settings, sizes }) {
     const { canvas } = settings;
     const cellDimension = sizes.cells.width;
-    const gridWidth = Math.ceil(canvas.width / cellDimension * 1.1);
-    const gridHeight = Math.ceil(canvas.height / cellDimension * 1.1);
+    const gridWidth = Math.ceil(canvas.width / cellDimension * 2);
+    const gridHeight = Math.ceil(canvas.height / cellDimension * 2);
 
     const rowCount = parseInt(gridHeight);
     const rowLength = parseInt(gridWidth);
@@ -361,7 +345,7 @@ function getPlayerStateRenderer({ settings, sizes }) {
 
     return function renderPlayerState(props, index) {
 
-        const { crashed, lines, name } = props;
+        const { isCrashed, lines, name } = props;
         const playerNo = index + 1;
         const currentLine = lines[lines.length - 1];
         const { x1, x2, y1, y2 } = currentLine;
@@ -386,13 +370,13 @@ function getPlayerStateRenderer({ settings, sizes }) {
         return (
             <g key={ name } className={ `Player Player--${playerNo}` }>
                 { lines.map(getPlayerLineRenderer({ name, settings, sizes })) }
-                { renderSpaceShip({ crashed, currentPosition, sizes }) }
+                { renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) }
             </g>
         );
     }
 }
 
-function renderSpaceShip({ crashed, currentPosition, sizes }) {
+function renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) {
 
     const { direction, x, y } = currentPosition;
     const cellDimension = sizes.cells.width;
@@ -421,12 +405,22 @@ function renderSpaceShip({ crashed, currentPosition, sizes }) {
     const transformX = (x * cellDimension) + transformXCorrection;
     const transformY = ((y - 1) * cellDimension) + transformYCorrection;
 
+    let fill = 'white';
+    switch(playerNo) {
+        case 1:
+            fill = '#6aa0fc';
+            break;
+        case 2:
+            fill = '#E419F9';
+            break;
+    }
+
     return (
         <use
             className="SpaceShip"
-            xlinkHref="#Spaceship2"
+            xlinkHref="#Spaceship"
             transform={ `translate(${transformX}, ${transformY}) rotate(${rotation})`}
-            style={{ opacity: crashed ? 0 : 1 }}
+            style={{ opacity: isCrashed ? 0 : 1, fill }}
             width={ cellDimension }
             height={ cellDimension }
         />
@@ -455,6 +449,7 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
             <line
                 key={ `${name}-line-${index}` }
                 className={ `line line--${modifierClass}` }
+                style={{ filter: 'url(#glow)' }}
                 x1={ x1 }
                 y1={ y1 }
                 x2={ x2 }
@@ -479,7 +474,7 @@ function renderPlayerInfo({ players, isVisible }) {
         const info = [
             <div className="AvatarWrapper">
                 <div className="AvatarBackground"></div>
-                <image
+                <img
                     className="Avatar"
                     src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60` }
                     alt="avatar"

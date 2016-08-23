@@ -130,19 +130,18 @@ html {
     fill: #F7FF55;
 }
 
-.SpaceShip-7 {
-    filter:'url(#luminosity-noclip)';
-}
-.Player--1 .SpaceShip {
+/*Symbols can't be styled normally, so in code*/
+/*.Player--1 .SpaceShip {*/
     /*fill: #6aa0fc;*/
-}
-.Player--2 .SpaceShip {
+/*}*/
+/*.Player--2 .SpaceShip {*/
     /*fill: #E419F9;*/
-}
+/*}*/
 
 .line {
     fill: transparent;
     stroke-linecap: square;
+    shape-rendering: crispEdges;
 }
 .line--small {
     stroke-width: 1;
@@ -169,7 +168,7 @@ html {
 }
 .CrashCircle {
     fill: #C9C9C9;
-    opacity: 0.5;
+    opacity: 0.7;
 }
 .VictoryScreen-wrapper {
     transition: all 0.2s ease-in;
