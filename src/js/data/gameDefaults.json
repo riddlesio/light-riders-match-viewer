@@ -8,8 +8,8 @@
     "canvas": {
         "width": 960,
         "height": 540,
-        "marginLeft": 80,
-        "marginRight": 80,
+        "marginLeft": 160,
+        "marginRight": 160,
         "marginTop": 40,
         "marginBottom": 80
     },

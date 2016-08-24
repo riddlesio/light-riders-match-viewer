@@ -94,6 +94,7 @@ function registerEventListeners (context) {
     PlaybackEvent.on(PlaybackEvent.PLAY, context.play, context);
     PlaybackEvent.on(PlaybackEvent.PAUSE, context.pause, context);
     PlaybackEvent.on(PlaybackEvent.FORWARD, context.moveForward, context);
+    PlaybackEvent.on(PlaybackEvent.ROUNDFORWARD, context.roundForward, context);
     PlaybackEvent.on(PlaybackEvent.GOTO, context.setMove, context);
     PlaybackEvent.on(PlaybackEvent.FAST_FORWARD, context.fastForward, context);
     PlaybackEvent.on(PlaybackEvent.BACKWARD, context.roundBackward, context);
@@ -109,6 +110,7 @@ function releaseEventListeners (context) {
     PlaybackEvent.off(PlaybackEvent.PLAY, context.play, context);
     PlaybackEvent.off(PlaybackEvent.PAUSE, context.pause, context);
     PlaybackEvent.off(PlaybackEvent.FORWARD, context.moveForward, context);
+    PlaybackEvent.off(PlaybackEvent.ROUNDFORWARD, context.roundForward, context);
     PlaybackEvent.off(PlaybackEvent.GOTO, context.setMove, context);
     PlaybackEvent.off(PlaybackEvent.FAST_FORWARD, context.fastForward, context);
     PlaybackEvent.off(PlaybackEvent.BACKWARD, context.roundBackward, context);

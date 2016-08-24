@@ -37,8 +37,12 @@ const SimpleGameLoopMixin = {
                 let nextStateNumber         = currentStateNumber + 1;
                 let nextState               = states[nextStateNumber];
 
+                const targetRound = currentState.isSubState
+                    ? currentState.round
+                    : currentState.round + 1;
+
                 while (nextState &&
-                    (nextState.isSubState || nextState.round <= currentState.round)) {
+                    (nextState.isSubState || nextState.round < targetRound)) {
                     nextStateNumber++;
                     nextState = states[nextStateNumber];
                 }
@@ -125,6 +129,10 @@ const SimpleGameLoopMixin = {
 
         _.extend(context, mixin);
     },
+};
+
+const handleTimer = function () {
+
 };
 
 export default SimpleGameLoopMixin;
