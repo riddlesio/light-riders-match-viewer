@@ -130,11 +130,28 @@ const GameView = createView('GameView', lifeCycle, function (props) {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
     };
 
-    const winnerData = {
-        emailHash: players[winner - 1].emailHash,
-        name: players[winner - 1].name,
-        number: winner,
-    };
+    let winnerData;
+    let avatarImage;
+
+    if (winner) {
+        winnerData = {
+            message: `${ players[winner].name } won the game!`,
+            number: winner,
+        };
+
+        avatarImage = <img
+            className="VictoryScreen-avatar"
+            src={ `https://www.gravatar.com/avatar/${players[winner].emailHash}?s=120&d=mm` }
+            alt="avatar"
+        />
+    } else {
+        winnerData = {
+            message: 'It\'s a draw!',
+            number: 'draw',
+        };
+
+        avatarImage = null;
+    }
 
     const finished = currentState + 1 >= statesLength;
 
@@ -191,7 +208,6 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                                 <feMergeNode in="SourceGraphic"/>
                             </feMerge>
                         </filter>
-                        { /* TODO: Apply mask like the design */ }
                         <symbol id="Spaceship" viewBox="0 0 21 22">
                             <path
                                 d="M10.5 4.5 L16.5 16.5 L10.44 12.75 L4.5 16.5 L10.5 4.5 Z"
@@ -230,15 +246,11 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                 <div className={ `VictoryScreen Player--${winnerData.number}` }>
                     <div className="VictoryScreen-component" style={{ marginTop: svg.height / 2 }}>
                         <div className="VictoryScreen-avatarWrapper">
-                            <img
-                                className="VictoryScreen-avatar"
-                                src={ `https://www.gravatar.com/avatar/${winnerData.emailHash}?s=120` }
-                                alt="avatar"
-                            />
+                            { avatarImage }
                         </div>
                         <div className="VictoryScreen-textWrapper">
                             <h2 className="VictoryScreen-textHeading">Game End</h2>
-                                <p className="VictoryScreen-textMessage">{ winnerData.name } won the game!</p>
+                                <p className="VictoryScreen-textMessage">{ winnerData.message }</p>
                         </div>
                     </div>
                 </div>
@@ -287,8 +299,8 @@ function renderCrashes({ state, sizes }) {
     return state.playerStates.map((state) => {
         const { isCrashed, name, lines } = state;
         const currentLine = lines[lines.length - 1];
-        const x = currentLine.x2;
-        const y = currentLine.y2 - 1;
+        const x = currentLine.x2 + 1;
+        const y = currentLine.y2;
 
         const cx = toPixels(x) - halfCellDimension;
         const cy = toPixels(y) + halfCellDimension;
@@ -346,7 +358,7 @@ function getPlayerStateRenderer({ settings, sizes }) {
     return function renderPlayerState(props, index) {
 
         const { isCrashed, lines, name } = props;
-        const playerNo = index + 1;
+        const playerNo = index;
         const currentLine = lines[lines.length - 1];
         const { x1, x2, y1, y2 } = currentLine;
         let direction;
@@ -402,15 +414,15 @@ function renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) {
             transformYCorrection += cellDimension;
             break;
     }
-    const transformX = (x * cellDimension) + transformXCorrection;
-    const transformY = ((y - 1) * cellDimension) + transformYCorrection;
+    const transformX = ((x + 1) * cellDimension) + transformXCorrection;
+    const transformY = (y * cellDimension) + transformYCorrection;
 
     let fill = 'white';
     switch(playerNo) {
-        case 1:
+        case 0:
             fill = '#6aa0fc';
             break;
-        case 2:
+        case 1:
             fill = '#E419F9';
             break;
     }
@@ -440,10 +452,10 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
         const cellDimension = cells.width;
         const halfCellDimension = cellDimension / 2;
 
-        x1 = ((x1 - 1) * cellDimension) + halfCellDimension;
-        y1 = ((y1 - 1) * cellDimension) + halfCellDimension;
-        x2 = ((x2 - 1) * cellDimension) + halfCellDimension;
-        y2 = ((y2 - 1) * cellDimension) + halfCellDimension;
+        x1 = (x1 * cellDimension) + halfCellDimension;
+        y1 = (y1 * cellDimension) + halfCellDimension;
+        x2 = (x2 * cellDimension) + halfCellDimension;
+        y2 = (y2 * cellDimension) + halfCellDimension;
 
         return (
             <line
@@ -466,7 +478,7 @@ function isOdd(num) {
 function renderPlayerInfo({ players, isVisible }) {
 
     return players.map((player, index) => {
-        const className = `Player Player${index + 1}`;
+        const className = `Player Player${index}`;
         const odd = isOdd(index);
         const playerCords = getPlayerInfoCords(index);
         const { top, bottom, left, right } = playerCords;
@@ -476,7 +488,7 @@ function renderPlayerInfo({ players, isVisible }) {
                 <div className="AvatarBackground"></div>
                 <img
                     className="Avatar"
-                    src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60` }
+                    src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60&d=mm` }
                     alt="avatar"
                 />
             </div>,

@@ -30,15 +30,15 @@ const Cell = createView('Cell', function ({ cell, cellSize, index }) {
     const className = classNames({
         'Cell': true,
         'Position': cell === '33' || cell === '34' || cell === '36' || cell === '40',
-        'Position--p1': cell === '33',
-        'Position--p2': cell === '34',
-        'Position--p3': cell === '36',
-        'Position--p4': cell === '40',
+        'Position--p0': cell === '33',
+        'Position--p1': cell === '34',
+        'Position--p2': cell === '36',
+        'Position--p3': cell === '40',
         'Wall': cell === '17' || cell === '18' || cell === '20' || cell === '24',
-        'Wall--p1': cell === '17',
-        'Wall--p2': cell === '18',
-        'Wall--p3': cell === '20',
-        'Wall--p4': cell === '24',
+        'Wall--p0': cell === '17',
+        'Wall--p1': cell === '18',
+        'Wall--p2': cell === '20',
+        'Wall--p3': cell === '24',
     });
 
     if (className.includes('Position')) {

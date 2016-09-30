@@ -63,7 +63,7 @@ function parseStates(matchData, settings) {
     substateCount = Math.floor(substateCount);
 
     const tweenStates = [];
-    parsedStates.forEach(function (state, index) {
+    parsedStates.forEach(function (state, stateIndex) {
         if (state.round <= 0) {
             tweenStates.push(state);
             return;
@@ -78,7 +78,7 @@ function parseStates(matchData, settings) {
                 const lastLine          = lines[lines.length - 1];
                 const increment         = 1 / (substateCount + 1);
                 const isSubStateCrashed = playerState.isCrashed &&
-                    parsedStates[index - 1].playerStates[pIndex].isCrashed;
+                    parsedStates[stateIndex].playerStates[pIndex].isCrashed;
                 let { x1, x2, y1, y2 }  = lastLine;
 
                 if (x1 < x2) {
@@ -113,10 +113,11 @@ function parseStates(matchData, settings) {
         isSubState: true,
     };
     const withAdditionalStates = tweenStates.concat(new Array(substateCount).fill(finalState));
+    const limitedStates = limitCoordinates(withAdditionalStates, width, height);
 
     return {
         errors,
-        states: withAdditionalStates,
+        states: limitedStates,
         winner: players.winner,
     };
 }
@@ -124,6 +125,7 @@ function parseStates(matchData, settings) {
 function parseState({ settings, state, previousParsedState }) {
 
     const playerNames = settings.players.map(p => p.name);
+
     const playerStates = playerNames.map(function (name, index) {
 
         const playerState = state.players[index];
@@ -181,6 +183,33 @@ function parseErrors(parsedStates) {
     });
 
     return errors;
+}
+
+function limitCoordinates(states, width, height) {
+    return states.map(function (state) {
+        return {
+            ...state,
+            playerStates: state.playerStates
+                .map(function (playerState) {
+                    return {
+                        ...playerState,
+                        lines: playerState.lines
+                            .map(function (line) {
+                                return {
+                                    x1: limitCoordinate(line.x1, width),
+                                    x2: limitCoordinate(line.x2, width),
+                                    y1: limitCoordinate(line.y1, height),
+                                    y2: limitCoordinate(line.y2, height),
+                                };
+                            })
+                    }
+                })
+        };
+    });
+}
+
+function limitCoordinate(coordinate, limit) {
+    return Math.min(limit - 0.5, Math.max(-0.5, coordinate));
 }
 
 export {

@@ -1,3 +1,10 @@
+:root {
+    --player0-color: #6AA0FC;
+    --player1-color: #E419F9;
+    --player2-color: #00FF0C;
+    --player3-color: #F7FF55;
+}
+
 html {
     font-size: 62.5%;
     font-family: 'Titillium Web', sans-serif;
@@ -67,17 +74,17 @@ html {
 .Player:nth-of-type(4) .Player-name {
     vertical-align: bottom;
 }
+.Player0 .Player-name {
+    color: var(--player0-color);
+}
 .Player1 .Player-name {
-    color: #6AA0FC;
+    color: var(--player1-color);
 }
 .Player2 .Player-name {
-    color: #E419F9;
+    color: var(--player2-color);
 }
 .Player3 .Player-name {
-    color: #00FF0C;
-}
-.Player4 .Player-name {
-    color: #F7FF55;
+    color: var(--player3-color);
 }
 .AvatarWrapper {
     width: 60px;
@@ -96,17 +103,17 @@ html {
     width: 100%;
     height: 100%;
 }
+.Player0 .AvatarBackground {
+    background-color: var(--player0-color);
+}
 .Player1 .AvatarBackground {
-    background-color: #6AA0FC;
+    background-color: var(--player1-color);
 }
 .Player2 .AvatarBackground {
-    background-color: #E419F9;
+    background-color: var(--player2-color);
 }
 .Player3 .AvatarBackground {
-    background-color: #00FF0C;
-}
-.Player4 .AvatarBackground {
-    background-color: #F7FF55;
+    background-color: var(--player3-color);
 }
 
 .Cell {
@@ -117,26 +124,18 @@ html {
     stroke-width: 1;
 }
 
+.Position--p0:first-child {
+    fill: var(--player0-color);
+}
 .Position--p1:first-child {
-    fill: #6AA0FC;
+    fill: var(--player1-color);
 }
 .Position--p2:first-child {
-    fill: #E419F9;
+    fill: var(--player2-color);
 }
 .Position--p3:first-child {
-    fill: #00FF0C;
+    fill: var(--player3-color);
 }
-.Position--p4:first-child {
-    fill: #F7FF55;
-}
-
-/*Symbols can't be styled normally, so in code*/
-/*.Player--1 .SpaceShip {*/
-    /*fill: #6aa0fc;*/
-/*}*/
-/*.Player--2 .SpaceShip {*/
-    /*fill: #E419F9;*/
-/*}*/
 
 .line {
     fill: transparent;
@@ -149,17 +148,17 @@ html {
 .line--normal {
     stroke-width: 4;
 }
+.Player--0 .line {
+    stroke: var(--player0-color);
+}
 .Player--1 .line {
-    stroke: #6AA0FC;
+    stroke: var(--player1-color);
 }
 .Player--2 .line {
-    stroke: #E419F9;
+    stroke: var(--player2-color);
 }
 .Player--3 .line {
-    stroke: #00FF0C;
-}
-.Player--4 .line {
-    stroke: #F7FF55;
+    stroke: var(--player3-color);
 }
 
 .ErrorCircle {
@@ -196,21 +195,26 @@ html {
 
     background-color: black;
 }
+
+.Player--draw .VictoryScreen-component {
+    border-color: #c9c9c9;
+}
+
+.Player--0 .VictoryScreen-component,
+.Player--0 .VictoryScreen-avatarWrapper {
+    border-color: var(--player0-color);
+}
 .Player--1 .VictoryScreen-component,
 .Player--1 .VictoryScreen-avatarWrapper {
-    border-color: #6AA0FC;
+    border-color: var(--player1-color);
 }
 .Player--2 .VictoryScreen-component,
 .Player--2 .VictoryScreen-avatarWrapper {
-    border-color: #E419F9;
+    border-color: var(--player2-color);
 }
 .Player--3 .VictoryScreen-component,
 .Player--3 .VictoryScreen-avatarWrapper {
-    border-color: #00FF0C;
-}
-.Player--4 .VictoryScreen-component,
-.Player--4 .VictoryScreen-avatarWrapper {
-    border-color: #F7FF55;
+    border-color: var(--player3-color);
 }
 .VictoryScreen-avatarWrapper {
     width: 120px;
@@ -223,30 +227,32 @@ html {
     width:100%;
     height: 100%;
 }
+.Player--0 .VictoryScreen-textWrapper {
+    color: var(--player0-color);
+}
 .Player--1 .VictoryScreen-textWrapper {
-    color: #6AA0FC;
+    color: var(--player1-color);
 }
 .Player--2 .VictoryScreen-textWrapper {
-    color: #E419F9;
+    color: var(--player2-color);
 }
 .Player--3 .VictoryScreen-textWrapper {
-    color: #00FF0C;
-}
-.Player--4 .VictoryScreen-textWrapper {
-    color: #F7FF55;
+    color: var(--player3-color);
 }
 .VictoryScreen-textWrapper {
     display: inline-block;
     vertical-align: top;
     height: 100%;
-    padding: 15px 30px;
+    padding: 15px 20px;
 }
 .VictoryScreen-textHeading {
     font-size: 2.8rem;
     font-weight: 600;
     line-height: 1rem;
+    color: white;
 }
 .VictoryScreen-textMessage {
     font-size: 2rem;
     line-height: 1rem;
+    color: white;
 }
