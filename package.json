@@ -57,7 +57,7 @@
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
-    "@riddles/match-viewer": "^2.0.0",
+    "@riddles/match-viewer": "^2.0.1",
     "classnames": "^2.1.0",
     "lodash": "^3.0.1",
     "omniscient": "^4.1.1",
