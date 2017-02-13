@@ -132,7 +132,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
 
     let winnerData;
     let avatarImage;
-
+    
     if (winner) {
         winnerData = {
             message: `${ players[winner].name } won the game!`,

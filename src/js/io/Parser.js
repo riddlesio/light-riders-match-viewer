@@ -25,6 +25,8 @@ function parsePlayerNames(playerData) {
         players.emailHash.push(hash);
     });
 
+    players.winner = '1';
+
     return {
         players,
     };
@@ -35,6 +37,7 @@ function parseStates(matchData, settings) {
     const { states } = matchData;
     const { players } = settings;
     const parsedStates = [];
+    let winner = matchData.settings.players.winner;
 
     states.forEach(function (state) {
         const previousParsedState = parsedStates.length > 0
@@ -115,11 +118,10 @@ function parseStates(matchData, settings) {
     };
     const withAdditionalStates = tweenStates.concat(new Array(substateCount).fill(finalState));
     const limitedStates = limitCoordinates(withAdditionalStates, width, height);
-
     return {
         errors,
         states: limitedStates,
-        winner: players.winner,
+        winner: winner
     };
 }
 
