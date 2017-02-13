@@ -32,7 +32,8 @@ function parsePlayerNames(playerData) {
 
 function parseStates(matchData, settings) {
 
-    const { states, players } = matchData;
+    const { states } = matchData;
+    const { players } = settings;
     const parsedStates = [];
 
     states.forEach(function (state) {
