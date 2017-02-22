@@ -10,7 +10,7 @@ describe('Initiate:', function () {
     this.timeout(60000);
 
     before(() => {
-        browser.get('http://localhost:8989')
+        browser.get('http://localhost:8888')
             .then(() => browser.wait(element(by.id('player')).isPresent()));
     });
 

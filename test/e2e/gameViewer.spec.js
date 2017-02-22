@@ -62,5 +62,27 @@ describe('GamePlayer index', function () {
 
         expect($('.GamePlayer-button').isPresent()).to.eventually.equal(true);
     });
+
+    it('should show a mid-game state', () => {
+
+        browser.sleep(2000);
+
+        Array.from({ length: 4 }).forEach(nextStateButton.click);
+
+        browser.sleep(2000);
+
+        expect(true).to.be.true;
+    });
+
+    it('should show the score in the end', () => {
+
+        browser.sleep(2000);
+
+        lastStateButton.click();
+
+        browser.sleep(2000);
+
+        expect($('.VictoryScreen-textMessage').isPresent()).to.eventually.equal(true);
+    });
 });
 
