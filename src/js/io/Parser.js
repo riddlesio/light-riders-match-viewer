@@ -35,9 +35,9 @@ function parsePlayerNames(playerData) {
 function parseStates(matchData, settings) {
 
     const { states } = matchData;
-    const { players } = settings;
+    // const { players } = settings;
     const parsedStates = [];
-    let winner = matchData.settings.players.winner;
+    // const winner = matchData.players.winner;
 
     states.forEach(function (state) {
         const previousParsedState = parsedStates.length > 0
@@ -67,6 +67,7 @@ function parseStates(matchData, settings) {
     substateCount = Math.floor(substateCount);
 
     const tweenStates = [];
+
     parsedStates.forEach(function (state, stateIndex) {
         if (state.round <= 0) {
             tweenStates.push(state);
@@ -121,7 +122,7 @@ function parseStates(matchData, settings) {
     return {
         errors,
         states: limitedStates,
-        winner: winner
+        winner: matchData.players.winner,
     };
 }
 
