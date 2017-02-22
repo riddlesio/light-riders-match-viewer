@@ -467,13 +467,14 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
             <line
                 key={ `${name}-line-${index}` }
                 className={ `line line--${modifierClass}` }
-                style={{ filter: 'url(#glow)' }}
                 x1={ x1 }
                 y1={ y1 }
                 x2={ x2 }
                 y2={ y2 }
+                filter="url(#glow)"
             />
         );
+        // style={{ filter: 'url(#glow)' }}
     };
 }
 
