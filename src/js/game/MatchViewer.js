@@ -81,14 +81,14 @@ const MatchViewer = createGame({
         };
 
         ReactDOM.render(<GameView { ...props }/>, this.getDOMNode());
-    }
+    },
 }, [StateMixin, GameLoopMixin]);
 
 /**
  * Register the event listeners
  * @param {AbstractGame} context
  */
-function registerEventListeners (context) {
+function registerEventListeners(context) {
 
     PlaybackEvent.on(PlaybackEvent.PLAY, context.play, context);
     PlaybackEvent.on(PlaybackEvent.PAUSE, context.pause, context);
@@ -104,7 +104,7 @@ function registerEventListeners (context) {
  * Release the event listeners
  * @param {AbstractGame} context
  */
-function releaseEventListeners (context) {
+function releaseEventListeners(context) {
 
     PlaybackEvent.off(PlaybackEvent.PLAY, context.play, context);
     PlaybackEvent.off(PlaybackEvent.PAUSE, context.pause, context);

@@ -17,17 +17,19 @@ const lifeCycle = {
                     height: 0,
                 },
                 grid: {
-                    width: 0,
-                    height: 0,
+                    width: 960,
+                    height: 540,
+                    heightPercentage: 100,
+                    widthPercentage: 100,
                 },
                 svg: {
                     width: 0,
                     height: 0,
-                    heightPercentage: 100,
-                    widthPercentage: 100,
+                    // heightPercentage: 100,
+                    // widthPercentage: 100,
                 },
-            }
-        }
+            },
+        };
     },
 
     componentWillMount() {
@@ -45,7 +47,7 @@ const lifeCycle = {
 
         window.addEventListener('resize', function () {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
+            resizeTimer = setTimeout(function () {
                 resize();
             }, 50);
         });
@@ -54,7 +56,8 @@ const lifeCycle = {
     },
 
     setPlayerInfo(bool) {
-        // this.setState({ showPlayerInfo: true, paused: bool });  // hiding player info off for now
+        // Hiding player info off for now
+        // this.setState({ showPlayerInfo: true, paused: bool });
         this.setState({ showPlayerInfo: true, paused: bool });
     },
 
@@ -72,16 +75,21 @@ const lifeCycle = {
 
     recalculateSizes() {
 
+        // Todo: Check if gridSpace clientWidth and clientHeight are acquired
+        // Todo: once rendering the game is fixes
         // Get available grid size from dom
-        const GridSpace = this.refs.GridSpace;
-        const svgWidth = GridSpace.clientWidth;
-        const svgHeight = GridSpace.clientHeight;
+        const gridSpace = this.refs.GridSpace;
+        const svgWidth = gridSpace.clientWidth;
+        const svgHeight = gridSpace.clientHeight;
+        console.log(svgWidth);
+        console.log(svgHeight);
 
         // Get square cell size
         const { field } = this.props.settings;
         const cellHeight = svgHeight / field.height;
         const cellWidth = svgWidth / field.width;
         const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+
         // TODO: if breakpoint toggle css class
 
         // Get grid size
@@ -105,7 +113,7 @@ const lifeCycle = {
                     width: svgWidth,
                     height: svgHeight,
                 },
-            }
+            },
         });
     },
 };
@@ -132,10 +140,10 @@ const GameView = createView('GameView', lifeCycle, function (props) {
 
     let winnerData;
     let avatarImage;
-    
+
     if (winner) {
         winnerData = {
-            message: `${ players[winner].name } won the game!`,
+            message: `${players[winner].name} won the game!`,
             number: winner,
         };
 
@@ -143,7 +151,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             className="VictoryScreen-avatar"
             src={ `https://www.gravatar.com/avatar/${players[winner].emailHash}?s=120&d=mm` }
             alt="avatar"
-        />
+        />;
     } else {
         winnerData = {
             message: 'It\'s a draw!',
@@ -160,8 +168,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             <svg
                 className="GridBackground-wrapper"
                 viewBox={ `0 0 ${grid.width + marginLeft + marginRight} ${grid.height + marginTop + marginBottom}` }
-                preserveAspectRatio="xMidYMid meet"
-            >
+                preserveAspectRatio="xMidYMid meet">
                 <g transform={ `translate(-${gridTransformX},-${gridTransformY})` }>
                     { renderGrid({ settings, sizes }) }
                 </g>
@@ -194,9 +201,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                 <svg
                     className="GameState"
                     viewBox={ `0 0 ${grid.width} ${grid.height}` }
-                    preserveAspectRatio="xMidYMid meet"
-                    ref="GridSpace"
-                >
+                    preserveAspectRatio="xMidYMid meet">
                     <defs>
                         <filter id="spaceship-glow" x="-2" y="-2" width="22" height="22">
                             <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
@@ -222,7 +227,7 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                     {
                         state.playerStates.map(
                             getPlayerStateRenderer({
-                                settings, sizes, isVisible: this.state.showPlayerInfo
+                                settings, sizes, isVisible: this.state.showPlayerInfo,
                             })
                         )
                     }
@@ -235,8 +240,9 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                     className="Players"
                     style={{
                         width: `${grid.widthPercentage}%`,
-                        height: `${grid.heightPercentage}%`
+                        height: `${grid.heightPercentage}%`,
                     }}
+                    ref="GridSpace"
                 >
                     { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
                 </div>
@@ -320,17 +326,17 @@ function renderCrashes({ state, sizes }) {
 
 function renderGrid({ settings, sizes }) {
     const { canvas } = settings;
-    const cellDimension = sizes.cells.width;
-    const gridWidth = Math.ceil(canvas.width / cellDimension * 2);
-    const gridHeight = Math.ceil(canvas.height / cellDimension * 2);
 
-    const rowCount = parseInt(gridHeight);
-    const rowLength = parseInt(gridWidth);
-    const rowArray = Array.from({ length: rowLength });
+    const cellDimension = sizes.cells.width;
+    const columnCount = parseInt(Math.ceil(canvas.width / cellDimension * 2));
+    const rowCount = parseInt(Math.ceil(canvas.height / cellDimension * 2));
+
+    const rowArray = Array.from({ length: columnCount });
     const arrayField = Array.from({ length: rowCount }).map(() => rowArray);
+
     const grid = {
-        width: gridWidth,
-        height: gridHeight,
+        width: columnCount,
+        height: rowCount,
     };
 
     return arrayField.map(getRowRenderer({ grid, settings, sizes }));
@@ -376,7 +382,7 @@ function getPlayerStateRenderer({ settings, sizes }) {
         const currentPosition = {
             direction,
             x: currentLine.x2,
-            y: currentLine.y2
+            y: currentLine.y2,
         };
 
         return (
@@ -385,7 +391,7 @@ function getPlayerStateRenderer({ settings, sizes }) {
                 { renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) }
             </g>
         );
-    }
+    };
 }
 
 function renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) {
@@ -396,7 +402,7 @@ function renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) {
     let transformXCorrection = 0;
     let transformYCorrection = 0;
 
-    switch(direction) {
+    switch (direction) {
         case 'left':
             rotation = 270;
             transformXCorrection -= cellDimension;
@@ -418,7 +424,7 @@ function renderSpaceShip({ isCrashed, currentPosition, sizes, playerNo }) {
     const transformY = (y * cellDimension) + transformYCorrection;
 
     let fill = 'white';
-    switch(playerNo) {
+    switch (playerNo) {
         case 0:
             fill = '#6aa0fc';
             break;
@@ -458,17 +464,27 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
         y2 = (y2 * cellDimension) + halfCellDimension;
 
         return (
-            <line
-                key={ `${name}-line-${index}` }
-                className={ `line line--${modifierClass}` }
-                style={{ filter: 'url(#glow)' }}
-                x1={ x1 }
-                y1={ y1 }
-                x2={ x2 }
-                y2={ y2 }
-            />
+            <g>
+                <line
+                    key={ `${name}-backgroundLine-${index}` }
+                    className={ `line line--${modifierClass}` }
+                    x1={ x1 }
+                    y1={ y1 }
+                    x2={ x2 }
+                    y2={ y2 }
+                />
+                <line
+                    key={ `${name}-line-${index}` }
+                    className={ `line line--${modifierClass}` }
+                    x1={ x1 }
+                    y1={ y1 }
+                    x2={ x2 }
+                    y2={ y2 }
+                    filter="url(#glow)"
+                />
+            </g>
         );
-    }
+    };
 }
 
 function isOdd(num) {
@@ -494,7 +510,7 @@ function renderPlayerInfo({ players, isVisible }) {
             </div>,
             <p className="Player-name">
                 { player.name }
-            </p>
+            </p>,
         ];
 
         return (
@@ -513,27 +529,30 @@ function renderPlayerInfo({ players, isVisible }) {
 function getPlayerInfoCords(index) {
     if (index === 0) {
         return {
-            top: "-30px",
-            left: "-70px",
-        }
+            top: '-30px',
+            left: '-70px',
+        };
     }
+
     if (index === 1) {
         return {
-            top: "-30px",
-            right: "-70px",
-        }
+            top: '-30px',
+            right: '-70px',
+        };
     }
+
     if (index === 2) {
         return {
-            bottom: "-30px",
-            left: "-70px",
-        }
+            bottom: '-30px',
+            left: '-70px',
+        };
     }
+
     if (index === 3) {
         return {
-            bottom: "-30px",
-            right: "-70px",
-        }
+            bottom: '-30px',
+            right: '-70px',
+        };
     }
 }
 

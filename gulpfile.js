@@ -59,7 +59,7 @@ function buildConfig(taskName) {
 // gulp.task('copyFonts', copy(streamFactory, gulp.dest, buildConfig('copyFonts')));
 gulp.task('copyHtml', copy(streamFactory, gulp.dest, buildConfig('copyHtml')));
 gulp.task('images', images(streamFactory, gulp.dest, buildConfig('images')));
-gulp.task('css',    css(streamFactory, gulp.dest, buildConfig('css')));
-gulp.task('js',     webpack(streamFactory, gulp.dest, buildConfig('webpack')));
+gulp.task('css', css(streamFactory, gulp.dest, buildConfig('css')));
+gulp.task('js', webpack(streamFactory, gulp.dest, buildConfig('webpack')));
 
 gulp.task('build', ['js', 'css', 'images', 'copyHtml']);
