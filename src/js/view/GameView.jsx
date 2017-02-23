@@ -464,17 +464,26 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
         y2 = (y2 * cellDimension) + halfCellDimension;
 
         return (
-            <line
-                key={ `${name}-line-${index}` }
-                className={ `line line--${modifierClass}` }
-                x1={ x1 }
-                y1={ y1 }
-                x2={ x2 }
-                y2={ y2 }
-                filter="url(#glow)"
-            />
+            <g>
+                <line
+                    key={ `${name}-backgroundLine-${index}` }
+                    className={ `line line--${modifierClass}` }
+                    x1={ x1 }
+                    y1={ y1 }
+                    x2={ x2 }
+                    y2={ y2 }
+                />
+                <line
+                    key={ `${name}-line-${index}` }
+                    className={ `line line--${modifierClass}` }
+                    x1={ x1 }
+                    y1={ y1 }
+                    x2={ x2 }
+                    y2={ y2 }
+                    filter="url(#glow)"
+                />
+            </g>
         );
-        // style={{ filter: 'url(#glow)' }}
     };
 }
 
