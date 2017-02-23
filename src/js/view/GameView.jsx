@@ -23,10 +23,8 @@ const lifeCycle = {
                     widthPercentage: 100,
                 },
                 svg: {
-                    width: 0,
-                    height: 0,
-                    // heightPercentage: 100,
-                    // widthPercentage: 100,
+                    width: 960,
+                    height: 540,
                 },
             },
         };
@@ -52,7 +50,7 @@ const lifeCycle = {
             }, 50);
         });
 
-        setTimeout(this.maybeHidePlayerInfo, 3000);
+        // setTimeout(this.maybeHidePlayerInfo, 3000);
     },
 
     setPlayerInfo(bool) {
@@ -75,43 +73,34 @@ const lifeCycle = {
 
     recalculateSizes() {
 
-        // Todo: Check if gridSpace clientWidth and clientHeight are acquired
-        // Todo: once rendering the game is fixes
-        // Get available grid size from dom
-        const gridSpace = this.refs.GridSpace;
-        const svgWidth = gridSpace.clientWidth;
-        const svgHeight = gridSpace.clientHeight;
-        console.log(svgWidth);
-        console.log(svgHeight);
+        const gameSpace = this.refs.gameSpace;
+        const availableWidth = gameSpace.clientWidth;
+        const availableHeight = gameSpace.clientHeight;
 
-        // Get square cell size
         const { field } = this.props.settings;
-        const cellHeight = svgHeight / field.height;
-        const cellWidth = svgWidth / field.width;
-        const cellDimensions = cellWidth > cellHeight ? cellHeight : cellWidth;
+        const cellWidth = availableWidth / field.width;
+        const cellHeight = availableHeight / field.height;
+        const cellDimension = Math.min(cellWidth, cellHeight);
 
-        // TODO: if breakpoint toggle css class
-
-        // Get grid size
-        const gridWidth = field.width * cellDimensions;
-        const gridHeight = field.height * cellDimensions;
+        const gridWidth = field.width * cellDimension;
+        const gridHeight = field.height * cellDimension;
 
         this.setState({
-            minimalistic: cellDimensions < 5,
+            minimalistic: cellDimension < 5,
             sizes: {
                 cells: {
-                    height: cellDimensions,
-                    width: cellDimensions,
+                    height: cellDimension,
+                    width: cellDimension,
                 },
                 grid: {
                     width: gridWidth,
                     height: gridHeight,
-                    heightPercentage: gridHeight / svgHeight * 100,
-                    widthPercentage: gridWidth / svgWidth * 100,
+                    heightPercentage: gridHeight / availableHeight * 100,
+                    widthPercentage: gridWidth / availableWidth * 100,
                 },
                 svg: {
-                    width: svgWidth,
-                    height: svgHeight,
+                    width: 960,
+                    height: 540,
                 },
             },
         });
@@ -236,21 +225,21 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                 </svg>
             </div>
             <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
-                <div
-                    className="Players"
-                    style={{
-                        width: `${grid.widthPercentage}%`,
-                        height: `${grid.heightPercentage}%`,
-                    }}
-                    ref="GridSpace"
-                >
-                    { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
+                <div ref="gameSpace" style={{ width: '100%', height: '100%' }}>
+                    <div
+                        className="Players"
+                        style={{
+                            width: `${grid.widthPercentage}%`,
+                            height: `${grid.heightPercentage}%`,
+                        }}>
+                        { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
+                    </div>
                 </div>
             </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
                 <div className="VictoryScreen-background"></div>
                 <div className={ `VictoryScreen Player--${winnerData.number}` }>
-                    <div className="VictoryScreen-component" style={{ marginTop: svg.height / 2 }}>
+                    <div className="VictoryScreen-component" style={{ marginTop: grid.height / 2 }}>
                         <div className="VictoryScreen-avatarWrapper">
                             { avatarImage }
                         </div>
