@@ -10,12 +10,10 @@ const Row = createView('Row', function ({ cells, index, grid, settings, sizes })
     const transform = `translate(0,${transformY})`;
 
     return (
-        <g
-            className="Row"
+        <g className="Row"
             transform={ transform }
             width={ width }
-            height={ sizes.cells.height }
-        >
+            height={ sizes.cells.height } >
             { cells.map(getCellRenderer({ cellSize: sizes.cells, settings })) }
         </g>
     );

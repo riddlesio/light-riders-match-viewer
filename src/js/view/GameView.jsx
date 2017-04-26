@@ -150,38 +150,38 @@ const GameView = createView('GameView', lifeCycle, function (props) {
 
     return (
         <div key="GAME" className="LightRiders-wrapper">
-            <svg
-                className="GridBackground-wrapper"
-                viewBox={ `0 0 ${grid.width + marginLeft + marginRight} ${grid.height + marginTop + marginBottom}` }
-                preserveAspectRatio="xMidYMid meet">
-                <g transform={ `translate(-${gridTransformX},-${gridTransformY})` }>
-                    { renderGrid({ settings, sizes }) }
-                </g>
-            </svg>
-            <svg className="RadialBackgroundGradient-wrapper" viewBox={ `0 0 ${canvas.width} ${canvas.height}` }>
-                <defs>
-                    <radialGradient
-                        id="radial-gradient"
-                        cx={ canvas.width / 2 }
-                        cy={ canvas.height / 2 }
-                        r={ grid.width }
-                        gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stopColor="#fff"/>
-                        <stop offset="0.08" stopColor="#ebebeb"/>
-                        <stop offset="0.42" stopColor="#9a9c9e"/>
-                        <stop offset="0.69" stopColor="#5f6265"/>
-                        <stop offset="0.89" stopColor="#3a3e42"/>
-                        <stop offset="1" stopColor="#2c3035"/>
-                    </radialGradient>
-                </defs>
-                <rect
-                    style={{ opacity: 0.2 }}
-                    fill="url(#radial-gradient)"
-                    y="0.47"
-                    width="960"
-                    height="540"
-                />
-            </svg>
+            {/*<svg*/}
+                {/*className="GridBackground-wrapper"*/}
+                {/*viewBox={ `0 0 ${grid.width + marginLeft + marginRight} ${grid.height + marginTop + marginBottom}` }*/}
+                {/*preserveAspectRatio="xMidYMid meet">*/}
+                {/*<g transform={ `translate(-${gridTransformX},-${gridTransformY})` }>*/}
+                    {/*{ renderGrid({ settings, sizes }) }*/}
+                {/*</g>*/}
+            {/*</svg>*/}
+            {/*<svg className="RadialBackgroundGradient-wrapper" viewBox={ `0 0 ${canvas.width} ${canvas.height}` }>*/}
+                {/*<defs>*/}
+                    {/*<radialGradient*/}
+                        {/*id="radial-gradient"*/}
+                        {/*cx={ canvas.width / 2 }*/}
+                        {/*cy={ canvas.height / 2 }*/}
+                        {/*r={ grid.width }*/}
+                        {/*gradientUnits="userSpaceOnUse">*/}
+                        {/*<stop offset="0" stopColor="#fff"/>*/}
+                        {/*<stop offset="0.08" stopColor="#ebebeb"/>*/}
+                        {/*<stop offset="0.42" stopColor="#9a9c9e"/>*/}
+                        {/*<stop offset="0.69" stopColor="#5f6265"/>*/}
+                        {/*<stop offset="0.89" stopColor="#3a3e42"/>*/}
+                        {/*<stop offset="1" stopColor="#2c3035"/>*/}
+                    {/*</radialGradient>*/}
+                {/*</defs>*/}
+                {/*<rect*/}
+                    {/*style={{ opacity: 0.2 }}*/}
+                    {/*fill="url(#radial-gradient)"*/}
+                    {/*y="0.47"*/}
+                    {/*width="960"*/}
+                    {/*height="540"*/}
+                {/*/>*/}
+            {/*</svg>*/}
             <div className="GameState-wrapper" style={ wrapperStyle }>
                 <svg
                     className="GameState"
@@ -222,13 +222,15 @@ const GameView = createView('GameView', lifeCycle, function (props) {
             </div>
             <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
                 <div ref="gameSpace" style={{ width: '100%', height: '100%' }}>
-                    <div
-                        className="Players"
+                    <div className="Players"
                         style={{
                             width: `${grid.widthPercentage}%`,
                             height: `${grid.heightPercentage}%`,
-                        }}>
+                        }} >
                         { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
+                        <svg className="GridBackground-wrapper">
+                            { renderGrid({ settings, sizes }) }
+                        </svg>
                     </div>
                 </div>
             </div>
