@@ -52,7 +52,7 @@ html {
 }
 .Players {
     position: relative;
-    border: 1px solid #363A3F;
+    border: 2px solid #666666;
     margin-left: auto;
     margin-right: auto;
 }
@@ -65,6 +65,7 @@ html {
     font-family: 'Titillium Web', sans-serif;
     display: inline-block;
     margin: 0 10px;
+    font-weight: bold;
 }
 .Player:nth-of-type(1) .Player-name,
 .Player:nth-of-type(2) .Player-name{
@@ -87,8 +88,8 @@ html {
     color: var(--player3-color);
 }
 .AvatarWrapper {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     border: 1px solid #5e6565;
     border-radius: 2px;
     display: inline-block;
@@ -102,6 +103,7 @@ html {
 .Avatar {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
 }
 .Player0 .AvatarBackground {
     background-color: var(--player0-color);
@@ -120,7 +122,7 @@ html {
     fill: transparent;
 }
 .Cell.Cell--grid {
-    stroke: #121414;
+    stroke: #333333;
     stroke-width: 1;
 }
 

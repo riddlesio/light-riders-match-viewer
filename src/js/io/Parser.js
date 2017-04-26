@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 function parseSettings(data, defaults = {}) {
 
     const { matchData, playerData } = data;
@@ -10,41 +12,20 @@ function parseSettings(data, defaults = {}) {
     };
 }
 
-function parsePlayerNames(playerData) {
-
-    let players = {
-        names: [],
-        emailHash: [],
-    };
-
-    playerData.forEach((player) => {
-        const name = player.name ? player.name : '';
-        const hash = player.emailHash ? player.emailHash : '';
-
-        players.names.push(name);
-        players.emailHash.push(hash);
-    });
-
-    players.winner = '1';
-
-    return {
-        players,
-    };
-}
-
 function parseStates(matchData, settings) {
 
-    const { states } = matchData;
-    // const { players } = settings;
+    const { states, winner } = matchData;
     const parsedStates = [];
-    // const winner = matchData.players.winner;
 
-    states.forEach(function (state) {
+    states.forEach(state => {
         const previousParsedState = parsedStates.length > 0
             ? parsedStates[parsedStates.length - 1]
             : null;
+        const parsedState = parseState({ settings, state, previousParsedState });
 
-        parsedStates.push(parseState({ settings, state, previousParsedState }));
+        addSwitchDeathLimit(parsedState, previousParsedState);
+
+        parsedStates.push(parsedState);
     });
 
     const errors = parseErrors(parsedStates);
@@ -67,8 +48,7 @@ function parseStates(matchData, settings) {
     substateCount = Math.floor(substateCount);
 
     const tweenStates = [];
-
-    parsedStates.forEach(function (state, stateIndex) {
+    parsedStates.forEach((state, stateIndex) => {
         if (state.round <= 0) {
             tweenStates.push(state);
             return;
@@ -77,13 +57,11 @@ function parseStates(matchData, settings) {
         for (let index = 1; index <= substateCount; index++) {
             const subState = { ...state, isSubState: true };
 
-            subState.playerStates = subState.playerStates.map(function (playerState, pIndex) {
-
+            subState.playerStates = subState.playerStates.map((playerState, pIndex) => {
                 const { lines }         = playerState;
                 const lastLine          = lines[lines.length - 1];
                 const increment         = 1 / (substateCount + 1);
-                const isSubStateCrashed = playerState.isCrashed &&
-                    parsedStates[stateIndex].playerStates[pIndex].isCrashed;
+                const limit             = playerState.limit;
                 let { x1, x2, y1, y2 }  = lastLine;
 
                 if (x1 < x2) {
@@ -102,11 +80,27 @@ function parseStates(matchData, settings) {
                 const newLines = lines.slice(0, -1);
                 newLines.push({ x1, x2, y1, y2 });
 
-                return { ...playerState, lines: newLines, isCrashed: isSubStateCrashed };
+                const isLimitedSubstate = x2 < limit.minX || x2 > limit.maxX ||
+                    y2 < limit.minY || y2 > limit.maxY;
+                const isSubStateCrashed = playerState.isCrashed &&
+                    (index === substateCount || isLimitedSubstate) &&
+                    parsedStates[stateIndex].playerStates[pIndex].isCrashed;
+
+                const subPlayerState = {
+                    ...playerState,
+                    lines: newLines,
+                    isCrashed: isSubStateCrashed
+                };
+
+                limitCoordinates(subPlayerState);
+
+                return subPlayerState;
             });
 
             tweenStates.push(subState);
         }
+
+        state.playerStates.forEach(playerState => limitCoordinates(playerState));
 
         tweenStates.push(state);
     });
@@ -117,68 +111,91 @@ function parseStates(matchData, settings) {
         round: lastState.round + 1,
         isSubState: true,
     };
-    const withAdditionalStates = tweenStates.concat(new Array(substateCount).fill(finalState));
-    const limitedStates = limitCoordinates(withAdditionalStates, width, height);
+
     return {
         errors,
-        states: limitedStates,
-        winner: matchData.players.winner,
+        states: tweenStates.concat(new Array(substateCount).fill(finalState)),
+        winner: parseWinner(winner, settings.players),
     };
 }
 
 function parseState({ settings, state, previousParsedState }) {
 
     const playerNames = settings.players.map(p => p.name);
+    let crashCount = 0;
 
-    const playerStates = playerNames.map(function (name, index) {
+    const playerStates = playerNames.map((name, index) => {
 
         const playerState = state.players[index];
-        const isCrashed = playerState.isCrashed;
-        const hasError = playerState.hasError;
-        const thisPosition = playerState.position
-            .split(',')
-            .map(coord => parseInt(coord));
+        const { isCrashed, error, position } = playerState;
+        const { width, height } = settings.field;
+        const limit = { minX: -0.5, maxX: width - 0.5, minY: -0.5, maxY: height - 0.5 };
+
+        isCrashed && crashCount++;
 
         let lines;
         if (!previousParsedState) {
             lines = [{
-                x1: thisPosition[0],
-                y1: thisPosition[1],
-                x2: thisPosition[0],
-                y2: thisPosition[1],
+                x1: position.x,
+                y1: position.y,
+                x2: position.x,
+                y2: position.y,
             }];
         } else {
             const previousLines = previousParsedState.playerStates[index].lines;
             const lastLine = previousLines[previousLines.length - 1];
 
-            lines = previousLines.map(function(line) {
-                return { ...line };
-            });
+            lines = previousLines.map(line => ({ ...line }));
             lines.push({
                 x1: lastLine.x2,
                 y1: lastLine.y2,
-                x2: thisPosition[0],
-                y2: thisPosition[1],
+                x2: position.x,
+                y2: position.y,
             })
         }
 
-        return { name, lines, isCrashed, hasError };
+        return { name, lines, isCrashed, error, position, limit };
     });
 
-    return { playerStates, round: state.round };
+    return { crashCount, playerStates, round: state.round };
+}
+
+function addSwitchDeathLimit(state, previousState) {
+    if (state.crashCount < 2 || previousState === null) return;
+
+    state.playerStates.forEach((playerState, playerStateIndex) => {
+        const position = playerState.position;
+        const switched = previousState.playerStates.reduce((switched, ps) =>
+        switched || _.isEqual(ps.position, position), false);
+
+        if (!switched) return;
+
+        const previousPlayerState = previousState.playerStates[playerStateIndex];
+        const previousPosition = previousPlayerState.position;
+        const limX = position.x - ((position.x - previousPosition.x) / 2);
+        const limY = position.y - ((position.y - previousPosition.y) / 2);
+
+        playerState.limit = {
+            minX: limX <= previousPosition.x ? limX : previousPosition.x,
+            minY: limY <= previousPosition.y ? limY : previousPosition.y,
+            maxX: limX <= previousPosition.x ? previousPosition.x : limX,
+            maxY: limY <= previousPosition.y ? previousPosition.y : limY,
+        };
+    });
 }
 
 function parseErrors(parsedStates) {
-
     const errors = [];
 
-    parsedStates.forEach(function (state) {
-        state.playerStates.forEach(function (playerState) {
-            if (playerState.hasError) {
-                const lastLine = playerState.lines[playerState.lines.length - 1];
+    parsedStates.forEach((state, stateIndex) => {
+        state.playerStates.forEach((playerState, playerStateIndex)  => {
+            if (playerState.error) {
+                const previousState = parsedStates[stateIndex - 1];
+                const previousPlayerState = previousState.playerStates[playerStateIndex];
+                const lastLine = previousPlayerState.lines[previousPlayerState.lines.length - 1];
 
                 errors.push({
-                    round: state.round,
+                    round: state.round - 1,
                     x: lastLine.x2,
                     y: lastLine.y2,
                 })
@@ -189,35 +206,30 @@ function parseErrors(parsedStates) {
     return errors;
 }
 
-function limitCoordinates(states, width, height) {
-    return states.map(function (state) {
-        return {
-            ...state,
-            playerStates: state.playerStates
-                .map(function (playerState) {
-                    return {
-                        ...playerState,
-                        lines: playerState.lines
-                            .map(function (line) {
-                                return {
-                                    x1: limitCoordinate(line.x1, width),
-                                    x2: limitCoordinate(line.x2, width),
-                                    y1: limitCoordinate(line.y1, height),
-                                    y2: limitCoordinate(line.y2, height),
-                                };
-                            })
-                    }
-                })
-        };
-    });
+function parseWinner(winner, players) {
+    if (winner === null) return null;
+
+    return {
+        ...players[winner],
+        id: winner,
+    }
 }
 
-function limitCoordinate(coordinate, limit) {
-    return Math.min(limit - 0.5, Math.max(-0.5, coordinate));
+function limitCoordinates(playerState) {
+    const lastLine = playerState.lines[playerState.lines.length - 1];
+
+    playerState.lines[playerState.lines.length - 1] = {
+        ...lastLine,
+        x2: limitCoordinate(lastLine.x2, playerState.limit.minX, playerState.limit.maxX),
+        y2: limitCoordinate(lastLine.y2, playerState.limit.minY, playerState.limit.maxY),
+    };
+}
+
+function limitCoordinate(number, min, max) {
+    return Math.min(max, Math.max(min, number));
 }
 
 export {
     parseSettings,
     parseStates,
-    parsePlayerNames,
 };

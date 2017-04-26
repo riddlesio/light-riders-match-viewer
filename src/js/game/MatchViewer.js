@@ -44,17 +44,15 @@ const MatchViewer = createGame({
      * @param  {Object} data
      */
     handleData: function (data) {
-        const { matchData, playerData } = data;
+        const { matchData } = data;
         const currentState = 0;
         const settings = parseSettings(data, defaults);
         const parsedStates = parseStates(matchData, settings);
-        const playerNames = parsePlayerNames(playerData);
         const { states } = parsedStates;
 
         this.settings = settings;
         this.states = states;
         this.parsedStates = parsedStates;
-        this.playerNames = playerNames;
 
         this.triggerStateChange(currentState);
         this.play();
@@ -80,8 +78,8 @@ const MatchViewer = createGame({
             statesLength: states.length,
         };
 
-        ReactDOM.render(<GameView { ...props }/>, this.getDOMNode());
-    },
+        ReactDOM.render(<GameView { ...props } />, this.getDOMNode());
+    }
 }, [StateMixin, GameLoopMixin]);
 
 /**

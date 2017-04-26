@@ -14,289 +14,280 @@
       "field": {
         "width": 16,
         "height": 16
+      },
+      "players": {
+        "names": ["player0", "player1"],
+        "count": 2
       }
     },
-    "players": {
-      "names": [
-        "player0",
-        "player1"
-      ],
-      "winner": "1",
-      "count": 2
-    },
-    "states": [
-      {
-        "round": -1,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "3,7",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "12,7",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 1,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "4,7",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "13,7",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 2,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "5,7",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "13,8",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 3,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "5,8",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "12,8",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 4,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "5,9",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "12,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 5,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "4,9",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "11,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 6,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "4,10",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "10,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 7,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "4,11",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "9,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 8,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "3,11",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "8,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 9,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "2,11",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "7,9",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 10,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "2,10",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "7,10",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 11,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "1,10",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "8,10",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 12,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "1,9",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "9,10",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 13,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "1,8",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "10,10",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 14,
-        "players": [
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "0,8",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "11,10",
-            "id": 1
-          }
-        ]
-      },
-      {
-        "round": 15,
-        "players": [
-          {
-            "isCrashed": true,
-            "hasError": false,
-            "position": "-1,8",
-            "id": 0
-          },
-          {
-            "isCrashed": false,
-            "hasError": false,
-            "position": "11,11",
-            "id": 1
-          }
-        ]
-      }
-    ]
+    "score": 13,
+    "winner": 0,
+    "states": [{
+      "round": 0,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 3,
+          "y": 7
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 12,
+          "y": 7
+        },
+        "error": null
+      }]
+    }, {
+      "round": 1,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 3,
+          "y": 8
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 11,
+          "y": 7
+        },
+        "error": null
+      }]
+    }, {
+      "round": 2,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 2,
+          "y": 8
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 11,
+          "y": 8
+        },
+        "error": null
+      }]
+    }, {
+      "round": 3,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 1,
+          "y": 8
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 11,
+          "y": 9
+        },
+        "error": null
+      }]
+    }, {
+      "round": 4,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 1,
+          "y": 7
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 10,
+          "y": 9
+        },
+        "error": null
+      }]
+    }, {
+      "round": 5,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 7
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 9,
+          "y": 9
+        },
+        "error": null
+      }]
+    }, {
+      "round": 6,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 8
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 9,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 7,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 9
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 10,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 8,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 10
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 11,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 9,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 11
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 12,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 10,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 0,
+          "y": 12
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 13,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 11,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 1,
+          "y": 12
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 14,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 12,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 1,
+          "y": 11
+        },
+        "error": null
+      }, {
+        "isCrashed": false,
+        "id": 1,
+        "position": {
+          "x": 15,
+          "y": 10
+        },
+        "error": null
+      }]
+    }, {
+      "round": 13,
+      "players": [{
+        "isCrashed": false,
+        "id": 0,
+        "position": {
+          "x": 1,
+          "y": 10
+        },
+        "error": null
+      }, {
+        "isCrashed": true,
+        "id": 1,
+        "position": {
+          "x": 16,
+          "y": 10
+        },
+        "error": null
+      }]
+    }]
   }
 }

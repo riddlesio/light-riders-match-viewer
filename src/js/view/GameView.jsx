@@ -128,26 +128,22 @@ const GameView = createView('GameView', lifeCycle, function (props) {
     };
 
     let winnerData;
-    let avatarImage;
-
     if (winner) {
         winnerData = {
-            message: `${players[winner].name} won the game!`,
-            number: winner,
+            id: winner.id,
+            message: `${ winner.name } won the game!`,
+            avatar: <img
+                className="VictoryScreen-avatar"
+                src={ `https://www.gravatar.com/avatar/${winner.emailHash}?s=120&d=mm` }
+                alt="avatar"
+            />,
         };
-
-        avatarImage = <img
-            className="VictoryScreen-avatar"
-            src={ `https://www.gravatar.com/avatar/${players[winner].emailHash}?s=120&d=mm` }
-            alt="avatar"
-        />;
     } else {
         winnerData = {
+            id: 'draw',
             message: 'It\'s a draw!',
-            number: 'draw',
+            avatar: null,
         };
-
-        avatarImage = null;
     }
 
     const finished = currentState + 1 >= statesLength;
@@ -237,11 +233,11 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                 </div>
             </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
-                <div className="VictoryScreen-background"></div>
+                <div className="VictoryScreen-background" />
                 <div className={ `VictoryScreen Player--${winnerData.number}` }>
                     <div className="VictoryScreen-component" style={{ marginTop: grid.height / 2 }}>
                         <div className="VictoryScreen-avatarWrapper">
-                            { avatarImage }
+                            { winnerData.avatar }
                         </div>
                         <div className="VictoryScreen-textWrapper">
                             <h2 className="VictoryScreen-textHeading">Game End</h2>
@@ -265,8 +261,8 @@ function renderErrors({ state, errors, sizes }) {
         if (error.round > state.round) return false;
         if (error.round === state.round && state.isSubState) return false;
 
-        const cx = toPixels(error.x) - halfCellDimension;
-        const cy = toPixels(error.y) - halfCellDimension;
+        const cx = toPixels(error.x) + halfCellDimension;
+        const cy = toPixels(error.y) + halfCellDimension;
 
         errorCircles.push(
             <circle
@@ -353,6 +349,7 @@ function getPlayerStateRenderer({ settings, sizes }) {
     return function renderPlayerState(props, index) {
 
         const { isCrashed, lines, name } = props;
+        const width = settings.field.width;
         const playerNo = index;
         const currentLine = lines[lines.length - 1];
         const { x1, x2, y1, y2 } = currentLine;
@@ -364,8 +361,12 @@ function getPlayerStateRenderer({ settings, sizes }) {
             direction = 'right';
         } else if (y2 > y1) {
             direction = 'down';
-        } else {
+        } else if (y1 > y2) {
             direction = 'up';
+        } else if (x1 < width / 2) {
+            direction = 'right'
+        } else {
+            direction = 'left';
         }
 
         const currentPosition = {
