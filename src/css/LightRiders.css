@@ -1,3 +1,22 @@
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Titillium Web'),
+    local('TitilliumWeb-Regular'),
+    url(https://fonts.gstatic.com/s/titilliumweb/v4/7XUFZ5tgS-tD6QamInJTcZSnX671uNZIV63UdXh3Mg0.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Titillium WebBold'),
+    local('TitilliumWeb-Bold'),
+    url(https://fonts.gstatic.com/s/titilliumweb/v4/anMUvcNT0H1YN4FII8wprxP6Eu1_xfSBSoi9uie1FdE.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
 :root {
     --player0-color: #6AA0FC;
     --player1-color: #E419F9;
@@ -52,7 +71,7 @@ html {
 }
 .Players {
     position: relative;
-    border: 2px solid #666666;
+    border: 1px solid #666666;
     margin-left: auto;
     margin-right: auto;
 }
@@ -62,7 +81,6 @@ html {
 }
 .Player-name {
     font-size: 2rem;
-    font-family: 'Titillium Web', sans-serif;
     display: inline-block;
     margin: 0 10px;
     font-weight: bold;
@@ -75,23 +93,25 @@ html {
 .Player:nth-of-type(4) .Player-name {
     vertical-align: bottom;
 }
-.Player0 .Player-name {
+.Player--0 .Player-name {
     color: var(--player0-color);
+    text-shadow: 0 0 40px var(--player0-color), 0 0 40px var(--player0-color);
 }
-.Player1 .Player-name {
+.Player--1 .Player-name {
     color: var(--player1-color);
+    text-shadow: 0 0 40px var(--player1-color), 0 0 40px var(--player1-color);
 }
-.Player2 .Player-name {
+.Player--2 .Player-name {
     color: var(--player2-color);
+    text-shadow: 0 0 40px var(--player2-color), 0 0 40px var(--player2-color);
 }
-.Player3 .Player-name {
+.Player--3 .Player-name {
     color: var(--player3-color);
+    text-shadow: 0 0 40px var(--player3-color), 0 0 40px var(--player3-color);
 }
 .AvatarWrapper {
-    width: 45px;
-    height: 45px;
-    border: 1px solid #5e6565;
-    border-radius: 2px;
+    width: 41px;
+    height: 41px;
     display: inline-block;
 }
 .AvatarBackground {
@@ -104,18 +124,24 @@ html {
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    border: 3px solid;
 }
-.Player0 .AvatarBackground {
-    background-color: var(--player0-color);
+
+.Player--0 .Avatar {
+    box-shadow: 0 0 30px var(--player0-color);
+    border-color: var(--player0-color);
 }
-.Player1 .AvatarBackground {
-    background-color: var(--player1-color);
+.Player--1 .Avatar {
+    box-shadow: 0 0 30px var(--player1-color);
+    border-color: var(--player1-color);
 }
-.Player2 .AvatarBackground {
-    background-color: var(--player2-color);
+.Player--2 .Avatar {
+    box-shadow: 0 0 30px var(--player2-color);
+    border-color: var(--player2-color);
 }
-.Player3 .AvatarBackground {
-    background-color: var(--player3-color);
+.Player--3 .Avatar {
+    box-shadow: 0 0 30px var(--player3-color);
+    border-color: var(--player3-color);
 }
 
 .Cell {
@@ -184,77 +210,62 @@ html {
     bottom: 0;
 }
 .VictoryScreen-background {
-    background: black;
-    opacity: 0.8;
+    background: url('../img/endscreen.png') no-repeat center;
+    background-size: cover;
 }
 .VictoryScreen-component {
-    border: 2px solid;
-    width: 400px;
-    height: 120px;
-
+    display: flex;
+    justify-content: center;
     margin-left: auto;
     margin-right: auto;
-
-    background-color: black;
 }
 
-.Player--draw .VictoryScreen-component {
-    border-color: #c9c9c9;
+.VictoryScreen-avatarWrapper {
+    width: 50px;
+    height: 100%;
+    display: inline-block;
 }
 
-.Player--0 .VictoryScreen-component,
-.Player--0 .VictoryScreen-avatarWrapper {
+
+.Player--0 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player0-color), 0 0 30px var(--player0-color);
     border-color: var(--player0-color);
 }
-.Player--1 .VictoryScreen-component,
-.Player--1 .VictoryScreen-avatarWrapper {
+.Player--1 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player1-color), 0 0 30px var(--player1-color);
     border-color: var(--player1-color);
 }
-.Player--2 .VictoryScreen-component,
-.Player--2 .VictoryScreen-avatarWrapper {
+.Player--2 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player2-color), 0 0 30px var(--player2-color);
     border-color: var(--player2-color);
 }
-.Player--3 .VictoryScreen-component,
-.Player--3 .VictoryScreen-avatarWrapper {
+.Player--3 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player3-color), 0 0 30px var(--player3-color);
     border-color: var(--player3-color);
 }
-.VictoryScreen-avatarWrapper {
-    width: 120px;
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
-    border-right: 2px solid;
-}
-.VictoryScreen-avatar {
-    width:100%;
-    height: 100%;
-}
-.Player--0 .VictoryScreen-textWrapper {
+.Player--0 .VictoryScreen-textMessage {
     color: var(--player0-color);
+    text-shadow: 0 0 30px var(--player0-color), 0 0 30px var(--player0-color);
 }
-.Player--1 .VictoryScreen-textWrapper {
+.Player--1 .VictoryScreen-textMessage {
     color: var(--player1-color);
+    text-shadow: 0 0 30px var(--player1-color), 0 0 30px var(--player1-color);
 }
-.Player--2 .VictoryScreen-textWrapper {
+.Player--2 .VictoryScreen-textMessage {
     color: var(--player2-color);
+    text-shadow: 0 0 30px var(--player2-color), 0 0 30px var(--player2-color);
 }
-.Player--3 .VictoryScreen-textWrapper {
+.Player--3 .VictoryScreen-textMessage {
     color: var(--player3-color);
+    text-shadow: 0 0 30px var(--player3-color), 0 0 30px var(--player3-color);
 }
-.VictoryScreen-textWrapper {
-    display: inline-block;
-    vertical-align: top;
-    height: 100%;
-    padding: 15px 20px;
+.Player--draw .VictoryScreen-textMessage {
+    color: #c9c9c9;
+    text-shadow: 0 0 30px #c9c9c9, 0 0 30px #c9c9c9;
 }
-.VictoryScreen-textHeading {
-    font-size: 2.8rem;
-    font-weight: 600;
-    line-height: 1rem;
-    color: white;
-}
+
 .VictoryScreen-textMessage {
-    font-size: 2rem;
-    line-height: 1rem;
-    color: white;
+    margin: 0 0 0 15px;
+    font-size: 4rem;
+    line-height: 50px;
 }

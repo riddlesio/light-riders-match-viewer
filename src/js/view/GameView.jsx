@@ -111,17 +111,10 @@ const GameView = createView('GameView', lifeCycle, function (props) {
 
     const { currentState, state, errors, statesLength, settings, winner } = props;
     const { sizes }             = this.state;
-    const { cells, grid, svg }  = sizes;
+    const { grid, svg }  = sizes;
     const { canvas, players }   = settings;
 
     const { marginRight, marginTop, marginBottom, marginLeft } = canvas;
-    const cellDimension = cells.width;
-    const gridTransformX = cellDimension !== 0
-        ? (Math.ceil(marginLeft / cellDimension) * cellDimension) - marginLeft
-        : 0;
-    const gridTransformY = cellDimension !== 0
-        ? (Math.ceil(marginTop / cellDimension) * cellDimension) - marginTop
-        : 0;
 
     const wrapperStyle = {
         padding: `${marginTop}px ${marginLeft}px ${marginBottom}px ${marginRight}px`,
@@ -131,17 +124,17 @@ const GameView = createView('GameView', lifeCycle, function (props) {
     if (winner) {
         winnerData = {
             id: winner.id,
-            message: `${ winner.name } won the game!`,
+            message: `${ winner.name } won!`,
             avatar: <img
-                className="VictoryScreen-avatar"
-                src={ `https://www.gravatar.com/avatar/${winner.emailHash}?s=120&d=mm` }
+                className="Avatar"
+                src={ `https://www.gravatar.com/avatar/${winner.emailHash}?s=44&d=mm` }
                 alt="avatar"
             />,
         };
     } else {
         winnerData = {
             id: 'draw',
-            message: 'It\'s a draw!',
+            message: 'It\'s a draw',
             avatar: null,
         };
     }
@@ -150,38 +143,20 @@ const GameView = createView('GameView', lifeCycle, function (props) {
 
     return (
         <div key="GAME" className="LightRiders-wrapper">
-            {/*<svg*/}
-                {/*className="GridBackground-wrapper"*/}
-                {/*viewBox={ `0 0 ${grid.width + marginLeft + marginRight} ${grid.height + marginTop + marginBottom}` }*/}
-                {/*preserveAspectRatio="xMidYMid meet">*/}
-                {/*<g transform={ `translate(-${gridTransformX},-${gridTransformY})` }>*/}
-                    {/*{ renderGrid({ settings, sizes }) }*/}
-                {/*</g>*/}
-            {/*</svg>*/}
-            {/*<svg className="RadialBackgroundGradient-wrapper" viewBox={ `0 0 ${canvas.width} ${canvas.height}` }>*/}
-                {/*<defs>*/}
-                    {/*<radialGradient*/}
-                        {/*id="radial-gradient"*/}
-                        {/*cx={ canvas.width / 2 }*/}
-                        {/*cy={ canvas.height / 2 }*/}
-                        {/*r={ grid.width }*/}
-                        {/*gradientUnits="userSpaceOnUse">*/}
-                        {/*<stop offset="0" stopColor="#fff"/>*/}
-                        {/*<stop offset="0.08" stopColor="#ebebeb"/>*/}
-                        {/*<stop offset="0.42" stopColor="#9a9c9e"/>*/}
-                        {/*<stop offset="0.69" stopColor="#5f6265"/>*/}
-                        {/*<stop offset="0.89" stopColor="#3a3e42"/>*/}
-                        {/*<stop offset="1" stopColor="#2c3035"/>*/}
-                    {/*</radialGradient>*/}
-                {/*</defs>*/}
-                {/*<rect*/}
-                    {/*style={{ opacity: 0.2 }}*/}
-                    {/*fill="url(#radial-gradient)"*/}
-                    {/*y="0.47"*/}
-                    {/*width="960"*/}
-                    {/*height="540"*/}
-                {/*/>*/}
-            {/*</svg>*/}
+            <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
+                <div ref="gameSpace" style={{ width: '100%', height: '100%' }}>
+                    <div className="Players"
+                         style={{
+                             width: `calc(${grid.widthPercentage}% + 2px)`,
+                             height: `calc(${grid.heightPercentage}% + 2px)`,
+                         }} >
+                        <svg className="GridBackground-wrapper">
+                            { renderGrid({ settings, sizes }) }
+                        </svg>
+                        { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
+                    </div>
+                </div>
+            </div>
             <div className="GameState-wrapper" style={ wrapperStyle }>
                 <svg
                     className="GameState"
@@ -220,31 +195,14 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                     { renderErrors({ state, errors, sizes }) }
                 </svg>
             </div>
-            <div className="PlayerInformation-wrapper" style={ wrapperStyle }>
-                <div ref="gameSpace" style={{ width: '100%', height: '100%' }}>
-                    <div className="Players"
-                        style={{
-                            width: `${grid.widthPercentage}%`,
-                            height: `${grid.heightPercentage}%`,
-                        }} >
-                        { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
-                        <svg className="GridBackground-wrapper">
-                            { renderGrid({ settings, sizes }) }
-                        </svg>
-                    </div>
-                </div>
-            </div>
             <div className="VictoryScreen-wrapper" style={{ opacity: finished ? 1 : 0 }}>
                 <div className="VictoryScreen-background" />
-                <div className={ `VictoryScreen Player--${winnerData.number}` }>
-                    <div className="VictoryScreen-component" style={{ marginTop: grid.height / 2 }}>
+                <div className={ `VictoryScreen Player--${winnerData.id}` }>
+                    <div className="VictoryScreen-component" style={{ marginTop: (grid.height + 20)  / 1.5 }}>
                         <div className="VictoryScreen-avatarWrapper">
                             { winnerData.avatar }
                         </div>
-                        <div className="VictoryScreen-textWrapper">
-                            <h2 className="VictoryScreen-textHeading">Game End</h2>
-                                <p className="VictoryScreen-textMessage">{ winnerData.message }</p>
-                        </div>
+                        <p className="VictoryScreen-textMessage">{ winnerData.message }</p>
                     </div>
                 </div>
             </div>
@@ -312,19 +270,10 @@ function renderCrashes({ state, sizes }) {
 }
 
 function renderGrid({ settings, sizes }) {
-    const { canvas } = settings;
+    const grid = settings.field;
 
-    const cellDimension = sizes.cells.width;
-    const columnCount = parseInt(Math.ceil(canvas.width / cellDimension * 2));
-    const rowCount = parseInt(Math.ceil(canvas.height / cellDimension * 2));
-
-    const rowArray = Array.from({ length: columnCount });
-    const arrayField = Array.from({ length: rowCount }).map(() => rowArray);
-
-    const grid = {
-        width: columnCount,
-        height: rowCount,
-    };
+    const rowArray = Array.from({ length: grid.height });
+    const arrayField = Array.from({ length: grid.width }).map(() => rowArray);
 
     return arrayField.map(getRowRenderer({ grid, settings, sizes }));
 }
@@ -486,17 +435,16 @@ function isOdd(num) {
 function renderPlayerInfo({ players, isVisible }) {
 
     return players.map((player, index) => {
-        const className = `Player Player${index}`;
+        const className = `Player Player--${index}`;
         const odd = isOdd(index);
         const playerCords = getPlayerInfoCords(index);
         const { top, bottom, left, right } = playerCords;
 
         const info = [
             <div className="AvatarWrapper">
-                <div className="AvatarBackground"></div>
                 <img
                     className="Avatar"
-                    src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=60&d=mm` }
+                    src={ `https://www.gravatar.com/avatar/${player.emailHash}?s=45&d=mm` }
                     alt="avatar"
                 />
             </div>,
@@ -522,28 +470,28 @@ function getPlayerInfoCords(index) {
     if (index === 0) {
         return {
             top: '-30px',
-            left: '-70px',
+            left: '-53px',
         };
     }
 
     if (index === 1) {
         return {
             top: '-30px',
-            right: '-70px',
+            right: '-53px',
         };
     }
 
     if (index === 2) {
         return {
             bottom: '-30px',
-            left: '-70px',
+            left: '-53px',
         };
     }
 
     if (index === 3) {
         return {
             bottom: '-30px',
-            right: '-70px',
+            right: '-53px',
         };
     }
 }
