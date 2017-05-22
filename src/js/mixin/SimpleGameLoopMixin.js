@@ -12,7 +12,7 @@ const SimpleGameLoopMixin = {
             /**
              * Moves the game forward by one step
              */
-            moveForward: function () {
+            stepForward: function () {
 
                 const { currentState } = this.getState();
 
@@ -129,10 +129,6 @@ const SimpleGameLoopMixin = {
 
         _.extend(context, mixin);
     },
-};
-
-const handleTimer = function () {
-
 };
 
 export default SimpleGameLoopMixin;

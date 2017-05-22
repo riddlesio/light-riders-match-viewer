@@ -77,6 +77,8 @@ html {
 .Player {
     position: absolute;
     transition: all .5s ease-out;
+    display: flex;
+    align-items: center;
 }
 .Player-name {
     font-size: 2rem;
@@ -267,4 +269,16 @@ html {
     margin: 0 0 0 15px;
     font-size: 4rem;
     line-height: 50px;
+}
+
+.round-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -37px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75px;
+    color: #C9C9C9;
+    font-size: 1.5rem;
 }

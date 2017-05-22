@@ -153,6 +153,9 @@ const GameView = createView('GameView', lifeCycle, function (props) {
                         <svg className="GridBackground-wrapper">
                             { renderGrid({ settings, sizes }) }
                         </svg>
+                        <div className="round-wrapper">
+                            <span className="round">Round { state.round }</span>
+                        </div>
                         { renderPlayerInfo({ players, isVisible: this.state.showPlayerInfo }) }
                     </div>
                 </div>
@@ -405,7 +408,7 @@ function getPlayerLineRenderer({ name, settings, sizes }) {
         y2 = (y2 * cellDimension) + halfCellDimension;
 
         return (
-            <g>
+            <g key={ `line-${name}-${index}` }>
                 <line
                     key={ `${name}-backgroundLine-${index}` }
                     className={ `line line--${modifierClass}` }
@@ -469,14 +472,14 @@ function renderPlayerInfo({ players, isVisible }) {
 function getPlayerInfoCords(index) {
     if (index === 0) {
         return {
-            top: '-30px',
+            top: '-42px',
             left: '-53px',
         };
     }
 
     if (index === 1) {
         return {
-            top: '-30px',
+            top: '-42px',
             right: '-53px',
         };
     }

@@ -10,6 +10,7 @@ import data from './data/dummyData.json';
  import dataProvider  from '@riddles/match-viewer/lib/dataProvider/riddlesDataProvider';
  /* @endif */
 import MatchViewer from './game/MatchViewer';
+import PlaybackEvent from '@riddles/match-viewer/lib/event/PlaybackEvent';
 
 let displayChrome = true;
 
@@ -36,6 +37,10 @@ const game = new MatchViewer({
         playbackTimeout: {
             min: 1,
             max: 40,
+        },
+
+        timerHandler: function () {
+            PlaybackEvent.trigger(PlaybackEvent.STEP_FORWARD);
         },
     },
 });
