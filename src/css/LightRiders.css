@@ -1,0 +1,284 @@
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Titillium Web'),
+    local('TitilliumWeb-Regular'),
+    url(https://fonts.gstatic.com/s/titilliumweb/v4/7XUFZ5tgS-tD6QamInJTcZSnX671uNZIV63UdXh3Mg0.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+@font-face {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Titillium WebBold'),
+    local('TitilliumWeb-Bold'),
+    url(https://fonts.gstatic.com/s/titilliumweb/v4/anMUvcNT0H1YN4FII8wprxP6Eu1_xfSBSoi9uie1FdE.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+:root {
+    --player0-color: #6AA0FC;
+    --player1-color: #E419F9;
+    --player2-color: #00FF0C;
+    --player3-color: #F7FF55;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Titillium Web', sans-serif;
+}
+.RadialBackgroundGradient-wrapper {
+    position: absolute;
+}
+
+.GridBackground-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.LightRiders-wrapper {
+    height: 100%;
+    background: url('../img/background.png') no-repeat center;
+    background-size: cover;
+    position: relative;
+}
+.GameState-wrapper{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.GameState {
+    height: 100%;
+    width: 100%;
+}
+.PlayerInformation-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.Players {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+.Player {
+    position: absolute;
+    transition: all .5s ease-out;
+    display: flex;
+    align-items: center;
+}
+.Player-name {
+    font-size: 2rem;
+    display: inline-block;
+    margin: 0 10px;
+    font-weight: bold;
+}
+.Player:nth-of-type(1) .Player-name,
+.Player:nth-of-type(2) .Player-name{
+    vertical-align: top;
+}
+.Player:nth-of-type(3) .Player-name,
+.Player:nth-of-type(4) .Player-name {
+    vertical-align: bottom;
+}
+.Player--0 .Player-name {
+    color: var(--player0-color);
+    text-shadow: 0 0 40px var(--player0-color), 0 0 40px var(--player0-color);
+}
+.Player--1 .Player-name {
+    color: var(--player1-color);
+    text-shadow: 0 0 40px var(--player1-color), 0 0 40px var(--player1-color);
+}
+.Player--2 .Player-name {
+    color: var(--player2-color);
+    text-shadow: 0 0 40px var(--player2-color), 0 0 40px var(--player2-color);
+}
+.Player--3 .Player-name {
+    color: var(--player3-color);
+    text-shadow: 0 0 40px var(--player3-color), 0 0 40px var(--player3-color);
+}
+.AvatarWrapper {
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+}
+.AvatarBackground {
+    width: 60px;
+    height: 60px;
+    opacity: 0.1;
+    position: absolute;
+}
+.Avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid;
+}
+
+.Player--0 .Avatar {
+    box-shadow: 0 0 30px var(--player0-color);
+    border-color: var(--player0-color);
+}
+.Player--1 .Avatar {
+    box-shadow: 0 0 30px var(--player1-color);
+    border-color: var(--player1-color);
+}
+.Player--2 .Avatar {
+    box-shadow: 0 0 30px var(--player2-color);
+    border-color: var(--player2-color);
+}
+.Player--3 .Avatar {
+    box-shadow: 0 0 30px var(--player3-color);
+    border-color: var(--player3-color);
+}
+
+.Cell {
+    fill: transparent;
+}
+.Cell.Cell--grid {
+    stroke: #333333;
+    stroke-width: 1;
+}
+
+.Position--p0:first-child {
+    fill: var(--player0-color);
+}
+.Position--p1:first-child {
+    fill: var(--player1-color);
+}
+.Position--p2:first-child {
+    fill: var(--player2-color);
+}
+.Position--p3:first-child {
+    fill: var(--player3-color);
+}
+
+.line {
+    fill: transparent;
+    stroke-linecap: square;
+    shape-rendering: crispEdges;
+}
+.line--small {
+    stroke-width: 1;
+}
+.line--normal {
+    stroke-width: 4;
+}
+.Player--0 .line {
+    stroke: var(--player0-color);
+}
+.Player--1 .line {
+    stroke: var(--player1-color);
+}
+.Player--2 .line {
+    stroke: var(--player2-color);
+}
+.Player--3 .line {
+    stroke: var(--player3-color);
+}
+
+.ErrorCircle {
+    fill: #FF5552;
+    opacity: 0.5;
+}
+.CrashCircle {
+    fill: #C9C9C9;
+    opacity: 0.7;
+}
+.VictoryScreen-wrapper {
+    transition: all 0.2s ease-in;
+}
+.VictoryScreen-wrapper,
+.VictoryScreen-background,
+.VictoryScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.VictoryScreen-background {
+    background: url('../img/endscreen.png') no-repeat center;
+    background-size: cover;
+}
+.VictoryScreen-component {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.VictoryScreen-avatarWrapper {
+    width: 50px;
+    height: 100%;
+    display: inline-block;
+}
+
+
+.Player--0 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player0-color), 0 0 30px var(--player0-color);
+    border-color: var(--player0-color);
+}
+.Player--1 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player1-color), 0 0 30px var(--player1-color);
+    border-color: var(--player1-color);
+}
+.Player--2 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player2-color), 0 0 30px var(--player2-color);
+    border-color: var(--player2-color);
+}
+.Player--3 .VictoryScreen-avatarWrapper .Avatar {
+    box-shadow: 0 0 30px var(--player3-color), 0 0 30px var(--player3-color);
+    border-color: var(--player3-color);
+}
+.Player--0 .VictoryScreen-textMessage {
+    color: var(--player0-color);
+    text-shadow: 0 0 30px var(--player0-color), 0 0 30px var(--player0-color);
+}
+.Player--1 .VictoryScreen-textMessage {
+    color: var(--player1-color);
+    text-shadow: 0 0 30px var(--player1-color), 0 0 30px var(--player1-color);
+}
+.Player--2 .VictoryScreen-textMessage {
+    color: var(--player2-color);
+    text-shadow: 0 0 30px var(--player2-color), 0 0 30px var(--player2-color);
+}
+.Player--3 .VictoryScreen-textMessage {
+    color: var(--player3-color);
+    text-shadow: 0 0 30px var(--player3-color), 0 0 30px var(--player3-color);
+}
+.Player--draw .VictoryScreen-textMessage {
+    color: #c9c9c9;
+    text-shadow: 0 0 30px #c9c9c9, 0 0 30px #c9c9c9;
+}
+
+.VictoryScreen-textMessage {
+    margin: 0 0 0 15px;
+    font-size: 4rem;
+    line-height: 50px;
+}
+
+.round-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -37px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75px;
+    color: #C9C9C9;
+    font-size: 1.5rem;
+}

@@ -10,6 +10,7 @@ import data from './data/dummyData.json';
  import dataProvider  from '@riddles/match-viewer/lib/dataProvider/riddlesDataProvider';
  /* @endif */
 import MatchViewer from './game/MatchViewer';
+import PlaybackEvent from '@riddles/match-viewer/lib/event/PlaybackEvent';
 
 let displayChrome = true;
 
@@ -20,8 +21,8 @@ if (window.frameElement.getAttribute('data-indexgame')) {
 /* @endif */
 
 const game = new MatchViewer({
-    name: 'hello-world',
-    dataProvider: dataProvider(data),
+    name: 'light-rider',
+    dataProvider: dataProvider(/* @ifdef LOCAL */data/* @endif */),
     player: {
         // Determines whether they player's chrome should be displayed
         chrome: displayChrome,
@@ -30,12 +31,16 @@ const game = new MatchViewer({
         viewstack: false,
 
         // A number between 0 and 1
-        aspectRatio: 1920 / 1080,
+        aspectRatio: 960 / 540,
 
         // Time between each step when playing
         playbackTimeout: {
-            min: 16,
-            max: 750,
+            min: 1,
+            max: 40,
+        },
+
+        timerHandler: function () {
+            PlaybackEvent.trigger(PlaybackEvent.STEP_FORWARD);
         },
     },
 });

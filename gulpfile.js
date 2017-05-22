@@ -30,9 +30,10 @@ function buildEnvironment(argv) {
 
     const debug    = !!argv.debug;
     const target   = argv.prod ? 'PROD' : 'DEV';
-    const platform = argv.prod && argv.riddles ? 'RIDDLES'
-        : argv.prod && argv.aigames ? 'AI_GAMES'
+    const platform = argv.riddles ? 'RIDDLES'
+        : argv.aigames ? 'AI_GAMES'
         : 'LOCAL';
+
     return {
         debug:  debug,
         platform: platform,
@@ -58,7 +59,6 @@ function buildConfig(taskName) {
 // gulp.task('copyFonts', copy(streamFactory, gulp.dest, buildConfig('copyFonts')));
 gulp.task('copyHtml', copy(streamFactory, gulp.dest, buildConfig('copyHtml')));
 gulp.task('images', images(streamFactory, gulp.dest, buildConfig('images')));
-gulp.task('css',    css(streamFactory, gulp.dest, buildConfig('css')));
-gulp.task('js',     webpack(streamFactory, gulp.dest, buildConfig('webpack')));
-
+gulp.task('css', css(streamFactory, gulp.dest, buildConfig('css')));
+gulp.task('js', webpack(streamFactory, gulp.dest, buildConfig('webpack')));
 gulp.task('build', ['js', 'css', 'images', 'copyHtml']);

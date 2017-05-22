@@ -42,6 +42,7 @@ const StateMixin = {
              * @return {Object}
              */
             getState: function () {
+
                 return state;
             }
         };

@@ -12,7 +12,7 @@ const SimpleGameLoopMixin = {
             /**
              * Moves the game forward by one step
              */
-            moveForward: function () {
+            stepForward: function () {
 
                 const { currentState } = this.getState();
 
@@ -30,18 +30,26 @@ const SimpleGameLoopMixin = {
              */
             roundForward: function () {
 
-                const states = this.states;
-                const { currentState } = this.getState();
-                const currentRound = states[currentState].round;
+                const state                 = this.getState();
+                const states                = this.states;
+                const currentStateNumber    = state.currentState;
+                const currentState          = states[currentStateNumber];
+                let nextStateNumber         = currentStateNumber + 1;
+                let nextState               = states[nextStateNumber];
 
-                let nextState = _.findIndex(states, { round: currentRound + 1 });
+                const targetRound = currentState.isSubState
+                    ? currentState.round
+                    : currentState.round + 1;
 
-                if (-1 === nextState) {
-
-                    nextState = states.length - 1;
+                while (nextState &&
+                    (nextState.isSubState || nextState.round < targetRound)) {
+                    nextStateNumber++;
+                    nextState = states[nextStateNumber];
                 }
 
-                this.triggerStateChange(nextState);
+                if (nextStateNumber >= states.length) return;
+
+                this.triggerStateChange(nextStateNumber);
             },
 
             /**
@@ -55,34 +63,25 @@ const SimpleGameLoopMixin = {
             },
 
             /**
-             * Moves the game backward by one step
-             */
-            moveBackward: function () {
-
-                const { currentState } = this.getState();
-
-                if (0 < currentState) {
-
-                    this.triggerStateChange(currentState - 1);
-                }
-            },
-
-            /**
              * Moves the game backward by one round
              */
             roundBackward: function () {
 
-                const states = this.states;
-                const { currentState } = this.getState();
-                const currentRound  = states[currentState].round;
+                const state                 = this.getState();
+                const states                = this.states;
+                const currentStateNumber    = state.currentState;
+                const currentState          = states[currentStateNumber];
+                let previousStateNumber     = currentStateNumber - 1;
+                let previousState           = states[previousStateNumber];
 
-                let nextState = _.findIndex(states, { round: currentRound - 1 });
-
-                if (-1 === nextState) {
-                    nextState = 0;
+                while (previousState && previousState.round >= currentState.round) {
+                    previousStateNumber--;
+                    previousState = states[previousStateNumber];
                 }
 
-                this.triggerStateChange(nextState);
+                if (previousStateNumber < 0) return;
+
+                this.triggerStateChange(previousStateNumber);
             },
 
             /**

@@ -1,156 +1,235 @@
-/**
- * Parses the passed data object into settings which are usable by the viewer
- * @param   {Object} data       The JSON data received from the server
- * @param   {Object} [defaults] The default settings as passed from the gameViewer
- * @returns {Object}            The settings object
- */
+import _ from 'lodash';
+
 function parseSettings(data, defaults = {}) {
+
+    const { matchData, playerData } = data;
+    const { settings } = matchData;
+
     return {
         ...defaults,
-        ...data.matchData.settings
+        ...settings,
+        players: playerData,
     };
 }
 
-/**
- * Parses the passed data and settings into states which can be rendered by the viewer
- * @param   {Object} data     The JSON data received from the server
- * @param   {Object} settings The parsed settings
- * @returns {Array}           List of states
- */
-function parseStates(data, settings) {
+function parseStates(matchData, settings) {
 
-    var initialState,
-        states,
-        field                           = settings.field;
-        //{ width, height, cellmargin }   = field.cell,
-        //{ margintop, marginleft }       = field.margins;
-        var width = 20, height = 20, cellmargin = 0;
-        var margintop = 100, marginleft = 10;
-    // create initial empty board state
-    initialState = _.cloneDeep(data.matchData.states[0]);
-    initialState.field = initialState.field.replace(/4|8/g, '0');
-    initialState.player = -1;
-    initialState.move = -1;
-    data.matchData.states.unshift(initialState);
+    const { states, winner } = matchData;
+    const parsedStates = [];
 
-    var parsedStates = [];
+    states.forEach(state => {
+        const previousParsedState = parsedStates.length > 0
+            ? parsedStates[parsedStates.length - 1]
+            : null;
+        const parsedState = parseState({ settings, state, previousParsedState });
 
-    var l = data.matchData.states.length;
-        console.log(l);
+        addSwitchDeathLimit(parsedState, previousParsedState);
 
-    for (var i = 0; i < l; i++) {
-        var state = data.matchData.states[i];
-        var parsedState = parseState(state, settings);
         parsedStates.push(parsedState);
+    });
 
+    const errors = parseErrors(parsedStates);
+    const { width, height } = settings.field;
+    const fieldSize = width > height ? width : height;
+    let substateCount;
+
+    if (fieldSize <= 25) {
+        substateCount = 25 / fieldSize * 8;
+    } else if (fieldSize > 25 && fieldSize <= 50) {
+        substateCount = 50 / fieldSize * 4;
+    } else if (fieldSize > 100 && fieldSize <= 100) {
+        substateCount = 100 / fieldSize * 2;
+    } else if (fieldSize > 200 && fieldSize <= 200) {
+        substateCount = 200 / fieldSize;
+    } else {
+        substateCount = 0;
     }
 
-    
-    
+    substateCount = Math.floor(substateCount);
 
-    return states;
-}
-
-function parseState(state, settings) {
-    return _.map(state, function (state) {
-        var { move, column, winner, field, illegalMove, player} = state;
-
-        if (winner) {
-            if (winner != "none") {
-                winner = settings.players.names[parseInt(winner.replace("player", "")) - 1];
-            }
+    const tweenStates = [];
+    parsedStates.forEach((state, stateIndex) => {
+        if (state.round <= 0) {
+            tweenStates.push(state);
+            return;
         }
 
-        var fieldwidth = settings.field.width;
+        for (let index = 1; index <= substateCount; index++) {
+            const subState = { ...state, isSubState: true };
 
-        var lines = [
-           [1, 3, 2, 3, 1],
-           [2, 5, 2, 3, 1],
-           [3, 2, 2, 3, 1],
-           [4, 16, 2, 3, 1],
-           [18, 5, 2, 3, 1]
-        ];
+            subState.playerStates = subState.playerStates.map((playerState, pIndex) => {
+                const { lines }         = playerState;
+                const lastLine          = lines[lines.length - 1];
+                const increment         = 1 / (substateCount + 1);
+                const limit             = playerState.limit;
+                let { x1, x2, y1, y2 }  = lastLine;
 
-        var prevx = 0;
-        var prevy = 0;
+                if (x1 < x2) {
+                    x2 = x2 - 1 + (index * increment);
+                }
+                else if (x2 < x1) {
+                    x2 = x2 + 1 - (index * increment);
+                }
+                else if (y1 < y2) {
+                    y2 = y2 - 1 + (index * increment);
+                }
+                else if (y1 > y2) {
+                    y2 = y2 + 1 - (index * increment);
+                }
 
-        console.log("state");
+                const newLines = lines.slice(0, -1);
+                newLines.push({ x1, x2, y1, y2 });
 
-        return {
-            move,
-            column,
-            winner,
-            illegalMove,
-            player,
-            lines: _.chain(field)
-                .map(function (cellType, index) {
-                    var value = cellType;
-                    var row     = Math.floor(index / fieldwidth),
-                        column  = index % fieldwidth,
-                        x1       = column * width + marginleft,
-                        y1       = row * height + margintop,
-                        x2       = column * width + marginleft+width,
-                        y2       = row * height + margintop;
+                const isLimitedSubstate = x2 < limit.minX || x2 > limit.maxX ||
+                    y2 < limit.minY || y2 > limit.maxY;
+                const isSubStateCrashed = playerState.isCrashed &&
+                    (index === substateCount || isLimitedSubstate) &&
+                    parsedStates[stateIndex].playerStates[pIndex].isCrashed;
 
+                const subPlayerState = {
+                    ...playerState,
+                    lines: newLines,
+                    isCrashed: isSubStateCrashed
+                };
 
-                    /* 1. Copy previous state lines */
-                    /* 2. Find position of light cycle relative to previous position (prevx, prevy) */
-                    /* 3. Draw a line */
-                    /* 4. Make this not suck */ 
-                    if (value == 17) {
-                        var row     = Math.floor(index / fieldwidth),
-                        column  = index % fieldwidth;
-                        console.log(prevx + " " + column + " " + prevy + " " + row);
+                limitCoordinates(subPlayerState);
 
+                return subPlayerState;
+            });
 
-                        var x1       = column * width + marginleft;
-                        var x2       = column * width + marginleft;
+            tweenStates.push(subState);
+        }
 
-                        var y1       = row * height + margintop;
-                        var y2       = row * height + margintop;
+        state.playerStates.forEach(playerState => limitCoordinates(playerState));
 
-                        if (column > prevx) {
-                            x2       = column * width + marginleft-width;
-                        } 
-                        if (column < prevx) {
-                            x2       = column * width + marginleft+width;
-                        } 
-                        if (row > prevy) {
-                            y2       = row * height + margintop-height;                              
-                        } 
-                        if (row < prevy) {
-                            y2       = row * height + margintop+height;                              
-                        }
-                    }
-                    if (value == 33) {
-                        console.log("Lightcycle " + column + " " + row);
-                        prevx = column;
-                        prevy = row;
-                    }
-                    return { row, column, x1, y1, x2, y2, value};
-                })
-                .value(),
-            cells: _.chain(field)
-                .map(function (cellType, index) {
-                    var value = cellType;
-                    var row     = Math.floor(index / fieldwidth),
-                        column  = index % fieldwidth,
-                        x       = column * width + marginleft,
-                        y       = row * height + margintop;
-                    return { row, column, x, y, width, height, value};
-                })
-                .value()
-        };
+        tweenStates.push(state);
     });
-    return parsedState;
+
+    const lastState = tweenStates[tweenStates.length - 1];
+    const finalState = {
+        ...lastState,
+        round: lastState.round + 1,
+        isSubState: true,
+    };
+
+    return {
+        errors,
+        states: tweenStates.concat(new Array(substateCount).fill(finalState)),
+        winner: parseWinner(winner, settings.players),
+    };
 }
 
-function parsePlayerNames(data, settings) {
-    return data.playerData;
+function parseState({ settings, state, previousParsedState }) {
+
+    const playerNames = settings.players.map(p => p.name);
+    let crashCount = 0;
+
+    const playerStates = playerNames.map((name, index) => {
+
+        const playerState = state.players[index];
+        const { isCrashed, error, position } = playerState;
+        const { width, height } = settings.field;
+        const limit = { minX: -0.5, maxX: width - 0.5, minY: -0.5, maxY: height - 0.5 };
+
+        isCrashed && crashCount++;
+
+        let lines;
+        if (!previousParsedState) {
+            lines = [{
+                x1: position.x,
+                y1: position.y,
+                x2: position.x,
+                y2: position.y,
+            }];
+        } else {
+            const previousLines = previousParsedState.playerStates[index].lines;
+            const lastLine = previousLines[previousLines.length - 1];
+
+            lines = previousLines.map(line => ({ ...line }));
+            lines.push({
+                x1: lastLine.x2,
+                y1: lastLine.y2,
+                x2: position.x,
+                y2: position.y,
+            })
+        }
+
+        return { name, lines, isCrashed, error, position, limit };
+    });
+
+    return { crashCount, playerStates, round: state.round };
+}
+
+function addSwitchDeathLimit(state, previousState) {
+    if (state.crashCount < 2 || previousState === null) return;
+
+    state.playerStates.forEach((playerState, playerStateIndex) => {
+        const position = playerState.position;
+        const switched = previousState.playerStates.reduce((switched, ps) =>
+        switched || _.isEqual(ps.position, position), false);
+
+        if (!switched) return;
+
+        const previousPlayerState = previousState.playerStates[playerStateIndex];
+        const previousPosition = previousPlayerState.position;
+        const limX = position.x - ((position.x - previousPosition.x) / 2);
+        const limY = position.y - ((position.y - previousPosition.y) / 2);
+
+        playerState.limit = {
+            minX: limX <= previousPosition.x ? limX : previousPosition.x,
+            minY: limY <= previousPosition.y ? limY : previousPosition.y,
+            maxX: limX <= previousPosition.x ? previousPosition.x : limX,
+            maxY: limY <= previousPosition.y ? previousPosition.y : limY,
+        };
+    });
+}
+
+function parseErrors(parsedStates) {
+    const errors = [];
+
+    parsedStates.forEach((state, stateIndex) => {
+        state.playerStates.forEach((playerState, playerStateIndex)  => {
+            if (playerState.error) {
+                const previousState = parsedStates[stateIndex - 1];
+                const previousPlayerState = previousState.playerStates[playerStateIndex];
+                const lastLine = previousPlayerState.lines[previousPlayerState.lines.length - 1];
+
+                errors.push({
+                    round: state.round - 1,
+                    x: lastLine.x2,
+                    y: lastLine.y2,
+                })
+            }
+        });
+    });
+
+    return errors;
+}
+
+function parseWinner(winner, players) {
+    if (winner === null) return null;
+
+    return {
+        ...players[winner],
+        id: winner,
+    }
+}
+
+function limitCoordinates(playerState) {
+    const lastLine = playerState.lines[playerState.lines.length - 1];
+
+    playerState.lines[playerState.lines.length - 1] = {
+        ...lastLine,
+        x2: limitCoordinate(lastLine.x2, playerState.limit.minX, playerState.limit.maxX),
+        y2: limitCoordinate(lastLine.y2, playerState.limit.minY, playerState.limit.maxY),
+    };
+}
+
+function limitCoordinate(number, min, max) {
+    return Math.min(max, Math.max(min, number));
 }
 
 export {
     parseSettings,
     parseStates,
-    parsePlayerNames,
-}
+};

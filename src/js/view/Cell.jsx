@@ -1,38 +1,88 @@
-(function (undefined) {
+import React from 'react';
+import createView from 'omniscient';
+import classNames from 'classnames';
 
-    const
-        React      = require('react'),
-        createView = require('omniscient'),
-        classNames = require('classnames');
+const Cell = createView('Cell', function ({ cell, cellSize, index }) {
 
-    var Cell;
+    const { height, width } = cellSize;
+    const transformX = index * width;
+    const halfDimension = height / 2;
 
-    Cell = createView(function (data) {
-        var { row, column, x, y, width, height, value } = data;
+    /**
+     *  Description of cell values
+     *  In case of 4 players
+     *
+     *  PLAYER POSITIONS:
+     *  Player 1: 33
+     *  Player 2: 34
+     *  Player 3: 36
+     *  Player 4: 40
+     *
+     *  PLAYER CREATED WALLS:
+     *  Player 1: 17
+     *  Player 2: 18
+     *  Player 3: 20
+     *  Player 4: 24
+     *
+     *  Player illegal move: n
+     */
 
-        var xlinkHref = "GoGame-cell-player" + value;
-
-        if (value == 17) { xlinkHref = "GoGame-cell-player1"; }
-        if (value == 18) { xlinkHref = "GoGame-cell-player2"; }
-
-        //if (value > 0) console.log(value);
-        //var xlinkHref = "GoGame-cell-player1";
-        if (value == 5) xlinkHref = "GoGame-cell-wall";
-        //if (value == 0) xlinkHref = "GoGame-cell-empty";
-
-        var id="row" + row + "col" + column;
-
-        return (
-            <g
-            key="key"
-            className="GoGame-cell" >
-                 <g id={ id } dangerouslySetInnerHTML={{
-                     __html: `<use x="${ x }" y="${ y }" width="${ width }" height="${ height }" xlink:href="#${ xlinkHref }" />`
-                 }} />
-            </g>
-         );
+    const className = classNames({
+        'Cell': true,
+        'Position': cell === '33' || cell === '34' || cell === '36' || cell === '40',
+        'Position--p0': cell === '33',
+        'Position--p1': cell === '34',
+        'Position--p2': cell === '36',
+        'Position--p3': cell === '40',
+        'Wall': cell === '17' || cell === '18' || cell === '20' || cell === '24',
+        'Wall--p0': cell === '17',
+        'Wall--p1': cell === '18',
+        'Wall--p2': cell === '20',
+        'Wall--p3': cell === '24',
     });
 
-    // Private functions
-    module.exports = Cell;
-}());
+    if (className.includes('Position')) {
+        return (
+            <g
+                className="Cell"
+                width={ width }
+                height={ height }
+            >
+                <use
+                    className={ className }
+                    xlinkHref="#SpaceShip"
+                    width={ width / 2 }
+                    height={ height / 2 }
+                    x={ transformX }
+                />
+            </g>
+        );
+    }
+
+    if (className.includes('Wall')) {
+        return (
+            <g
+                className={ className }
+                width={ width }
+                height={ height }
+            >
+                <path
+                    className="Cell line"
+                    transform={ `translate(${transformX},0) rotate(270) translate(-${height})` }
+                    d={ `M${halfDimension} 0 L${halfDimension} ${height}` }
+                />
+            </g>
+        )
+    }
+
+    return (
+        <rect
+            className={ className }
+            width={ width }
+            height={ height }
+            x={ transformX }
+        />
+    );
+});
+
+export default Cell;

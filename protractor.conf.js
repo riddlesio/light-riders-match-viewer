@@ -7,7 +7,7 @@ exports.config = {
     seleniumAddress: 'http://hub.browserstack.com/wd/hub',
     // seleniumAddress: 'http://localhost:4444/wd/hub',
     specs: ['test/e2e/index.spec.js'],
-    baseUrl: 'http://starapple.riddles.io:8080',
+    baseUrl: 'http://localhost:8888/',
     framework: 'mocha',
     getPageTimeout: 10000,
     allScriptsTimeout: 60000,

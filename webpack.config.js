@@ -4,7 +4,10 @@ const webpack = require('webpack');
 module.exports = function (config) {
 
     const environment   = config.environment;
-    const variables     = '?' + environment.target + '&' + environment.platform + (environment.debug ? '&DEBUG' : '');
+    const target        = environment.target;
+    const platform      = environment.platform;
+    const debug         = environment.debug;
+    const variables     = `?${target}&${platform}${(debug ? '&DEBUG' : '')}`;
 
     var webpackConfig = {
         resolve: {
@@ -52,7 +55,17 @@ module.exports = function (config) {
         ],
     };
 
-    if (environment.debug) {
+    if (target === 'PROD') {
+        webpackConfig.plugins.push(
+            new webpack.DefinePlugin({
+                'process.env': {
+                    NODE_ENV: "'production'",
+                },
+            })
+        );
+    }
+
+    if (debug) {
         // Gives you sourcemaps without slowing down rebundling
         webpackConfig.devtool = 'eval-source-map';
     }

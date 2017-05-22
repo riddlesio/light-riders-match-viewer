@@ -45,7 +45,8 @@ body {
     width: 100%;
     position: absolute;
     bottom: 0;
-    background: rgba(0,0,0,0.65);
+    background: rgba(83, 83, 83, 0.7);
+    z-index: 10;
 }
 
 .GamePlayer-view {
@@ -94,3 +95,15 @@ body {
 .u-hidden {
     display: none;
 }
+
+/*input[type=range]::-moz-range-track {*/
+    /*background-color: #fbfbfb;*/
+/*}*/
+
+/*input[type=range]::-webkit-slider-runnable-track {*/
+    /*background-color: #fbfbfb;*/
+/*}*/
+
+/*input[type=range]::-ms-track {*/
+    /*background-color: #fbfbfb;*/
+/*}*/
