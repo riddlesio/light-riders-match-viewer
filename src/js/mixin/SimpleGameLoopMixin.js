@@ -9,6 +9,10 @@ const SimpleGameLoopMixin = {
 
         const mixin = {
 
+            emitEnd: function () {
+                window && window.parent && window.parent.postMessage('PLAYBACK_FINISHED', '*');
+            },
+
             /**
              * Moves the game forward by one step
              */
@@ -20,7 +24,7 @@ const SimpleGameLoopMixin = {
 
                     this.triggerStateChange(currentState + 1);
                 } else {
-
+                    this.emitEnd();
                     this.pause();
                 }
             },
